@@ -1,0 +1,36 @@
+name: Daily Trilingual Digest Auto Generator
+
+on:
+  schedule:
+    - cron: '30 23 * * *' # UTC 23:30 = 台灣時間每天早上 07:30
+  workflow_dispatch: # 允許在 GitHub 網頁上手動點擊按鈕立即測試執行
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install google-generativeai edge-tts
+
+      - name: Generate daily news and MP3 audio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python generate.py
+
+      - name: Commit and push updates
+        run: |
+          git config user.name "Daily Digest Bot"
+          git config user.email "bot@://github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update daily digest" && git push)
