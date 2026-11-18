@@ -21,12 +21,19 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install google-generativeai edge-tts
+        run: pip install google-generativeai edge-tts requests beautifulsoup4 pytz
 
       - name: Generate daily news and MP3 audio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python generate.py
+
+      - name: Send LINE Notification
+        env:
+          LINE_CHANNEL_ID: ${{ secrets.LINE_CHANNEL_ID }}
+          LINE_CHANNEL_SECRET: ${{ secrets.LINE_CHANNEL_SECRET }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python send_line_notification.py
 
       - name: Commit and push updates
         run: |
