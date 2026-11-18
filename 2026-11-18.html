@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer">
   <title>Daily Trilingual Digest - 2026.11.18</title>
   <style>
     :root { --bg: #f4f5f7; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --en: #2563eb; --ja: #dc2626; --vi: #059669; --border: #e5e7eb; }
@@ -15,6 +14,7 @@
     .back-btn { text-decoration: none; color: var(--muted); font-size: 0.9rem; font-weight: 500; }
     h1 { font-size: 1.5rem; margin-bottom: 4px; }
     .date-badge { font-size: 0.9rem; color: var(--muted); }
+    .status-box { font-size: 0.85rem; color: #1f2937; background: #e0e7ff; padding: 8px 14px; border-radius: 12px; margin-top: 10px; display: inline-block; }
     input[type="radio"].lang-radio { display: none; }
     .filter-bar { display: flex; justify-content: center; gap: 8px; margin: 14px 0 24px; flex-wrap: wrap; position: sticky; top: 10px; z-index: 10; background: rgba(244,245,247,0.92); backdrop-filter: blur(6px); padding: 8px; border-radius: 12px; }
     .filter-btn { border: 1px solid var(--border); background: #fff; color: var(--text); padding: 8px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; user-select: none; }
@@ -45,6 +45,7 @@
     <header>
       <h1>Daily Trilingual Digest</h1>
       <div class="date-badge">2026.11.18 • 每日三語精選新聞</div>
+      <div id="voice-status" class="status-box">點擊下方「🔊 朗讀」測試語音</div>
     </header>
 
     <input type="radio" name="lang" id="opt-all" class="lang-radio" checked>
@@ -67,7 +68,7 @@
         <p class="subtitle">墨爾本獨立咖啡館推出「以書換咖啡」活動，鼓勵居民放下手機享受紙本閱讀。</p>
         <div class="section-header">
           <span class="section-label">ARTICLE • 英文報導</span>
-          <button type="button" class="speak-btn" onclick="playCloudAudio(this, 'en')">🔊 朗讀英文</button>
+          <button type="button" class="speak-btn" onclick="speakNative(this, 'en')">🔊 朗讀英文</button>
         </div>
         <p class="article-text">On November 18, 2026, a cozy independent cafe in Melbourne launched a creative "Book-for-Brew" initiative to encourage offline reading. Customers who bring a gently used paperback to add to the shop's community bookshelf receive a free flat white in return. The owner hopes the campaign will spark friendly conversations among neighbors and give old stories a second life.</p>
         <span class="section-label" style="margin-top:18px;">VOCABULARY & PHRASES 核心詞彙</span>
@@ -90,7 +91,7 @@
         <p class="subtitle">京都古寺開啟秋季夜間特別參拜，燈光映照下的楓葉倒影如夢似幻。</p>
         <div class="section-header">
           <span class="section-label">ARTICLE • 日文報導</span>
-          <button type="button" class="speak-btn" onclick="playCloudAudio(this, 'ja')">🔊 朗讀日文</button>
+          <button type="button" class="speak-btn" onclick="speakNative(this, 'ja')">🔊 朗讀日文</button>
         </div>
         <p class="article-text"><ruby>京都市<rt>きょうとし</rt></ruby><ruby>東山区<rt>ひがしやまく</rt></ruby>にある<ruby>歴史<rt>れきし</rt></ruby>ある<ruby>寺院<rt>じいん</rt></ruby>で11<ruby>月<rt>がつ</rt></ruby>18<ruby>日<rt>にち</rt></ruby>、<ruby>秋<rt>あき</rt></ruby>の<ruby>紅葉<rt>こうよう</rt></ruby>をライトアップする<ruby>夜間<rt>やかん</rt></ruby><ruby>特別拝観<rt>とくべつはいかん</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まりました。<ruby>庭園<rt>ていえん</rt></ruby>の<ruby>池<rt>いけ</rt></ruby>に<ruby>赤<rt>あか</rt></ruby>や<ruby>黄色<rt>きいろ</rt></ruby>に<ruby>色<rt>いろ</rt></ruby>づいた<ruby>木々<rt>きぎ</rt></ruby>が<ruby>映<rt>うつ</rt></ruby>り<ruby>込<rt>こ</rt></ruby>み、<ruby>訪<rt>おとず</rt></ruby>れた<ruby>人々<rt>ひとびと</rt></ruby>は<ruby>幻想的<rt>げんそうてき</rt></ruby>な<ruby>景色<rt>けしき</rt></ruby>を<ruby>静<rt>しず</rt></ruby>かに<ruby>楽<rt>たの</rt></ruby>しんでいます。</p>
         <span class="section-label" style="margin-top:18px;">VOCABULARY & PHRASES 核心詞彙</span>
@@ -113,7 +114,7 @@
         <p class="subtitle">河內推出週末「資源回收換盆栽」小站，吸引大批年輕人與親子響應環保。</p>
         <div class="section-header">
           <span class="section-label">ARTICLE • 越南文報導</span>
-          <button type="button" class="speak-btn" onclick="playCloudAudio(this, 'vi')">🔊 朗讀越南文</button>
+          <button type="button" class="speak-btn" onclick="speakNative(this, 'vi')">🔊 朗讀越南文</button>
         </div>
         <p class="article-text">Ngày 18/11/2026, một nhóm tình nguyện viên trẻ tại Hà Nội đã tổ chức trạm "Đổi rác lấy cây xanh" thu hút đông đảo người dân tham gia. Người dân mang chai nhựa, giấy vụn hoặc pin cũ đến trạm sẽ được tặng ngay những chậu sen đá nhỏ xinh. Hoạt động ý nghĩa này giúp nâng cao ý thức bảo vệ môi trường trong cộng đồng.</p>
         <span class="section-label" style="margin-top:18px;">VOCABULARY & PHRASES 核心詞彙</span>
@@ -126,6 +127,3 @@
           <li><strong>nâng cao ý thức</strong>：提升意識</li>
         </ul>
         <span class="section-label" style="margin-top:18px;">TRANSLATION 中文全譯</span>
-        <p class="translation"><strong>河內推出「回收物換綠植」活動站</strong><br>2026 年 11 月 18 日，河內一群年輕志工舉辦了「回收物換綠植」活動站，吸引大批民眾熱情參與。民眾只要將塑膠瓶、廢紙或廢電池帶到活動站，就能立刻獲贈小巧可愛的多肉植物盆栽。這項富有意義的活動有助於提升社區的環保意識。</p>
-      </article>
-    </div>
