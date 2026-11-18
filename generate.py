@@ -12,13 +12,15 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 model = genai.GenerativeModel("gemini-3.8-flash")
 
 prompt = f"""為 {d_disp} ({w_str}) 生成三則生活文化新聞（每篇約3~4句）：英文(en)、日文(ja)、越南文(vi)。
-日文 title_html 與 article_html 漢字須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
+規則：
+1. 日文 title_html、article_html 與 vocab 中的所有漢字皆須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
+2. 三種語言的 vocab 陣列各提供 6 個核心詞彙，每個詞彙皆須明確標註詞性（英文用 (n.)/(v.)/(adj.)/(phr.) 等，日文與越南文用 (名詞)/(動詞)/(形容詞)/(片語) 等），格式如 "<strong>詞彙</strong> (詞性)：中文解釋"。
 嚴格回傳純 JSON（無 markdown）：
-{{"en":{{"tag":"ISSUE NO. 01 • 分類 • 主題","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>詞1</strong>：解釋","<strong>詞2</strong>：解釋","<strong>詞3</strong>：解釋","<strong>詞4</strong>：解釋","<strong>詞5</strong>：解釋","<strong>詞6</strong>：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • JAPAN CULTURE • 主題","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong>詞1</strong>：解釋","<strong>詞2</strong>：解釋","<strong>詞3</strong>：解釋","<strong>詞4</strong>：解釋","<strong>詞5</strong>：解釋","<strong>詞6</strong>：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • VIETNAM LIFESTYLE • 主題","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>詞1</strong>：解釋","<strong>詞2</strong>：解釋","<strong>詞3</strong>：解釋","<strong>詞4</strong>：解釋","<strong>詞5</strong>：解釋","<strong>詞6</strong>：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
+{{"en":{{"tag":"ISSUE NO. 01 • 分類 • 主題","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>word</strong> (n.)：解釋","<strong>word2</strong> (v.)：解釋","<strong>word3</strong> (adj.)：解釋","<strong>word4</strong> (phr.)：解釋","<strong>word5</strong> (n.)：解釋","<strong>word6</strong> (v.)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • JAPAN CULTURE • 主題","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong><ruby>詞<rt>かな</rt></ruby></strong> (名詞)：解釋","<strong>詞2</strong> (動詞)：解釋","<strong>詞3</strong> (形容詞)：解釋","<strong>詞4</strong> (名詞)：解釋","<strong>詞5</strong> (動詞)：解釋","<strong>詞6</strong> (片語)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • VIETNAM LIFESTYLE • 主題","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>từ 1</strong> (名詞)：解釋","<strong>từ 2</strong> (動詞)：解釋","<strong>từ 3</strong> (形容詞)：解釋","<strong>từ 4</strong> (片語)：解釋","<strong>từ 5</strong> (名詞)：解釋","<strong>từ 6</strong> (動詞)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
 
 raw = model.generate_content(prompt).text.strip()
 if raw.startswith("```"):
-    raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+    raw = raw.split("\n", 1).rsplit("```", 1).strip()
 data = json.loads(raw)
 
 os.makedirs("audio", exist_ok=True)
