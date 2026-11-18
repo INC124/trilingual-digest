@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Trilingual Digest • 每日三語精選新聞目錄</title>
+  <style>
+    :root {
+      --bg-color: #f4f5f7;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --accent-en: #2563eb;
+      --accent-ja: #dc2626;
+      --accent-vi: #059669;
+      --border-color: #e5e7eb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.65;
+      padding: 20px 16px;
+    }
+    .container {
+      max-width: 760px; /* 稍微加寬讓雙語標題更舒展 */
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      padding: 28px 0 20px;
+    }
+    h1 {
+      font-size: 1.75rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* 檢視模式切換（純 CSS 控制） */
+    input[type="radio"].view-radio { display: none; }
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px 0 28px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: var(--text-main);
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    /* 按鈕選中狀態 */
+    #v-latest:checked ~ .filter-bar label[for="v-latest"],
+    #v-all:checked ~ .filter-bar label[for="v-all"] {
+      background: #1f2937;
+      color: #fff;
+      border-color: #1f2937;
+    }
+
+    /* 預設「今日精選」模式：只顯示第一張（最新一天）卡片，隱藏其他卡片 */
+    #v-latest:checked ~ .digest-list .digest-item:not(:first-child) {
+      display: none;
+    }
+
+    /* 日期列表卡片（放大版） */
+    .digest-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .digest-item {
+      display: block;
+      text-decoration: none;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 28px; /* 放大卡片內距 */
+      color: var(--text-main);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      border: 1px solid transparent;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .digest-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.09);
+      border-color: #d1d5db;
+    }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .item-date {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #111827;
+    }
+    .item-arrow {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--accent-en);
+      background: #eff6ff;
+      padding: 6px 14px;
+      border-radius: 12px;
+    }
+    .topic-list {
+      list-style: none;
+    }
+    .topic-list li {
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed #f3f4f6;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .topic-list li:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .lang-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 8px;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .bg-en { background-color: var(--accent-en); }
+    .bg-ja { background-color: var(--accent-ja); }
+    .bg-vi { background-color: var(--accent-vi); }
+
+    /* 原文標題與中文標題雙層排版 */
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .orig-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.5;
+    }
+    .orig-title ruby rt {
+      font-size: 0.6em;
+      color: #555;
+      font-weight: normal;
+    }
+    .zh-title {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-bottom: 24px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Daily Trilingual Digest</h1>
+      <p class="subtitle">每日三語精選新聞 • 英 / 日 / 越 閱讀存檔</p>
+    </header>
+
+    <!-- 檢視模式切換：預設選中「今日精選」 -->
+    <input type="radio" name="view" id="v-latest" class="view-radio" checked>
+    <input type="radio" name="view" id="v-all" class="view-radio">
+
+    <div class="filter-bar">
+      <label for="v-latest" class="filter-btn">今日精選</label>
+      <label for="v-all" class="filter-btn">全部日期存檔</label>
+    </div>
+
+    <div class="digest-list">
+      <!-- ====== 每天新增的日期卡片請貼在下方這一行之後（最上面的卡片會自動成為「今日精選」） ====== -->
+
+      <!-- 2026.11.18 -->
+      <a href="2026-11-18.html" class="digest-item">
+        <div class="item-header">
+          <span class="item-date">2026.11.18 (三)</span>
+          <span class="item-arrow">閱讀全文 →</span>
+        </div>
+        <ul class="topic-list">
+          <li>
+            <span class="lang-badge bg-en">EN</span>
+            <div class="title-group">
+              <span class="orig-title">Melbourne Cafe Offers Free Coffee for Book Swaps</span>
+              <span class="zh-title">墨爾本獨立咖啡館推出「以書換咖啡」活動，鼓勵居民放下手機享受紙本閱讀。</span>
+            </div>
+          </li>
+          <li>
+            <span class="lang-badge bg-ja">JA</span>
+            <div class="title-group">
+              <span class="orig-title"><ruby>京都<rt>きょうと</rt></ruby>の<ruby>寺院<rt>じいん</rt></ruby>で<ruby>紅葉<rt>こうよう</rt></ruby>の<ruby>夜間<rt>やかん</rt></ruby><ruby>特別拝観<rt>とくべつはいかん</rt></ruby>がスタート</span>
+              <span class="zh-title">京都古寺開啟秋季夜間特別參拜，燈光映照下的楓葉倒影如夢似幻。</span>
+            </div>
+          </li>
+          <li>
+            <span class="lang-badge bg-vi">VI</span>
+            <div class="title-group">
+              <span class="orig-title">Hà Nội ra mắt trạm đổi rác lấy cây xanh cuối tuần</span>
+              <span class="zh-title">河內推出週末「資源回收換盆栽」小站，吸引大批年輕人與親子響應環保。</span>
+            </div>
+          </li>
+        </ul>
+      </a>
+
+      <!-- ====== 每天新增的日期卡片請貼在上方這一行之前 ====== -->
+    </div>
+
+    <footer>
+      Daily Trilingual Digest • 每天三分鐘，輕鬆累積三語閱讀力
+    </footer>
+  </div>
+</body>
+</html>
