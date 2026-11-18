@@ -23,80 +23,33 @@
       line-height: 1.7;
       padding: 16px;
     }
-    .container {
-      max-width: 680px;
-      margin: 0 auto;
-    }
-    header {
-      text-align: center;
-      padding: 20px 0 16px;
-    }
-    .nav-top {
-      text-align: left;
-      margin-bottom: 12px;
-    }
-    .back-btn {
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
+    .container { max-width: 680px; margin: 0 auto; }
+    header { text-align: center; padding: 20px 0 16px; }
+    .nav-top { text-align: left; margin-bottom: 12px; }
+    .back-btn { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
     .back-btn:hover { color: var(--text-main); }
-    h1 {
-      font-size: 1.5rem;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-    .date-badge {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
+    h1 { font-size: 1.5rem; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .date-badge { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
 
-    /* 隱藏原生單選按鈕 */
-    input[type="radio"].lang-radio {
-      display: none;
-    }
-
-    /* 語言切換按鈕列 */
+    /* 純 CSS 語言切換 */
+    input[type="radio"].lang-radio { display: none; }
     .filter-bar {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin: 16px 0 24px;
-      flex-wrap: wrap;
-      position: sticky;
-      top: 10px;
-      z-index: 10;
-      background: rgba(244, 245, 247, 0.92);
-      backdrop-filter: blur(6px);
-      padding: 8px;
-      border-radius: 12px;
+      display: flex; justify-content: center; gap: 8px; margin: 16px 0 24px;
+      flex-wrap: wrap; position: sticky; top: 10px; z-index: 10;
+      background: rgba(244, 245, 247, 0.92); backdrop-filter: blur(6px);
+      padding: 8px; border-radius: 12px;
     }
     .filter-btn {
-      border: 1px solid var(--border-color);
-      background: #fff;
-      color: var(--text-main);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s;
+      border: 1px solid var(--border-color); background: #fff; color: var(--text-main);
+      padding: 8px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; user-select: none; transition: all 0.2s;
     }
-
-    /* 純 CSS 控制按鈕高亮狀態 */
     #opt-all:checked ~ .filter-bar label[for="opt-all"],
     #opt-en:checked ~ .filter-bar label[for="opt-en"],
     #opt-ja:checked ~ .filter-bar label[for="opt-ja"],
     #opt-vi:checked ~ .filter-bar label[for="opt-vi"] {
-      background: #1f2937;
-      color: #fff;
-      border-color: #1f2937;
+      background: #1f2937; color: #fff; border-color: #1f2937;
     }
-
-    /* 純 CSS 控制文章卡片顯示與隱藏 */
     #opt-en:checked ~ .cards-wrapper .card:not([data-lang="en"]),
     #opt-ja:checked ~ .cards-wrapper .card:not([data-lang="ja"]),
     #opt-vi:checked ~ .cards-wrapper .card:not([data-lang="vi"]) {
@@ -105,68 +58,52 @@
 
     /* 文章卡片 */
     .card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      background: var(--card-bg); border-radius: 16px; padding: 24px;
+      margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       border-top: 4px solid #ccc;
     }
     .card[data-lang="en"] { border-top-color: var(--accent-en); }
     .card[data-lang="ja"] { border-top-color: var(--accent-ja); }
     .card[data-lang="vi"] { border-top-color: var(--accent-vi); }
     .tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: block;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; display: block;
     }
-    h2 {
-      font-size: 1.25rem;
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
+    h2 { font-size: 1.25rem; line-height: 1.4; margin-bottom: 8px; }
     .subtitle {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 18px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem; color: var(--text-muted); margin-bottom: 18px;
+      padding-bottom: 14px; border-bottom: 1px solid var(--border-color);
+    }
+
+    /* 標題與語音按鈕並排 */
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 18px 0 8px;
     }
     .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.8px;
-      margin: 18px 0 8px;
-      display: block;
+      font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
+      letter-spacing: 0.8px; display: block;
     }
-    .article-text {
-      font-size: 1.05rem;
-      margin-bottom: 16px;
+    .speak-btn {
+      background: #f3f4f6; border: 1px solid #d1d5db; color: #1f2937;
+      padding: 6px 14px; border-radius: 16px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+      transition: all 0.2s;
     }
-    ruby rt {
-      font-size: 0.6em;
-      color: #555;
+    .speak-btn:hover { background: #e5e7eb; }
+    .speak-btn.speaking {
+      background: #fef2f2; border-color: #ef4444; color: #dc2626;
     }
+
+    .article-text { font-size: 1.05rem; margin-bottom: 16px; }
+    ruby rt { font-size: 0.6em; color: #555; }
     .vocab-list {
-      list-style: none;
-      background: #f9fafb;
-      padding: 14px 16px;
-      border-radius: 10px;
-      font-size: 0.95rem;
+      list-style: none; background: #f9fafb; padding: 14px 16px;
+      border-radius: 10px; font-size: 0.95rem; margin-top: 8px;
     }
-    .vocab-list li {
-      margin-bottom: 6px;
-    }
+    .vocab-list li { margin-bottom: 6px; }
     .vocab-list li:last-child { margin-bottom: 0; }
-    .translation {
-      font-size: 0.95rem;
-      color: #374151;
-    }
+    .translation { font-size: 0.95rem; color: #374151; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -179,13 +116,11 @@
       <div class="date-badge">2026.11.18 • 每日三語精選新聞</div>
     </header>
 
-    <!-- 純 CSS 狀態控制器 -->
     <input type="radio" name="lang" id="opt-all" class="lang-radio" checked>
     <input type="radio" name="lang" id="opt-en" class="lang-radio">
     <input type="radio" name="lang" id="opt-ja" class="lang-radio">
     <input type="radio" name="lang" id="opt-vi" class="lang-radio">
 
-    <!-- 語言單獨選擇選單 -->
     <div class="filter-bar">
       <label for="opt-all" class="filter-btn">全部閱讀</label>
       <label for="opt-en" class="filter-btn">🇺🇸 英文</label>
@@ -200,12 +135,15 @@
         <h2>Melbourne Cafe Offers Free Coffee for Book Swaps</h2>
         <p class="subtitle">墨爾本獨立咖啡館推出「以書換咖啡」活動，鼓勵居民放下手機享受紙本閱讀。</p>
         
-        <span class="section-label">ARTICLE • 英文報導</span>
+        <div class="section-header">
+          <span class="section-label">ARTICLE • 英文報導</span>
+          <button type="button" class="speak-btn" onclick="toggleSpeech(this, 'en')">🔊 朗讀英文</button>
+        </div>
         <p class="article-text">
           On November 18, 2026, a cozy independent cafe in Melbourne launched a creative "Book-for-Brew" initiative to encourage offline reading. Customers who bring a gently used paperback to add to the shop's community bookshelf receive a free flat white in return. The owner hopes the campaign will spark friendly conversations among neighbors and give old stories a second life.
         </p>
 
-        <span class="section-label">VOCABULARY & PHRASES 核心詞彙</span>
+        <span class="section-label" style="margin-top:18px;">VOCABULARY & PHRASES 核心詞彙</span>
         <ul class="vocab-list">
           <li><strong>initiative</strong> (n.)：倡議、新計畫</li>
           <li><strong>gently used</strong> (adj. phr.)：九成新、保存良好的（二手物）</li>
@@ -215,7 +153,7 @@
           <li><strong>a second life</strong> (n. phr.)：第二次生命、重獲新生</li>
         </ul>
 
-        <span class="section-label">TRANSLATION 中文全譯</span>
+        <span class="section-label" style="margin-top:18px;">TRANSLATION 中文全譯</span>
         <p class="translation">
           <strong>墨爾本咖啡館推出「以書換咖啡」活動</strong><br>
           2026 年 11 月 18 日，墨爾本一間溫馨的獨立咖啡館發起了一項充滿創意的「以書換咖啡」計畫，以鼓勵線下閱讀。顧客只要帶一本保存良好的平裝書放入店內的社區書架，就能免費換取一杯澳式白咖啡。店主希望這項活動能激發鄰里之間的友善交流，並賦予舊故事第二次生命。
@@ -228,12 +166,15 @@
         <h2><ruby>京都<rt>きょうと</rt></ruby>の<ruby>寺院<rt>じいん</rt></ruby>で<ruby>紅葉<rt>こうよう</rt></ruby>の<ruby>夜間<rt>やかん</rt></ruby><ruby>特別拝観<rt>とくべつはいかん</rt></ruby>がスタート</h2>
         <p class="subtitle">京都古寺開啟秋季夜間特別參拜，燈光映照下的楓葉倒影如夢似幻。</p>
         
-        <span class="section-label">ARTICLE • 日文報導</span>
+        <div class="section-header">
+          <span class="section-label">ARTICLE • 日文報導</span>
+          <button type="button" class="speak-btn" onclick="toggleSpeech(this, 'ja')">🔊 朗讀日文</button>
+        </div>
         <p class="article-text">
           <ruby>京都市<rt>きょうとし</rt></ruby><ruby>東山区<rt>ひがしやまく</rt></ruby>にある<ruby>歴史<rt>れきし</rt></ruby>ある<ruby>寺院<rt>じいん</rt></ruby>で11<ruby>月<rt>がつ</rt></ruby>18<ruby>日<rt>にち</rt></ruby>、<ruby>秋<rt>あき</rt></ruby>の<ruby>紅葉<rt>こうよう</rt></ruby>をライトアップする<ruby>夜間<rt>やかん</rt></ruby><ruby>特別拝観<rt>とくべつはいかん</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まりました。<ruby>庭園<rt>ていえん</rt></ruby>の<ruby>池<rt>いけ</rt></ruby>に<ruby>赤<rt>あか</rt></ruby>や<ruby>黄色<rt>きいろ</rt></ruby>に<ruby>色<rt>いろ</rt></ruby>づいた<ruby>木々<rt>きぎ</rt></ruby>が<ruby>映<rt>うつ</rt></ruby>り<ruby>込<rt>こ</rt></ruby>み、<ruby>訪<rt>おとず</rt></ruby>れた<ruby>人々<rt>ひとびと</rt></ruby>は<ruby>幻想的<rt>げんそうてき</rt></ruby>な<ruby>景色<rt>けしき</rt></ruby>を<ruby>静<rt>しず</rt></ruby>かに<ruby>楽<rt>たの</rt></ruby>しんでいます。
         </p>
 
-        <span class="section-label">VOCABULARY & PHRASES 核心詞彙</span>
+        <span class="section-label" style="margin-top:18px;">VOCABULARY & PHRASES 核心詞彙</span>
         <ul class="vocab-list">
           <li><strong><ruby>寺院<rt>じいん</rt></ruby></strong>：寺廟、寺院</li>
           <li><strong><ruby>紅葉<rt>こうよう</rt></ruby></strong>：楓葉、秋葉</li>
@@ -243,7 +184,7 @@
           <li><strong><ruby>幻想的<rt>げんそうてき</rt></ruby></strong>：夢幻般的、如幻似真的</li>
         </ul>
 
-        <span class="section-label">TRANSLATION 中文全譯</span>
+        <span class="section-label" style="margin-top:18px;">TRANSLATION 中文全譯</span>
         <p class="translation">
           <strong>京都寺院展開楓葉夜間特別參拜</strong><br>
           11 月 18 日，位於京都市東山區的一座歷史古寺，正式展開點亮秋日楓葉的夜間特別參拜活動。庭園池水倒映著染上紅黃色彩的樹木，前來造訪的遊客們正靜靜地欣賞這片如夢似幻的景致。
@@ -256,18 +197,8 @@
         <h2>Hà Nội ra mắt trạm đổi rác lấy cây xanh cuối tuần</h2>
         <p class="subtitle">河內推出週末「資源回收換盆栽」小站，吸引大批年輕人與親子響應環保。</p>
         
-        <span class="section-label">ARTICLE • 越南文報導</span>
+        <div class="section-header">
+          <span class="section-label">ARTICLE • 越南文報導</span>
+          <button type="button" class="speak-btn" onclick="toggleSpeech(this, 'vi')">🔊 朗讀越南文</button>
+        </div>
         <p class="article-text">
-          Ngày 18/11/2026, một nhóm tình nguyện viên trẻ tại Hà Nội đã tổ chức trạm "Đổi rác lấy cây xanh" thu hút đông đảo người dân tham gia. Người dân mang chai nhựa, giấy vụn hoặc pin cũ đến trạm sẽ được tặng ngay những chậu sen đá nhỏ xinh. Hoạt động ý nghĩa này giúp nâng cao ý thức bảo vệ môi trường trong cộng đồng.
-        </p>
-
-        <span class="section-label">VOCABULARY & PHRASES 核心詞彙</span>
-        <ul class="vocab-list">
-          <li><strong>tình nguyện viên</strong>：志工、義工</li>
-          <li><strong>đổi rác lấy cây xanh</strong>：以垃圾（回收物）換綠植</li>
-          <li><strong>thu hút đông đảo</strong>：吸引大批（人潮）</li>
-          <li><strong>giấy vụn</strong>：廢紙</li>
-          <li><strong>chậu sen đá</strong>：多肉植物盆栽</li>
-          <li><strong>nâng cao ý thức</strong>：提升意識</li>
-        </ul>
-
