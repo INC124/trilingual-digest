@@ -5,7 +5,6 @@ from datetime import datetime, timezone, timedelta
 import google.generativeai as genai
 import edge_tts
 
-# 設定台灣時區 (UTC+8)
 tz = timezone(timedelta(hours=8))
 now = datetime.now(tz)
 date_str = now.strftime("%Y-%m-%d")
@@ -20,7 +19,7 @@ prompt = f"""
 請為 {date_display} ({weekday_str}) 生成《Daily Trilingual Digest • 每日三語精選新聞》。
 主題請選擇三個不同國家、溫馨有文化氣息或生活感的新聞短文（每篇約 3～4 句話）：
 1. 英文 (en)
-2. 日文 (ja)：注意！title_html 與 article_html 中的所有日文漢字都必須加上正上方振假名 <ruby>漢字<rt>かな</rt></ruby> 標籤；但 title_plain 與 article_plain 必須是「純日文（不含任何振假名或 HTML 標籤）」，供語音朗讀使用。
+2. 日文 (ja)：title_html 與 article_html 中的所有日文漢字都必須加上正上方振假名 <ruby>漢字<rt>かな</rt></ruby> 標籤；但 title_plain 與 article_plain 必須是純日文（不含任何振假名或 HTML 標籤）。
 3. 越南文 (vi)
 
 請嚴格以純 JSON 格式回覆（不要加 markdown 標記），結構如下：
@@ -36,10 +35,10 @@ prompt = f"""
   "ja": {{
     "tag": "ISSUE NO. 02 • JAPAN CULTURE • 中文主題",
     "title_html": "含ruby標籤的日文標題",
-    "title_plain": "純日文標題（無ruby）",
+    "title_plain": "純日文標題",
     "subtitle": "中文副標題",
     "article_html": "含ruby標籤的日文內文",
-    "article_plain": "純日文內文（無ruby）",
+    "article_plain": "純日文內文",
     "vocab": ["<strong>詞彙1</strong>：中文解釋", "<strong>詞彙2</strong>：中文解釋", "<strong>詞彙3</strong>：中文解釋", "<strong>詞彙4</strong>：中文解釋", "<strong>詞彙5</strong>：中文解釋", "<strong>詞彙6</strong>：中文解釋"],
     "translation": "<strong>中文標題</strong><br>中文全譯內文"
   }},
@@ -61,7 +60,6 @@ if raw_text.startswith("```"):
 
 data = json.loads(raw_text)
 
-# 自動生成三語真人發音 MP3
 os.makedirs("audio", exist_ok=True)
 async def make_audio():
     voices = {
@@ -75,7 +73,6 @@ async def make_audio():
 
 asyncio.run(make_audio())
 
-# 生成當日 HTML 頁面（內建原生 MP3 播放器）
 vocab_en = "\n".join([f"<li>{v}</li>" for v in data["en"]["vocab"]])
 vocab_ja = "\n".join([f"<li>{v}</li>" for v in data["ja"]["vocab"]])
 vocab_vi = "\n".join([f"<li>{v}</li>" for v in data["vi"]["vocab"]])
@@ -178,17 +175,18 @@ daily_html = f"""<!DOCTYPE html>
     </div>
   </div>
 </body>
-</html>"""
+</html>
+"""
 
 with open(f"{date_str}.html", "w", encoding="utf-8") as f:
     f.write(daily_html)
 
-# 更新 index.html 插入今日卡片
-new_card = f"""      <!-- {date_display} -->
-      <a href="{date_str}.html" class="digest-item">
-        <div class="item-header">
-          <span class="item-date">{date_display} ({weekday_str})</span>
-          <span class="item-arrow">閱讀全文 →</span>
-        </div>
-        <ul class="topic-list">
-          <li><span class="lang-badge bg-en">EN</span><div class="title-group"><span class="orig-title">{data["en"]["title"]}</span><span class="zh-title">{data["en"]["subtitle"]}</span></div></li>
+card_lines = [
+    f'      <!-- {date_display} -->',
+    f'      <a href="{date_str}.html" class="digest-item">',
+    f'        <div class="item-header">',
+    f'          <span class="item-date">{date_display} ({weekday_str})</span>',
+    f'          <span class="item-arrow">閱讀全文 →</span>',
+    f'        </div>',
+    f'        <ul class="topic-list">',
+    f'          <li><span class="lang-badge bg-en">EN</span><div class="title-group"><span class="orig-title">{data["en"]["title"]}</span><span class="zh-title">{data["en"]["subtitle"]}</span></div></li>',
