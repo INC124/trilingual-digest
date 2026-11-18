@@ -9,7 +9,7 @@ d_disp = now.strftime("%Y.%m.%d")
 w_str = ["一", "二", "三", "四", "五", "六", "日"][now.weekday()]
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-3.8-flash")
 
 prompt = f"""為 {d_disp} ({w_str}) 生成三則生活文化新聞（每篇約3~4句）：英文(en)、日文(ja)、越南文(vi)。
 日文 title_html 與 article_html 漢字須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
