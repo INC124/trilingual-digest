@@ -1,8 +1,11 @@
 import asyncio
 import json
 import os
+import random
 import re
 import time
+import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 import edge_tts
 
@@ -13,18 +16,79 @@ MODELS = [
     "gemini-3.5-flash-lite",
 ]
 
+THEME_POOL = [
+    "當地生活與日常習慣",
+    "文化與藝術傳統",
+    "國際趣聞與跨國交流",
+    "飲食、旅遊與城市風景",
+]
+
 now = datetime.now(timezone(timedelta(hours=8)))
 d_str = now.strftime("%Y-%m-%d")
 d_disp = now.strftime("%Y.%m.%d")
 w_str = ["一", "二", "三", "四", "五", "六", "日"][now.weekday()]
 
-prompt = f"""為 {d_disp} ({w_str}) 生成三則生活文化新聞（每篇約3~4句）：英文(en)、日文(ja)、越南文(vi)。
+
+def fetch_rss_seeds(limit: int = 6) -> list[str]:
+    """抓取公開 RSS 標題與摘要作為真實素材參考（失敗時回傳空清單）"""
+    rss_urls = [
+        "https://feeds.bbci.co.uk/news/world/rss.xml",
+        "https://www3.nhk.or.jp/rss/news/cat0.xml",
+    ]
+    seeds = []
+    for url in rss_urls:
+        try:
+            req = urllib.request.Request(
+                url,
+                headers={"User-Agent": "Mozilla/5.0 (TrilingualDigestBot/1.0)"},
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                xml_data = resp.read()
+            root = ET.fromstring(xml_data)
+            for item in root.findall(".//item")[:limit]:
+                title = (item.findtext("title") or "").strip()
+                desc = re.sub(r"<[^>]+>", "", item.findtext("description") or "").strip()
+                if title:
+                    seeds.append(f"- {title}：{desc[:120]}")
+        except Exception as e:
+            print(f"[WARN] 抓取 RSS 素材失敗 ({url}): {e}")
+    return seeds[:limit]
+
+
+rng = random.Random(d_str)
+daily_themes = {
+    "en": rng.choice(THEME_POOL),
+    "ja": rng.choice(THEME_POOL),
+    "vi": rng.choice(THEME_POOL + ["越南生活文化與國際連結"]),
+}
+print(
+    f"[INFO] 今日隨機主題分配 -> EN: {daily_themes['en']} | "
+    f"JA: {daily_themes['ja']} | VI: {daily_themes['vi']}"
+)
+
+seeds = fetch_rss_seeds(limit=6)
+seed_block = (
+    "以下為今日參考的真實新聞/文化素材，請優先挑選適合生活、文化或國際趣聞的題材改寫（每篇約3~4句）：\n"
+    + "\n".join(seeds)
+    if seeds
+    else "今日未取得外部新聞列表，請撰寫貼近真實日常的生活文化短文（每篇約3~4句）。"
+)
+
+prompt = f"""為 {d_disp} ({w_str}) 生成三則短文（每篇約3~4句），涵蓋國際、生活與文化面向：英文(en)、日文(ja)、越南文(vi)。
+今日主題方向建議：
+- 英文(en)：{daily_themes['en']}
+- 日文(ja)：{daily_themes['ja']}
+- 越南文(vi)：{daily_themes['vi']}（兼顧越南生活/文化，並適度融入近年越南的國際連結或交流視角，風格自然易讀）
+
+{seed_block}
+
 規則：
-1. 日文 title_html、article_html 與 vocab 中的所有漢字皆須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
-2. 三種語言的 vocab 陣列各提供 6 個核心詞彙，每個詞彙皆須明確標註詞性（英文用 (n.)/(v.)/(adj.)/(phr.) 等，日文與越南文用 (名詞)/(動詞)/(形容詞)/(片語) 等），格式如 "<strong>詞彙</strong> (詞性)：中文解釋"。
-3. 越南文 (vi) 的 title、article 與 vocab 中每個詞彙的詞彙本體（<strong>...</strong> 內）必須是純越南文，嚴禁夾雜任何中文字；中文只能出現在 subtitle、詞彙冒號後的中文解釋與 translation 中。
+1. 事實與防腦補：若有提供參考素材，請優先依據素材改寫；若缺乏特定細節，請以真實日常與文化角度描述，嚴禁自行編造未提及的具體數字、統計、得獎紀錄或虛構事件。
+2. 日文 title_html、article_html 與 vocab 中的所有漢字皆須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
+3. 三種語言的 vocab 陣列各提供 6 個核心詞彙，每個詞彙皆須明確標註詞性（英文用 (n.)/(v.)/(adj.)/(phr.) 等，日文與越南文用 (名詞)/(動詞)/(形容詞)/(片語) 等），格式如 "<strong>詞彙</strong> (詞性)：中文解釋"。
+4. 越南文 (vi) 的 title、article 與 vocab 中每個詞彙的詞彙本體（<strong>...</strong> 內）必須是純越南文，嚴禁夾雜任何中文字；中文只能出現在 subtitle、詞彙冒號後的中文解釋與 translation 中。
 嚴格回傳純 JSON（無 markdown）：
-{{"en":{{"tag":"ISSUE NO. 01 • 分類 • 主題","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>word</strong> (n.)：解釋","<strong>word2</strong> (v.)：解釋","<strong>word3</strong> (adj.)：解釋","<strong>word4</strong> (phr.)：解釋","<strong>word5</strong> (n.)：解釋","<strong>word6</strong> (v.)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • JAPAN CULTURE • 主題","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong><ruby>詞<rt>かな</rt></ruby></strong> (名詞)：解釋","<strong>詞2</strong> (動詞)：解釋","<strong>詞3</strong> (形容詞)：解釋","<strong>詞4</strong> (名詞)：解釋","<strong>詞5</strong> (動詞)：解釋","<strong>詞6</strong> (片語)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • VIETNAM LIFESTYLE • 主題","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>từ 1</strong> (名詞)：解釋","<strong>từ 2</strong> (動詞)：解釋","<strong>từ 3</strong> (形容詞)：解釋","<strong>từ 4</strong> (片語)：解釋","<strong>từ 5</strong> (名詞)：解釋","<strong>từ 6</strong> (動詞)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
+{{"en":{{"tag":"ISSUE NO. 01 • {daily_themes['en']}","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>word</strong> (n.)：解釋","<strong>word2</strong> (v.)：解釋","<strong>word3</strong> (adj.)：解釋","<strong>word4</strong> (phr.)：解釋","<strong>word5</strong> (n.)：解釋","<strong>word6</strong> (v.)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • {daily_themes['ja']}","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong><ruby>詞<rt>かな</rt></ruby></strong> (名詞)：解釋","<strong>詞2</strong> (動詞)：解釋","<strong>詞3</strong> (形容詞)：解釋","<strong>詞4</strong> (名詞)：解釋","<strong>詞5</strong> (動詞)：解釋","<strong>詞6</strong> (片語)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • {daily_themes['vi']}","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>từ 1</strong> (名詞)：解釋","<strong>từ 2</strong> (動詞)：解釋","<strong>từ 3</strong> (形容詞)：解釋","<strong>từ 4</strong> (片語)：解釋","<strong>từ 5</strong> (名詞)：解釋","<strong>từ 6</strong> (動詞)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
 
 
 def clean_vi_text(text: str) -> str:
@@ -163,7 +227,10 @@ def generate_digest_data(prompt_text: str) -> dict:
 
 
 data = generate_digest_data(prompt)
-print(f"[INFO] 標題預覽 -> EN: {data['en']['title']} | JA: {data['ja']['title_plain']} | VI: {data['vi']['title']}")
+print(
+    f"[INFO] 標題預覽 -> EN: {data['en']['title']} | "
+    f"JA: {data['ja']['title_plain']} | VI: {data['vi']['title']}"
+)
 
 os.makedirs("audio", exist_ok=True)
 
