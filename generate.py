@@ -181,7 +181,18 @@ with open("index.html", "r", encoding="utf-8") as f:
     idx = f.read()
 
 marker = "<!-- ====== 每天新增的日期卡片請貼在下方這一行之後 ====== -->"
+is_manual_run = os.environ.get("IS_MANUAL_RUN", "").strip().lower() == "true"
+
+if is_manual_run and f"{d_str}.html" in idx:
+    card_pattern = re.compile(
+        rf'\s*<a\b[^>]*href="{re.escape(d_str)}\.html"[^>]*class="digest-item"[^>]*>.*?</a>\s*',
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    idx = card_pattern.sub("\n\n", idx, count=1)
+    print(f"[INFO] 手動執行模式：已移除既有 {d_str} 卡片，準備覆蓋為最新內容")
+
 if f"{d_str}.html" not in idx and marker in idx:
     idx = idx.replace(marker, marker + "\n" + new_card, 1)
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(idx)
+    print(f"[INFO] 已更新 index.html 中的 {d_str} 卡片")
