@@ -1,31 +1,46 @@
+import html
 import json
 import os
 import re
 import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
 CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
 GROUP_ID = os.environ.get("LINE_GROUP_ID", "").strip()
+GROUP_IDS_RAW = os.environ.get("LINE_GROUP_IDS", "").strip()
 USER_ID = os.environ.get("LINE_USER_ID", "").strip()
-
-# 優先推播到群組；若未設定 LINE_GROUP_ID，則退回推播給個人 LINE_USER_ID
-TARGET_ID = GROUP_ID or USER_ID
 
 PAGES_BASE_URL = "https://inc124.github.io/trilingual-digest"
 
 
-def parse_titles_from_html(html: str) -> dict:
+def get_target_ids() -> list:
+    targets = []
+    if GROUP_IDS_RAW:
+        for gid in GROUP_IDS_RAW.split(","):
+            clean_gid = gid.strip()
+            if clean_gid and clean_gid not in targets:
+                targets.append(clean_gid)
+    if GROUP_ID and GROUP_ID not in targets:
+        targets.append(GROUP_ID)
+    if not targets and USER_ID:
+        targets.append(USER_ID)
+    return targets
+
+
+def parse_titles_from_html(raw_html: str) -> dict:
     titles = {"en": "", "ja": "", "vi": ""}
     cards = re.findall(
         r'<article\b[^>]*\bdata-lang="(en|ja|vi)"[^>]*>(.*?)</article>',
-        html,
+        raw_html,
         flags=re.DOTALL | re.IGNORECASE,
     )
     for lang, card_html in cards:
         h2_match = re.search(r"<h2\b[^>]*>(.*?)</h2>", card_html, flags=re.DOTALL | re.IGNORECASE)
         if h2_match:
             clean_title = re.sub(r"<[^>]+>", "", h2_match.group(1))
+            clean_title = html.unescape(clean_title)
             clean_title = re.sub(r"\s+", " ", clean_title).strip()
             titles[lang] = clean_title
     return titles
@@ -43,8 +58,8 @@ def fetch_remote_titles(page_url: str) -> dict:
         },
     )
     with urllib.request.urlopen(req, timeout=15) as resp:
-        html = resp.read().decode("utf-8", errors="replace")
-    return parse_titles_from_html(html)
+        page_html = resp.read().decode("utf-8", errors="replace")
+    return parse_titles_from_html(page_html)
 
 
 def fetch_local_titles(d_str: str) -> dict:
@@ -98,8 +113,10 @@ def get_synced_titles(article_url: str, d_str: str) -> dict:
 def main():
     if not CHANNEL_ACCESS_TOKEN:
         raise RuntimeError("缺少環境變數 LINE_CHANNEL_ACCESS_TOKEN")
-    if not TARGET_ID:
-        raise RuntimeError("缺少環境變數 LINE_GROUP_ID 或 LINE_USER_ID")
+
+    target_ids = get_target_ids()
+    if not target_ids:
+        raise RuntimeError("缺少環境變數 LINE_GROUP_IDS、LINE_GROUP_ID 或 LINE_USER_ID")
 
     now = datetime.now(timezone(timedelta(hours=8)))
     d_str = now.strftime("%Y-%m-%d")
@@ -118,35 +135,44 @@ def main():
         f"👉 立即閱讀全文：\n{article_url}"
     )
 
-    payload = {
-        "to": TARGET_ID,
-        "messages": [
-            {
-                "type": "text",
-                "text": message_text,
-            }
-        ],
-    }
+    success_count = 0
+    errors = []
 
-    req = urllib.request.Request(
-        "https://api.line.me/v2/bot/message/push",
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {CHANNEL_ACCESS_TOKEN}",
-        },
-        method="POST",
-    )
+    for idx_num, target_id in enumerate(target_ids, start=1):
+        payload = {
+            "to": target_id,
+            "messages": [
+                {
+                    "type": "text",
+                    "text": message_text,
+                }
+            ],
+        }
 
-    try:
-        with urllib.request.urlopen(req, timeout=20) as resp:
-            status_code = resp.getcode()
-            body = resp.read().decode("utf-8", errors="replace")
-            target_type = "群組" if GROUP_ID else "個人"
-            print(f"[SUCCESS] 已透過 LINE Push API 發送通知至{target_type}（HTTP {status_code}）：{body}")
-    except urllib.error.HTTPError as e:
-        err_body = e.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"LINE API 推播失敗（HTTP {e.code}）：{err_body}") from e
+        req = urllib.request.Request(
+            "https://api.line.me/v2/bot/message/push",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {CHANNEL_ACCESS_TOKEN}",
+            },
+            method="POST",
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                status_code = resp.getcode()
+                body = resp.read().decode("utf-8", errors="replace")
+                print(f"[SUCCESS] ({idx_num}/{len(target_ids)}) 已發送至 {target_id}（HTTP {status_code}）：{body}")
+                success_count += 1
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="replace")
+            msg = f"推播至 {target_id} 失敗（HTTP {e.code}）：{err_body}"
+            print(f"[ERROR] {msg}")
+            errors.append(msg)
+
+    if success_count == 0 and errors:
+        raise RuntimeError("所有目標皆推播失敗：" + " | ".join(errors))
 
 
 if __name__ == "__main__":
