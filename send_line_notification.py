@@ -1,94 +1,98 @@
-from datetime import datetime
+import json
 import os
-from bs4 import BeautifulSoup
-import pytz
-import requests
+import re
+import urllib.request
+from datetime import datetime, timedelta, timezone
 
-# 1. 取得環境變數
-channel_id = os.environ.get("LINE_CHANNEL_ID")
-channel_secret = os.environ.get("LINE_CHANNEL_SECRET")
-user_id = os.environ.get("LINE_USER_ID")
+CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
+GROUP_ID = os.environ.get("LINE_GROUP_ID", "").strip()
+USER_ID = os.environ.get("LINE_USER_ID", "").strip()
 
-if not channel_id or not channel_secret:
-  raise Exception("缺少環境變數 LINE_CHANNEL_ID 或 LINE_CHANNEL_SECRET")
+# 優先推播到群組；若未設定 LINE_GROUP_ID，則退回推播給個人 LINE_USER_ID
+TARGET_ID = GROUP_ID or USER_ID
 
-if not user_id or not user_id.strip():
-  raise Exception(
-      "缺少環境變數 LINE_USER_ID（請到 GitHub Repository Secrets 新增"
-      " LINE_USER_ID）"
-  )
+PAGES_BASE_URL = "https://inc124.github.io/trilingual-digest"
 
-user_id = user_id.strip()
 
-# 2. 取得台灣時區的當天日期與網址
-taiwan_tz = pytz.timezone("Asia/Taipei")
-today = datetime.now(taiwan_tz)
-date_str = today.strftime("%Y-%m-%d")
-target_url = f"https://inc124.github.io/trilingual-digest/{date_str}.html"
+def fetch_today_titles(page_url: str) -> dict:
+    titles = {"en": "", "ja": "", "vi": ""}
+    try:
+        req = urllib.request.Request(
+            page_url,
+            headers={"User-Agent": "Mozilla/5.0 (TrilingualDigestNotifier/1.0)"},
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            html = resp.read().decode("utf-8", errors="replace")
 
-print(f"正在抓取目標網頁：{target_url}")
+        cards = re.findall(
+            r'<article\b[^>]*\bdata-lang="(en|ja|vi)"[^>]*>(.*?)</article>',
+            html,
+            flags=re.DOTALL | re.IGNORECASE,
+        )
+        for lang, card_html in cards:
+            h2_match = re.search(r"<h2\b[^>]*>(.*?)</h2>", card_html, flags=re.DOTALL | re.IGNORECASE)
+            if h2_match:
+                clean_title = re.sub(r"<[^>]+>", "", h2_match.group(1))
+                clean_title = re.sub(r"\s+", " ", clean_title).strip()
+                titles[lang] = clean_title
+    except Exception as e:
+        print(f"[WARN] 無法讀取當日文章頁面標題 ({page_url}): {e}")
+    return titles
 
-# 3. 抓取網頁並解析三語標題
-titles = {"EN": "無", "JA": "無", "VI": "無"}
-try:
-  response = requests.get(target_url, timeout=15)
-  if response.status_code == 200:
-    soup = BeautifulSoup(response.text, "html.parser")
 
-    for li in soup.find_all("li"):
-      lang_span = li.find("span")
-      if lang_span:
-        lang_text = lang_span.text.strip()
-        title_spans = li.find_all("span")
-        if len(title_spans) >= 2:
-          article_title = title_spans[1].text.strip()
-          if lang_text == "EN":
-            titles["EN"] = article_title
-          elif lang_text == "JA":
-            titles["JA"] = article_title
-          elif lang_text == "VI":
-            titles["VI"] = article_title
-  else:
-    print("警告：無法讀取今日網頁，將以純連結發送通知。")
-except Exception as e:
-  print(f"解析網頁發生錯誤: {e}")
+def main():
+    if not CHANNEL_ACCESS_TOKEN:
+        raise RuntimeError("缺少環境變數 LINE_CHANNEL_ACCESS_TOKEN")
+    if not TARGET_ID:
+        raise RuntimeError("缺少環境變數 LINE_GROUP_ID 或 LINE_USER_ID")
 
-# 4. 組裝 LINE 推播訊息
-message_text = (
-    f"🌅 早安！今天的 Daily Trilingual Digest（{date_str}）文章已準備好囉：\n\n"
-    f"🇬🇧 EN: {titles['EN']}\n"
-    f"🇯🇵 JA: {titles['JA']}\n"
-    f"🇻🇳 VI: {titles['VI']}\n\n"
-    f"👉 立即閱讀全文：\n{target_url}"
-)
+    now = datetime.now(timezone(timedelta(hours=8)))
+    d_str = now.strftime("%Y-%m-%d")
+    article_url = f"{PAGES_BASE_URL}/{d_str}.html"
 
-# 5. 自動向 LINE API 交換短效期 Access Token
-token_url = "https://api.line.me/v2/oauth/accessToken"
-token_payload = {
-    "grant_type": "client_credentials",
-    "client_id": channel_id,
-    "client_secret": channel_secret,
-}
-token_res = requests.post(token_url, data=token_payload, timeout=15)
+    titles = fetch_today_titles(article_url)
+    en_title = titles["en"] or "無"
+    ja_title = titles["ja"] or "無"
+    vi_title = titles["vi"] or "無"
 
-if token_res.status_code != 200:
-  raise Exception(f"取得 LINE Token 失敗: {token_res.text}")
+    message_text = (
+        f"🌅 早安！今天的 Daily Trilingual Digest ({d_str}) 文章已準備好囉：\n\n"
+        f"🇬🇧 EN：{en_title}\n"
+        f"🇯🇵 JA：{ja_title}\n"
+        f"🇻🇳 VI：{vi_title}\n\n"
+        f"👉 立即閱讀全文：\n{article_url}"
+    )
 
-access_token = token_res.json().get("access_token")
+    payload = {
+        "to": TARGET_ID,
+        "messages": [
+            {
+                "type": "text",
+                "text": message_text,
+            }
+        ],
+    }
 
-# 6. 發送 LINE 推播訊息
-line_api_url = "https://api.line.me/v2/bot/message/push"
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {access_token}",
-}
-payload = {
-    "to": user_id,
-    "messages": [{"type": "text", "text": message_text}],
-}
+    req = urllib.request.Request(
+        "https://api.line.me/v2/bot/message/push",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {CHANNEL_ACCESS_TOKEN}",
+        },
+        method="POST",
+    )
 
-line_res = requests.post(line_api_url, headers=headers, json=payload, timeout=15)
-if line_res.status_code == 200:
-  print("LINE 通知發送成功！")
-else:
-  raise Exception(f"LINE 通知發送失敗: {line_res.text}")
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            status_code = resp.getcode()
+            body = resp.read().decode("utf-8", errors="replace")
+            target_type = "群組" if GROUP_ID else "個人"
+            print(f"[SUCCESS] 已透過 LINE Push API 發送通知至{target_type}（HTTP {status_code}）：{body}")
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"LINE API 推播失敗（HTTP {e.code}）：{err_body}") from e
+
+
+if __name__ == "__main__":
+    main()
