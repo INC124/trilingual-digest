@@ -6,11 +6,11 @@ import time
 from datetime import datetime, timedelta, timezone
 import edge_tts
 
-# 依優先順序排列模型：主模型在前，配額受限或失敗時自動往後備援
+# 依穩定度與速度排列模型，避免單一模型逾時拖慢整體執行
 MODELS = [
-    "gemini-3.8-flash",
-    "gemini-3.5-flash-lite",
     "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-3.5-flash-lite",
 ]
 
 now = datetime.now(timezone(timedelta(hours=8)))
@@ -65,7 +65,7 @@ def generate_digest_data(prompt_text: str) -> dict:
     last_error = None
 
     for model_name in MODELS:
-        for attempt in range(1, 3):
+        for attempt in range(1, 2):
             try:
                 print(f"[INFO] 嘗試使用模型：{model_name}（第 {attempt} 次）")
                 raw = call_single_model(api_key, model_name, prompt_text)
@@ -105,7 +105,7 @@ def generate_digest_data(prompt_text: str) -> dict:
                     break
 
                 if is_rate_limit and attempt < 2:
-                    sleep_sec = 5 * attempt
+                    sleep_sec = 3
                     print(f"[INFO] 遇到速率限制或忙碌，等待 {sleep_sec} 秒後重試...")
                     time.sleep(sleep_sec)
                     continue
@@ -116,6 +116,7 @@ def generate_digest_data(prompt_text: str) -> dict:
 
 
 data = generate_digest_data(prompt)
+print(f"[INFO] 標題預覽 -> EN: {data['en']['title']} | JA: {data['ja']['title_plain']} | VI: {data['vi']['title']}")
 
 os.makedirs("audio", exist_ok=True)
 
@@ -128,7 +129,7 @@ async def make_audio():
     }
     for k, (v, t) in v_map.items():
         await edge_tts.Communicate(t, v, rate="-8%").save(f"audio/{d_str}-{k}.mp3")
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
 
 
 asyncio.run(make_audio())
