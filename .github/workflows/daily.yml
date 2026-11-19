@@ -26,6 +26,7 @@ jobs:
       - name: Generate daily news and MP3 audio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          IS_MANUAL_RUN: ${{ github.event_name == 'workflow_dispatch' }}
         run: python generate.py
 
       - name: Send LINE Notification
