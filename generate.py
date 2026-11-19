@@ -1,128 +1,75 @@
 import asyncio
-import json
 import os
-import re
-import time
 from datetime import datetime, timedelta, timezone
 import edge_tts
 
-# 依優先順序排列模型：主模型在前，配額受限或失敗時自動往後備援
-MODELS = [
-    "gemini-3.8-flash",
-    "gemini-3.5-flash-lite",
-    "gemini-2.5-flash",
-]
+# 【測試開關】True = 使用假資料不呼叫 Gemini；False = 恢復真實呼叫 Gemini
+USE_MOCK_DATA = True
 
 now = datetime.now(timezone(timedelta(hours=8)))
 d_str = now.strftime("%Y-%m-%d")
 d_disp = now.strftime("%Y.%m.%d")
 w_str = ["一", "二", "三", "四", "五", "六", "日"][now.weekday()]
 
-prompt = f"""為 {d_disp} ({w_str}) 生成三則生活文化新聞（每篇約3~4句）：英文(en)、日文(ja)、越南文(vi)。
-規則：
-1. 日文 title_html、article_html 與 vocab 中的所有漢字皆須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
-2. 三種語言的 vocab 陣列各提供 6 個核心詞彙，每個詞彙皆須明確標註詞性（英文用 (n.)/(v.)/(adj.)/(phr.) 等，日文與越南文用 (名詞)/(動詞)/(形容詞)/(片語) 等），格式如 "<strong>詞彙</strong> (詞性)：中文解釋"。
-嚴格回傳純 JSON（無 markdown）：
-{{"en":{{"tag":"ISSUE NO. 01 • 分類 • 主題","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>word</strong> (n.)：解釋","<strong>word2</strong> (v.)：解釋","<strong>word3</strong> (adj.)：解釋","<strong>word4</strong> (phr.)：解釋","<strong>word5</strong> (n.)：解釋","<strong>word6</strong> (v.)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • JAPAN CULTURE • 主題","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong><ruby>詞<rt>かな</rt></ruby></strong> (名詞)：解釋","<strong>詞2</strong> (動詞)：解釋","<strong>詞3</strong> (形容詞)：解釋","<strong>詞4</strong> (名詞)：解釋","<strong>詞5</strong> (動詞)：解釋","<strong>詞6</strong> (片語)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • VIETNAM LIFESTYLE • 主題","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>từ 1</strong> (名詞)：解釋","<strong>từ 2</strong> (動詞)：解釋","<strong>từ 3</strong> (形容詞)：解釋","<strong>từ 4</strong> (片語)：解釋","<strong>từ 5</strong> (名詞)：解釋","<strong>từ 6</strong> (動詞)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
+MOCK_DATA = {
+    "en": {
+        "tag": "ISSUE NO. 01 • TEST • LIFESTYLE",
+        "title": "Morning Coffee Rituals Boost Focus",
+        "subtitle": "【測試資料】早晨咖啡儀式有助提升專注力",
+        "article": "Many people start their morning with a warm cup of coffee. A calm routine helps set a steady pace for the day. Sharing a quiet moment before work can also improve overall mood.",
+        "vocab": [
+            "<strong>ritual</strong> (n.)：例行儀式",
+            "<strong>focus</strong> (v.)：專注",
+            "<strong>steady</strong> (adj.)：穩定的",
+            "<strong>set a pace</strong> (phr.)：設定節奏",
+            "<strong>routine</strong> (n.)：日常作息",
+            "<strong>improve</strong> (v.)：改善",
+        ],
+        "translation": "<strong>【測試】早晨咖啡儀式有助提升專注力</strong><br>許多人以一杯溫暖的咖啡開啟早晨。平靜的日常作息有助於為一天設定穩定的節奏。在工作前享受片刻寧靜，也能改善整體心情。",
+    },
+    "ja": {
+        "tag": "ISSUE NO. 02 • TEST • JAPAN CULTURE",
+        "title_html": "【<ruby>測試<rt>てすと</rt></ruby>】<ruby>朝<rt>あさ</rt></ruby>の<ruby>散歩<rt>さんぽ</rt></ruby>と<ruby>季節感<rt>きせつかん</rt></ruby>",
+        "title_plain": "【テスト】朝の散歩と季節感",
+        "subtitle": "【測試資料】晨間散步與感受季節變化",
+        "article_html": "<ruby>朝<rt>あさ</rt></ruby>の<ruby>空気<rt>くうき</rt></ruby>を<ruby>吸<rt>す</rt></ruby>いながら<ruby>歩<rt>ある</rt></ruby>くと、<ruby>気分<rt>きぶん</rt></ruby>がすっきりします。<ruby>季節<rt>きせつ</rt></ruby>の<ruby>変化<rt>へんか</rt></ruby>に<ruby>気<rt>き</rt></ruby>づくことも<ruby>毎日<rt>まいにち</rt></ruby>の<ruby>楽<rt>たの</rt></ruby>しみです。",
+        "article_plain": "朝の空気を吸いながら歩くと、気分がすっきりします。季節の変化に気づくことも毎日の楽しみです。",
+        "vocab": [
+            "<strong><ruby>散歩<rt>さんぽ</rt></ruby></strong> (名詞)：散步",
+            "<strong><ruby>空気<rt>くうき</rt></ruby></strong> (名詞)：空氣",
+            "<strong>すっきりする</strong> (片語)：感到清爽、舒暢",
+            "<strong><ruby>季節<rt>きせつ</rt></ruby></strong> (名詞)：季節",
+            "<strong><ruby>変化<rt>へんか</rt></ruby></strong> (名詞)：變化",
+            "<strong><ruby>気<rt>き</rt></ruby>づく</strong> (動詞)：察覺、注意到",
+        ],
+        "translation": "<strong>【測試】晨間散步與感受季節變化</strong><br>呼吸著早晨的空氣散步，會讓心情變得清爽。察覺季節的變化也是每天的樂趣之一。",
+    },
+    "vi": {
+        "tag": "ISSUE NO. 03 • TEST • VIETNAM LIFESTYLE",
+        "title": "Thoi Quen Doc Sach Buoi Sang",
+        "subtitle": "【測試資料】早晨閱讀的習慣",
+        "article": "Doc sach vao buoi sang giup tinh than thu thai hon. Chi can danh ra vai phut yen tinh truoc khi bat dau cong viec. Day la mot thoi quen tot cho suc khoe tinh than.",
+        "vocab": [
+            "<strong>thói quen</strong> (名詞)：習慣",
+            "<strong>đọc sách</strong> (片語)：閱讀",
+            "<strong>buổi sáng</strong> (名詞)：早晨",
+            "<strong>thư thái</strong> (形容詞)：放鬆、自在",
+            "<strong>bắt đầu</strong> (動詞)：開始",
+            "<strong>tinh thần</strong> (名詞)：精神、心靈",
+        ],
+        "translation": "<strong>【測試】早晨閱讀的習慣</strong><br>在早晨閱讀有助於讓心情更加放鬆。只要在開始工作前留出幾分鐘的寧靜時光，這就是對心理健康很有益的習慣。",
+    },
+}
 
 
-def clean_json_text(raw_text: str) -> str:
-    text = raw_text.strip()
-    # 移除開頭與結尾的 ```json 或 ```
-    text = re.sub(r"^```(?:json)?\s*\n?", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"\n?```\s*$", "", text)
-    text = text.strip()
-    # 若前後仍有雜訊文字，嘗試擷取最外層 {...}
-    start = text.find("{")
-    end = text.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        text = text[start : end + 1]
-    return text
+def generate_digest_data() -> dict:
+    if USE_MOCK_DATA:
+        print("[MOCK] 使用測試假資料，不呼叫 Gemini API")
+        return MOCK_DATA
+    raise RuntimeError("目前設定為非測試模式，請改用正式版 generate.py")
 
 
-def call_single_model(api_key: str, model_name: str, prompt_text: str) -> str:
-    # 優先使用新版 google-genai SDK，若未安裝則退回舊版 google-generativeai
-    try:
-        from google import genai  # type: ignore
-
-        client = genai.Client(api_key=api_key)
-        resp = client.models.generate_content(
-            model=model_name,
-            contents=prompt_text,
-        )
-        return (getattr(resp, "text", None) or "").strip()
-    except ImportError:
-        import google.generativeai as genai_legacy  # type: ignore
-
-        genai_legacy.configure(api_key=api_key)
-        legacy_model = genai_legacy.GenerativeModel(model_name)
-        resp = legacy_model.generate_content(prompt_text)
-        return (getattr(resp, "text", None) or "").strip()
-
-
-def generate_digest_data(prompt_text: str) -> dict:
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("找不到環境變數 GEMINI_API_KEY")
-
-    last_error = None
-
-    for model_name in MODELS:
-        # 每個模型最多重試 2 次（主要應對短暫 RPM / 503）
-        for attempt in range(1, 3):
-            try:
-                print(f"[INFO] 嘗試使用模型：{model_name}（第 {attempt} 次）")
-                raw = call_single_model(api_key, model_name, prompt_text)
-                if not raw:
-                    raise RuntimeError(f"模型 {model_name} 回傳空白內容")
-
-                cleaned = clean_json_text(raw)
-                parsed = json.loads(cleaned)
-
-                # 基本欄位檢查
-                for lang_key in ("en", "ja", "vi"):
-                    if lang_key not in parsed:
-                        raise ValueError(f"回傳 JSON 缺少欄位：{lang_key}")
-
-                print(f"[SUCCESS] 已成功透過 {model_name} 取得並解析三語新聞資料")
-                return parsed
-
-            except Exception as e:
-                last_error = e
-                err_str = str(e)
-                print(f"[WARN] 模型 {model_name} 發生錯誤：{err_str}")
-
-                # 判斷是否為每日配額耗盡（例如 quota_value 限制或 retry_delay 很長）
-                is_daily_quota = (
-                    "PerDay" in err_str
-                    or "Daily" in err_str
-                    or "quota_value" in err_str
-                    or bool(re.search(r"seconds:\s*\d{4,}", err_str))
-                )
-                is_rate_limit = (
-                    "429" in err_str
-                    or "RESOURCE_EXHAUSTED" in err_str
-                    or "503" in err_str
-                    or "UNAVAILABLE" in err_str
-                )
-
-                if is_daily_quota:
-                    print(f"[INFO] {model_name} 疑似已達每日配額上限，立即切換下一個模型...")
-                    break
-
-                if is_rate_limit and attempt < 2:
-                    sleep_sec = 5 * attempt
-                    print(f"[INFO] 遇到速率限制或忙碌，等待 {sleep_sec} 秒後重試...")
-                    time.sleep(sleep_sec)
-                    continue
-
-                # JSON 解析失敗或其他錯誤，跳出目前模型改試下一個模型
-                break
-
-    raise RuntimeError(f"所有候選模型皆無法成功生成資料，最後錯誤：{last_error}")
-
-
-data = generate_digest_data(prompt)
+data = generate_digest_data()
 
 os.makedirs("audio", exist_ok=True)
 
@@ -135,7 +82,7 @@ async def make_audio():
     }
     for k, (v, t) in v_map.items():
         await edge_tts.Communicate(t, v, rate="-8%").save(f"audio/{d_str}-{k}.mp3")
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
 
 
 asyncio.run(make_audio())
