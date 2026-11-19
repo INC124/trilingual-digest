@@ -22,8 +22,54 @@ prompt = f"""為 {d_disp} ({w_str}) 生成三則生活文化新聞（每篇約3~
 規則：
 1. 日文 title_html、article_html 與 vocab 中的所有漢字皆須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
 2. 三種語言的 vocab 陣列各提供 6 個核心詞彙，每個詞彙皆須明確標註詞性（英文用 (n.)/(v.)/(adj.)/(phr.) 等，日文與越南文用 (名詞)/(動詞)/(形容詞)/(片語) 等），格式如 "<strong>詞彙</strong> (詞性)：中文解釋"。
+3. 越南文 (vi) 的 title、article 與 vocab 中每個詞彙的詞彙本體（<strong>...</strong> 內）必須是純越南文，嚴禁夾雜任何中文字；中文只能出現在 subtitle、詞彙冒號後的中文解釋與 translation 中。
 嚴格回傳純 JSON（無 markdown）：
 {{"en":{{"tag":"ISSUE NO. 01 • 分類 • 主題","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>word</strong> (n.)：解釋","<strong>word2</strong> (v.)：解釋","<strong>word3</strong> (adj.)：解釋","<strong>word4</strong> (phr.)：解釋","<strong>word5</strong> (n.)：解釋","<strong>word6</strong> (v.)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • JAPAN CULTURE • 主題","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong><ruby>詞<rt>かな</rt></ruby></strong> (名詞)：解釋","<strong>詞2</strong> (動詞)：解釋","<strong>詞3</strong> (形容詞)：解釋","<strong>詞4</strong> (名詞)：解釋","<strong>詞5</strong> (動詞)：解釋","<strong>詞6</strong> (片語)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • VIETNAM LIFESTYLE • 主題","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>từ 1</strong> (名詞)：解釋","<strong>từ 2</strong> (動詞)：解釋","<strong>từ 3</strong> (形容詞)：解釋","<strong>từ 4</strong> (片語)：解釋","<strong>từ 5</strong> (名詞)：解釋","<strong>từ 6</strong> (動詞)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
+
+
+def clean_vi_text(text: str) -> str:
+    if not isinstance(text, str):
+        return text
+    cleaned = text
+    # 常見越中混字防呆：例如「thủ都」應為「thủ đô」
+    cleaned = re.sub(r"\bthủ都\b", "thủ đô", cleaned, flags=re.IGNORECASE)
+    cleaned = cleaned.replace("thủ都", "thủ đô")
+    # 移除其餘誤混在純越南文欄位中的中文字
+    cleaned = re.sub(r"[\u4e00-\u9fff]+", "", cleaned)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
+    return cleaned
+
+
+def sanitize_vi_data(vi_obj: dict) -> dict:
+    if not isinstance(vi_obj, dict):
+        return vi_obj
+
+    for field in ("title", "article"):
+        if field in vi_obj and isinstance(vi_obj[field], str):
+            original = vi_obj[field]
+            fixed = clean_vi_text(original)
+            if fixed != original:
+                print(f"[WARN] 越南文 {field} 觸發防呆清理：'{original}' -> '{fixed}'")
+                vi_obj[field] = fixed
+
+    if isinstance(vi_obj.get("vocab"), list):
+        new_vocab = []
+        for item in vi_obj["vocab"]:
+            if isinstance(item, str):
+                fixed_item = re.sub(
+                    r"(<strong>)(.*?)(</strong>)",
+                    lambda m: m.group(1) + clean_vi_text(m.group(2)) + m.group(3),
+                    item,
+                    count=1,
+                )
+                if fixed_item != item:
+                    print(f"[WARN] 越南文詞彙觸發防呆清理：'{item}' -> '{fixed_item}'")
+                new_vocab.append(fixed_item)
+            else:
+                new_vocab.append(item)
+        vi_obj["vocab"] = new_vocab
+
+    return vi_obj
 
 
 def clean_json_text(raw_text: str) -> str:
@@ -79,6 +125,7 @@ def generate_digest_data(prompt_text: str) -> dict:
                     if lang_key not in parsed:
                         raise ValueError(f"回傳 JSON 缺少欄位：{lang_key}")
 
+                parsed["vi"] = sanitize_vi_data(parsed["vi"])
                 print(f"[SUCCESS] 已成功透過 {model_name} 取得並解析三語新聞資料")
                 return parsed
 
