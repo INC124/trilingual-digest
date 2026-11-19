@@ -2,7 +2,7 @@ name: Daily Trilingual Digest Auto Generator
 
 on:
   schedule:
-    - cron: '12 0 * * *' # UTC 00:12 = 台灣時間每天早上 08:12
+    - cron: '37 22 * * *' # UTC 22:37 = 台灣時間每天早上 06:37
   workflow_dispatch: # 允許在 GitHub 網頁上手動點擊按鈕立即測試執行
 
 permissions:
