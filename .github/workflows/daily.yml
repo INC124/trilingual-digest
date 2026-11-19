@@ -35,12 +35,13 @@ jobs:
           LINE_CHANNEL_SECRET: ${{ secrets.LINE_CHANNEL_SECRET }}
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           LINE_GROUP_ID: ${{ secrets.LINE_GROUP_ID }}
+          LINE_GROUP_IDS: ${{ secrets.LINE_GROUP_IDS }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
         run: python send_line_notification.py
 
       - name: Commit and push updates
         run: |
           git config user.name "Daily Digest Bot"
-          git config user.email "bot@://github.com"
+          git config user.email "bot@users.noreply.github.com"
           git add .
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update daily digest" && git push)
