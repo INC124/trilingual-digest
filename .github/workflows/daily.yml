@@ -24,7 +24,6 @@ jobs:
         run: pip install google-generativeai edge-tts requests beautifulsoup4 pytz
 
       - name: Generate daily news and MP3 audio
-        if: false
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python generate.py
