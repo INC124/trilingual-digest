@@ -202,6 +202,37 @@ def strip_ruby_tags(html_text: str) -> str:
     return re.sub(r"\s+", " ", soup.get_text()).strip()
 
 
+def has_enough_zh(text: str, min_chars: int = 25) -> bool:
+    if not text:
+        return False
+    zh_chars = re.findall(r"[\u4e00-\u9fff]", text)
+    return len(zh_chars) >= min_chars
+
+
+def translate_to_zh_tw(source_text: str, lang_name: str, model_names: list) -> str:
+    if not source_text.strip():
+        return ""
+    trans_prompt = (
+        f"請將以下{lang_name}短文翻譯成自然流暢的「繁體中文」，"
+        f"保留原本段落結構，只輸出繁體中文譯文，不要加任何說明或原文：\n\n{source_text}"
+    )
+    for m_name in model_names:
+        try:
+            m = genai.GenerativeModel(
+                model_name=m_name,
+                generation_config={"temperature": 0.3},
+            )
+            res = m.generate_content(trans_prompt)
+            out = (res.text or "").strip()
+            out = re.sub(r"^```[a-zA-Z]*\s*|\s*```$", "", out).strip()
+            if has_enough_zh(out, min_chars=20):
+                return out
+        except Exception as e:
+            print(f"⚠️ [{lang_name}] 補翻模型 {m_name} 失敗：{e}")
+            continue
+    return ""
+
+
 # ==========================================
 # 5. Gemini 文章生成
 # ==========================================
@@ -231,7 +262,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   - **英文（en）`content`**：約 **130～165 個英文單字（words）**，分成 2 個自然段落，敘事流暢、有畫面感。
   - **日文（ja）`content`**：約 **160～220 個日文字元（含標點，不含 `<ruby>` 標籤字元）**，自然道地的書面生活敘事，分成 2 個段落。
   - **越南文（vi）`content`**：約 **130～170 個越南文詞（words）**，自然道地、貼近日常，分成 2 個段落。
-  - **繁體中文全譯 `translation`**：每篇皆附通順自然的繁體中文翻譯，約 **150～200 個中文字**。
+  - **繁體中文全譯 `translation`**：每篇皆附通順自然的繁體中文翻譯，約 **150～200 個中文字**。**`translation` 欄位必須是繁體中文，絕對不可照抄原文（尤其是越南文篇的全譯必須翻成繁體中文，不可留成越南文）**。
 3. **三語題材互補、不要三篇寫同一件事**：
   - 英文篇可從英文素材池挑選國際新聞、設計藝術或跨文化故事（也可結合今日切角）。
   - 日文篇從日文素材池（或結合日本季節/生活/歷史同月同日切角）撰寫純正日文短文。
@@ -240,7 +271,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   - 日文 `content` 中的常用漢字請加上 `<ruby>漢字<rt>ふりがな</rt></ruby>` 標音（片假名、平假名與數字不需加 ruby）。
   - `audio_text` 則提供「完全不含 HTML 標籤」的純日文文本供 TTS 朗讀。
 5. **越南文純淨度規則（vi）**：
-  - 越南文 `title`、`content`、`audio_text`、`vocab.word`、`vocab.example` **必須 100% 為純正越南文**，嚴禁夾雜任何中文字、日文假名或無關英文單字。
+  - 越南文 `title`、`content`、`audio_text`、`vocab.word`、`vocab.example` **必須 100% 為純正越南文**，嚴禁夾雜任何中文字、日文假名或無關英文單字；而 `vi.translation`、`vocab.meaning`、`vocab.example_zh` 則必須為**繁體中文**。
 6. **精選詞彙（vocab）**：
   - 每種語言挑出 **4 個** 最值得學習的關鍵詞彙或片語，附上詞性（`pos`：如 n. / v. / adj. / adv. / phr.）、繁體中文釋義（`meaning`），以及一句與本文情境相關的短例句（`example`）與例句中文翻譯（`example_zh`）。
 
@@ -266,7 +297,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     "title": "具體有吸引力的英文標題",
     "content": "約 130-165 英文單字的正文（可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純英文正文",
-    "translation": "約 150-200 字的流暢繁體中文全譯",
+    "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
     "vocab": [
       {{
         "word": "單字或片語",
@@ -282,7 +313,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     "title": "具體有吸引力的日文標題（純文字，不加 ruby）",
     "content": "約 160-220 字元的日文正文（漢字附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純日文正文（不含任何 HTML 標籤）",
-    "translation": "約 150-200 字的流暢繁體中文全譯",
+    "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
     "vocab": [
       {{
         "word": "日文單字（可附假名讀音）",
@@ -298,7 +329,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     "title": "具體有吸引力的純正越南文標題",
     "content": "約 130-170 詞的純正越南文正文（可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純正越南文正文",
-    "translation": "約 150-200 字的流暢繁體中文全譯",
+    "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文，不可照抄越南文）",
     "vocab": [
       {{
         "word": "純正越南文單字或片語",
@@ -352,6 +383,18 @@ def generate_trilingual_digest(seeds: dict) -> dict:
         data["vi"] = sanitize_vi_data(data["vi"])
         if not data["vi"].get("audio_text"):
             data["vi"]["audio_text"] = clean_vi_text(data["vi"].get("content", ""))
+
+    # 全譯防呆：若未翻成足夠繁體中文，自動補翻一次
+    lang_label_map = {"en": "英文", "ja": "日文", "vi": "越南文"}
+    for k, zh_label in lang_label_map.items():
+        if k in data and isinstance(data[k], dict):
+            sec = data[k]
+            if not has_enough_zh(sec.get("translation", ""), min_chars=25):
+                plain_src = strip_ruby_tags(sec.get("content", "")) if k == "ja" else sec.get("content", "")
+                fixed_zh = translate_to_zh_tw(plain_src, zh_label, candidate_models)
+                if fixed_zh:
+                    sec["translation"] = fixed_zh
+                    print(f"🛠️ [{k.upper()}] 全譯缺漏或未轉繁體中文，已自動補翻完成。")
 
     return data
 
