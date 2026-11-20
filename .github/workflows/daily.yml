@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '53 22 * * *' # UTC 22:53 = 台灣時間每天早上 06:53
   workflow_dispatch: # 允許在 GitHub 網頁上手動點擊按鈕立即測試執行
+    inputs:
+      version_suffix:
+        description: '試閱版本後綴（輸入 v1 產出 2026-11-20v1 且只通知巡檢機器人；留空則為正式版）'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -21,13 +26,21 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install google-generativeai edge-tts requests beautifulsoup4 pytz
+        run: pip install google-generativeai edge-tts requests beautifulsoup4 pytz lxml
 
       - name: Generate daily news and MP3 audio
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           IS_MANUAL_RUN: ${{ github.event_name == 'workflow_dispatch' }}
+          VERSION_SUFFIX: ${{ github.event.inputs.version_suffix || '' }}
         run: python generate.py
+
+      - name: Commit and push updates
+        run: |
+          git config user.name "Daily Digest Bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update daily digest" && git push)
 
       - name: Send LINE Notification
         env:
@@ -37,11 +50,5 @@ jobs:
           LINE_GROUP_ID: ${{ secrets.LINE_GROUP_ID }}
           LINE_GROUP_IDS: ${{ secrets.LINE_GROUP_IDS }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          VERSION_SUFFIX: ${{ github.event.inputs.version_suffix || '' }}
         run: python send_line_notification.py
-
-      - name: Commit and push updates
-        run: |
-          git config user.name "Daily Digest Bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add .
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update daily digest" && git push)
