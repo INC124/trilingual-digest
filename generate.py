@@ -1,535 +1,624 @@
-import asyncio
-import json
 import os
-import random
 import re
-import time
-import urllib.request
-import xml.etree.ElementTree as ET
-from datetime import datetime, timedelta, timezone
+import json
+import random
+import asyncio
+import datetime
+import pytz
+import requests
+from bs4 import BeautifulSoup
+import google.generativeai as genai
 import edge_tts
 
-# 依穩定度與能力排列模型，避免單一模型逾時拖慢整體執行
-MODELS = [
-    "gemini-3.8-flash",
-    "gemini-3.5-flash-lite",
-]
+# ==========================================
+# 1. 基本環境與 API 設定
+# ==========================================
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    raise ValueError("找不到 GEMINI_API_KEY 環境變數，請確認 GitHub Secrets 設定！")
 
-MAX_ATTEMPTS_PER_MODEL = 3
+genai.configure(api_key=GEMINI_API_KEY)
 
-THEME_POOL = [
-    "當地生活與日常習慣",
-    "文化與藝術傳統",
-    "國際趣聞與跨國交流",
-    "飲食、旅遊與城市風景",
-]
+TZ = pytz.timezone("Asia/Taipei")
+NOW = datetime.datetime.now(TZ)
+TODAY_STR = NOW.strftime("%Y-%m-%d")
+MONTH_DAY_ZH = f"{NOW.month}月{NOW.day}日"
+MONTH_DAY_EN = NOW.strftime("%B %d")
 
-now = datetime.now(timezone(timedelta(hours=8)))
-d_str = now.strftime("%Y-%m-%d")
-d_disp = now.strftime("%Y.%m.%d")
-w_str = ["一", "二", "三", "四", "五", "六", "日"][now.weekday()]
+OUTPUT_DIR = "docs"
+AUDIO_DIR = os.path.join(OUTPUT_DIR, "audio")
+ARCHIVE_DIR = os.path.join(OUTPUT_DIR, "archive")
+os.makedirs(AUDIO_DIR, exist_ok=True)
+os.makedirs(ARCHIVE_DIR, exist_ok=True)
 
-
-def fetch_rss_seeds(limit: int = 6) -> list[str]:
-    """抓取公開 RSS 標題與摘要作為真實素材參考（失敗時回傳空清單）"""
-    rss_urls = [
-        "https://feeds.bbci.co.uk/news/world/rss.xml",
-        "https://www3.nhk.or.jp/rss/news/cat0.xml",
-    ]
-    seeds = []
-    for url in rss_urls:
-        try:
-            req = urllib.request.Request(
-                url,
-                headers={"User-Agent": "Mozilla/5.0 (TrilingualDigestBot/1.0)"},
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                xml_data = resp.read()
-            root = ET.fromstring(xml_data)
-            for item in root.findall(".//item")[:limit]:
-                title = (item.findtext("title") or "").strip()
-                desc = re.sub(r"<[^>]+>", "", item.findtext("description") or "").strip()
-                if title:
-                    seeds.append(f"- {title}：{desc[:120]}")
-        except Exception as e:
-            print(f"[WARN] 抓取 RSS 素材失敗 ({url}): {e}")
-    return seeds[:limit]
-
-
-rng = random.Random(d_str)
-daily_themes = {
-    "en": rng.choice(THEME_POOL),
-    "ja": rng.choice(THEME_POOL),
-    "vi": rng.choice(THEME_POOL + ["越南生活文化與國際連結"]),
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/128.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8",
 }
-print(
-    f"[INFO] 今日隨機主題分配 -> EN: {daily_themes['en']} | "
-    f"JA: {daily_themes['ja']} | VI: {daily_themes['vi']}"
-)
 
-seeds = fetch_rss_seeds(limit=6)
-seed_block = (
-    "以下為今日參考的真實新聞/文化素材，請優先挑選適合生活、文化或國際趣聞的題材改寫（每篇約3~4句）：\n"
-    + "\n".join(seeds)
-    if seeds
-    else "今日未取得外部新聞列表，請撰寫貼近真實日常的生活文化短文（每篇約3~4句）。"
-)
+# ==========================================
+# 2. 三語多來源 RSS 設定池
+# ==========================================
+RSS_SOURCES = {
+    "en": [
+        {"name": "BBC World", "url": "https://feeds.bbci.co.uk/news/world/rss.xml"},
+        {"name": "AP News", "url": "https://feedx.net/rss/ap.xml"},
+        {"name": "The Japan Times", "url": "https://www.japantimes.co.jp/feed/"},
+        {"name": "The Japan News", "url": "https://japannews.yomiuri.co.jp/feed/"},
+        {"name": "SoraNews24", "url": "https://soranews24.com/feed/"},
+        {"name": "Unseen Japan", "url": "https://unseen-japan.com/feed/"},
+        {"name": "Tokyo Weekender", "url": "https://www.tokyoweekender.com/japan-life/news-and-opinion/feed/"},
+        {"name": "Spoon & Tamago", "url": "https://spoon-tamago.com/feed/"},
+        {"name": "Vietnam News Society", "url": "https://vietnamnews.vn/rss/society.rss"},
+        {"name": "FluentU Japanese", "url": "https://www.fluentu.com/blog/japanese/feed/"},
+    ],
+    "ja": [
+        {"name": "NHK News", "url": "https://www3.nhk.or.jp/rss/news/cat0.xml"},
+        {"name": "苫小牧民報", "url": "https://www.tomamin.co.jp/feed"},
+        {"name": "KBS World 日文今日新聞", "url": "http://world.kbs.co.kr/rss/rss_news.htm?lang=j&today=Y"},
+        {"name": "KBS World 日文文化", "url": "http://world.kbs.co.kr/rss/rss_news.htm?lang=j&id=Cu"},
+    ],
+    "vi": [
+        {"name": "Tuổi Trẻ", "url": "https://tuoitre.vn/rss/tin-moi-nhat.rss"},
+        {"name": "Người Việt", "url": "https://www.nguoi-viet.com/feed/"},
+        {"name": "Thanh Niên", "url": "https://thanhnien.vn/rss/home.rss"},
+        {"name": "Gia đình & Xã hội", "url": "https://giadinh.suckhoedoisong.vn/rss/home.rss"},
+    ],
+}
 
-prompt = f"""為 {d_disp} ({w_str}) 生成三則短文（每篇約3~4句），涵蓋國際、生活與文化面向：英文(en)、日文(ja)、越南文(vi)。
-今日主題方向建議：
-- 英文(en)：{daily_themes['en']}
-- 日文(ja)：{daily_themes['ja']}
-- 越南文(vi)：{daily_themes['vi']}（兼顧越南生活/文化，並適度融入近年越南的國際連結或交流視角，風格自然易讀）
+# 每日內容切角（結合當天真實新聞、歷史同月同日、生活文化與節慶小故事）
+ANGLE_POOL = [
+    {
+        "name": "當日真實新聞與生活影響",
+        "instruction": (
+            f"從下方素材中挑選一則具體真實事件，寫出明確的人事時地物與它對一般人日常生活的影響，"
+            f"避免空泛的總結或口號。"
+        ),
+    },
+    {
+        "name": "歷史上同月同日（{md_zh} / {md_en}）的真實事件或文化里程碑",
+        "instruction": (
+            f"優先結合「歷史上 {MONTH_DAY_ZH}（{MONTH_DAY_EN}）曾發生的真實事件、發明、文化作品或生活變遷」"
+            f"（若素材中無直接關聯，可獨立選取歷史上 {MONTH_DAY_ZH} 確有記載的真實故事），"
+            f"写出當時的具體場景與細節，並點出它與現代生活的連結。"
+        ),
+    },
+    {
+        "name": "貼近日常的生活文化與飲食小故事",
+        "instruction": (
+            f"從素材或在地文化脈絡中，聚焦一個具體的生活細節、街頭飲食、地方習慣或工藝設計，"
+            f"描述人們實際怎麼做、在哪裡發生、有什麼獨特之處，讓讀者有身歷其境的畫面感。"
+        ),
+    },
+    {
+        "name": "節慶習俗、季節更迭與地方風情",
+        "instruction": (
+            f"結合 {MONTH_DAY_ZH} 前後的季節氛圍、傳統節慶習俗或素材中的地方活動，"
+            f"具體描寫當地人如何準備、吃什麼、做什麼活動，避免只用形容詞讚美。"
+        ),
+    },
+]
 
-{seed_block}
+# ==========================================
+# 3. RSS 素材抓取與抽樣
+# ==========================================
+def clean_html_text(raw_html: str, max_len: int = 280) -> str:
+    if not raw_html:
+        return ""
+    soup = BeautifulSoup(raw_html, "html.parser")
+    text = re.sub(r"\s+", " ", soup.get_text(" ", strip=True)).strip()
+    if len(text) > max_len:
+        text = text[:max_len].rstrip() + "..."
+    return text
 
-規則：
-1. 事實與防腦補：若有提供參考素材，請優先依據素材改寫；若缺乏特定細節，請以真實日常與文化角度描述，嚴禁自行編造未提及的具體數字、統計、得獎紀錄或虛構事件。
-2. 日文 title_html、article_html 與 vocab 中的所有漢字皆須加 <ruby>漢字<rt>かな</rt></ruby>；title_plain 與 article_plain 為純日文無標籤。
-3. 三種語言的 vocab 陣列各提供 6 個核心詞彙，每個詞彙皆須明確標註詞性（英文用 (n.)/(v.)/(adj.)/(phr.) 等，日文與越南文用 (名詞)/(動詞)/(形容詞)/(片語) 等），格式如 "<strong>詞彙</strong> (詞性)：中文解釋"。
-4. 越南文 (vi) 的 title、article 與 vocab 中每個詞彙的詞彙本體（<strong>...</strong> 內）必須是純越南文，嚴禁夾雜任何中文字；中文只能出現在 subtitle、詞彙冒號後的中文解釋與 translation 中。
-嚴格回傳純 JSON（無 markdown）：
-{{"en":{{"tag":"ISSUE NO. 01 • {daily_themes['en']}","title":"英文標題","subtitle":"中文副標","article":"英文內文","vocab":["<strong>word</strong> (n.)：解釋","<strong>word2</strong> (v.)：解釋","<strong>word3</strong> (adj.)：解釋","<strong>word4</strong> (phr.)：解釋","<strong>word5</strong> (n.)：解釋","<strong>word6</strong> (v.)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"ja":{{"tag":"ISSUE NO. 02 • {daily_themes['ja']}","title_html":"含ruby標題","title_plain":"純日文標題","subtitle":"中文副標","article_html":"含ruby內文","article_plain":"純日文內文","vocab":["<strong><ruby>詞<rt>かな</rt></ruby></strong> (名詞)：解釋","<strong>詞2</strong> (動詞)：解釋","<strong>詞3</strong> (形容詞)：解釋","<strong>詞4</strong> (名詞)：解釋","<strong>詞5</strong> (動詞)：解釋","<strong>詞6</strong> (片語)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}},"vi":{{"tag":"ISSUE NO. 03 • {daily_themes['vi']}","title":"越南文標題","subtitle":"中文副標","article":"越南文內文","vocab":["<strong>từ 1</strong> (名詞)：解釋","<strong>từ 2</strong> (動詞)：解釋","<strong>từ 3</strong> (形容詞)：解釋","<strong>từ 4</strong> (片語)：解釋","<strong>từ 5</strong> (名詞)：解釋","<strong>từ 6</strong> (動詞)：解釋"],"translation":"<strong>中文標題</strong><br>中文全譯"}}}}"""
+
+def fetch_single_rss(source_name: str, url: str, per_source_limit: int = 4) -> list:
+    items = []
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=12)
+        resp.raise_for_status()
+        resp.encoding = resp.apparent_encoding or "utf-8"
+
+        soup = BeautifulSoup(resp.text, "xml")
+        entries = soup.find_all("item")
+        if not entries:
+            entries = soup.find_all("entry")
+
+        for entry in entries[:per_source_limit]:
+            title_tag = entry.find("title")
+            desc_tag = entry.find("description") or entry.find("summary") or entry.find("content")
+            title = clean_html_text(title_tag.get_text() if title_tag else "", max_len=140)
+            desc = clean_html_text(desc_tag.get_text() if desc_tag else "", max_len=280)
+            if title:
+                items.append({
+                    "source": source_name,
+                    "title": title,
+                    "summary": desc,
+                })
+    except Exception as e:
+        print(f"⚠️ RSS 抓取略過 [{source_name}]: {e}")
+    return items
 
 
+def gather_rss_seeds() -> dict:
+    seeds = {"en": [], "ja": [], "vi": []}
+    for lang, source_list in RSS_SOURCES.items():
+        pool = []
+        for src in source_list:
+            fetched = fetch_single_rss(src["name"], src["url"], per_source_limit=4)
+            pool.extend(fetched)
+        random.shuffle(pool)
+        # 每次最多挑 8 則候選給模型挑選其中「最具體的一則」深入撰寫
+        seeds[lang] = pool[:8]
+        print(f"✅ [{lang.upper()}] 共取得 {len(pool)} 則素材，抽樣 {len(seeds[lang])} 則供寫作參考")
+    return seeds
+
+
+# ==========================================
+# 4. 語言清洗與格式防呆
+# ==========================================
 def clean_vi_text(text: str) -> str:
-    if not isinstance(text, str):
-        return text
-    cleaned = text
-    # 常見越中混字防呆：例如「thủ都」應為「thủ đô」
-    cleaned = re.sub(r"\bthủ都\b", "thủ đô", cleaned, flags=re.IGNORECASE)
-    cleaned = cleaned.replace("thủ都", "thủ đô")
-    # 移除其餘誤混在純越南文欄位中的中文字
-    cleaned = re.sub(r"[\u4e00-\u9fff]+", "", cleaned)
-    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
-    return cleaned
+    if not text:
+        return ""
+    # 移除意外夾雜的 CJK（中文/日文假名/漢字）與韓文字元
+    text = re.sub(r"[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af]+", "", text)
+    text = re.sub(r"\s{2,}", " ", text).strip()
+    return text
 
 
 def sanitize_vi_data(vi_obj: dict) -> dict:
     if not isinstance(vi_obj, dict):
         return vi_obj
-
-    for field in ("title", "article"):
-        if field in vi_obj and isinstance(vi_obj[field], str):
-            original = vi_obj[field]
-            fixed = clean_vi_text(original)
-            if fixed != original:
-                print(f"[WARN] 越南文 {field} 觸發防呆清理：'{original}' -> '{fixed}'")
-                vi_obj[field] = fixed
-
-    if isinstance(vi_obj.get("vocab"), list):
-        new_vocab = []
+    for key in ["title", "content", "audio_text"]:
+        if key in vi_obj and isinstance(vi_obj[key], str):
+            vi_obj[key] = clean_vi_text(vi_obj[key])
+    if "vocab" in vi_obj and isinstance(vi_obj["vocab"], list):
+        cleaned_vocab = []
         for item in vi_obj["vocab"]:
-            if isinstance(item, str):
-                fixed_item = re.sub(
-                    r"(<strong>)(.*?)(</strong>)",
-                    lambda m: m.group(1) + clean_vi_text(m.group(2)) + m.group(3),
-                    item,
-                    count=1,
-                )
-                if fixed_item != item:
-                    print(f"[WARN] 越南文詞彙觸發防呆清理：'{item}' -> '{fixed_item}'")
-                new_vocab.append(fixed_item)
-            else:
-                new_vocab.append(item)
-        vi_obj["vocab"] = new_vocab
-
+            if not isinstance(item, dict):
+                continue
+            item["word"] = clean_vi_text(item.get("word", ""))
+            item["example"] = clean_vi_text(item.get("example", ""))
+            cleaned_vocab.append(item)
+        vi_obj["vocab"] = cleaned_vocab
     return vi_obj
 
 
-def clean_json_text(raw_text: str) -> str:
-    text = raw_text.strip()
-    text = re.sub(r"^```(?:json)?\s*\n?", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"\n?```\s*$", "", text)
-    text = text.strip()
-    start = text.find("{")
-    end = text.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        text = text[start : end + 1]
-    return text
+def strip_ruby_tags(html_text: str) -> str:
+    if not html_text:
+        return ""
+    soup = BeautifulSoup(html_text, "html.parser")
+    for rt in soup.find_all(["rt", "rp"]):
+        rt.decompose()
+    return re.sub(r"\s+", " ", soup.get_text()).strip()
 
 
-def call_single_model(api_key: str, model_name: str, prompt_text: str) -> str:
-    try:
-        from google import genai  # type: ignore
-        from google.genai import types  # type: ignore
+# ==========================================
+# 5. Gemini 文章生成
+# ==========================================
+def generate_trilingual_digest(seeds: dict) -> dict:
+    day_index = NOW.toordinal()
+    angle = ANGLE_POOL[day_index % len(ANGLE_POOL)]
+    angle_name = angle["name"].format(md_zh=MONTH_DAY_ZH, md_en=MONTH_DAY_EN)
+    angle_instruction = angle["instruction"]
 
-        client = genai.Client(api_key=api_key)
-        resp = client.models.generate_content(
-            model=model_name,
-            contents=prompt_text,
-            config=types.GenerateContentConfig(
-                temperature=0.7,
-                response_mime_type="application/json",
-            ),
-        )
-        return (getattr(resp, "text", None) or "").strip()
-    except ImportError:
-        import google.generativeai as genai_legacy  # type: ignore
+    # 偶爾讓日文或越文也能借鏡英文日本/越南文化專欄靈感（僅作題材靈感，輸出仍必須為純正目標語言）
+    cross_inspiration = [s for s in seeds["en"] if s["source"] in {
+        "SoraNews24", "Unseen Japan", "Tokyo Weekender", "Spoon & Tamago", "FluentU Japanese", "Vietnam News Society"
+    }][:3]
 
-        genai_legacy.configure(api_key=api_key)
-        legacy_model = genai_legacy.GenerativeModel(
-            model_name,
-            generation_config=genai_legacy.GenerationConfig(
-                temperature=0.7,
-                response_mime_type="application/json",
-            ),
-        )
-        resp = legacy_model.generate_content(prompt_text)
-        return (getattr(resp, "text", None) or "").strip()
+    prompt = f"""
+你是一位擅長說故事、觀察細膩的多語專欄作家與語言教練。今天是 {TODAY_STR}（{MONTH_DAY_ZH} / {MONTH_DAY_EN}）。
+請為「Daily Trilingual Digest（每日三語精選）」撰寫今天的 **英文（en）、日文（ja）、越南文（vi）** 三篇短文。
 
+### 今日寫作切角：{angle_name}
+{angle_instruction}
 
-def generate_digest_data(prompt_text: str) -> dict:
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("找不到環境變數 GEMINI_API_KEY")
+### 核心寫作要求（務必嚴格遵守）：
+1. **拒絕空泛與說教**：
+   - 絕對不要寫「這展現了文化之美」「隨著時代變遷」「令人深思」這類空洞套話。
+   - 每篇必須鎖定 **單一具體事件、歷史同月同日真實故事、或具體的生活/飲食/節慶場景**，寫出清楚的「誰、在哪裡、做了什麼、有什麼具體細節或有趣轉折」。
+   - 若引用歷史上 {MONTH_DAY_ZH} 的事件，必須是真實確切的歷史事件，不可杜撰年份或虛構人物。
+2. **篇幅設定（約 150 字左右）**：
+   - **英文（en）`content`**：約 **130～165 個英文單字（words）**，分成 2 個自然段落，敘事流暢、有畫面感。
+   - **日文（ja）`content`**：約 **160～220 個日文字元（含標點，不含 `<ruby>` 標籤字元）**，自然道地的書面生活敘事，分成 2 個段落。
+   - **越南文（vi）`content`**：約 **130～170 個越南文詞（words）**，自然道地、貼近日常，分成 2 個段落。
+   - **繁體中文全譯 `translation`**：每篇皆附通順自然的繁體中文翻譯，約 **150～200 個中文字**。
+3. **三語題材互補、不要三篇寫同一件事**：
+   - 英文篇可從英文素材池挑選國際新聞、設計藝術或跨文化故事（也可結合今日切角）。
+   - 日文篇從日文素材池（或結合日本季節/生活/歷史同月同日切角）撰寫純正日文短文。
+   - 越南文篇從越南文素材池（或結合越南生活飲食/節慶/歷史同月同日切角）撰寫純正越南文短文。
+4. **日文標音規則（ja）**：
+   - 日文 `content` 中的常用漢字請加上 `<ruby>漢字<rt>ふりがな</rt></ruby>` 標音（片假名、平假名與數字不需加 ruby）。
+   - `audio_text` 則提供「完全不含 HTML 標籤」的純日文文本供 TTS 朗讀。
+5. **越南文純淨度規則（vi）**：
+   - 越南文 `title`、`content`、`audio_text`、`vocab.word`、`vocab.example` **必須 100% 為純正越南文**，嚴禁夾雜任何中文字、日文假名或無關英文單字。
+6. **精選詞彙（vocab）**：
+   - 每種語言挑出 **4 個** 最值得學習的關鍵詞彙或片語，附上詞性（`pos`：如 n. / v. / adj. / adv. / phr.）、繁體中文釋義（`meaning`），以及一句與本文情境相關的短例句（`example`）與例句中文翻譯（`example_zh`）。
 
-    last_error = None
+### 參考素材池（請從中挑選最具體的一則發揮，勿將多則硬湊成大雜燴）：
+- **英文素材（EN Seeds）**：
+{json.dumps(seeds["en"], ensure_ascii=False, indent=2)}
 
-    for model_name in MODELS:
-        for attempt in range(1, MAX_ATTEMPTS_PER_MODEL + 1):
-            try:
-                print(f"[INFO] 嘗試使用模型：{model_name}（第 {attempt}/{MAX_ATTEMPTS_PER_MODEL} 次）")
-                raw = call_single_model(api_key, model_name, prompt_text)
-                if not raw:
-                    raise RuntimeError(f"模型 {model_name} 回傳空白內容")
+- **日文素材（JA Seeds）**：
+{json.dumps(seeds["ja"], ensure_ascii=False, indent=2)}
 
-                cleaned = clean_json_text(raw)
-                parsed = json.loads(cleaned)
+- **越南文素材（VI Seeds）**：
+{json.dumps(seeds["vi"], ensure_ascii=False, indent=2)}
 
-                for lang_key in ("en", "ja", "vi"):
-                    if lang_key not in parsed:
-                        raise ValueError(f"回傳 JSON 缺少欄位：{lang_key}")
+- **亞洲生活文化補充靈感（僅供題材參考，請轉寫為對應目標語言）**：
+{json.dumps(cross_inspiration, ensure_ascii=False, indent=2)}
 
-                parsed["vi"] = sanitize_vi_data(parsed["vi"])
-                print(f"[SUCCESS] 已成功透過 {model_name} 取得並解析三語新聞資料")
-                return parsed
+### 輸出格式（必須為合法 JSON，勿加 Markdown 程式碼區塊以外的多餘說明）：
+{{
+  "date": "{TODAY_STR}",
+  "angle": "{angle_name}",
+  "en": {{
+    "source_note": "參考來源名稱或歷史主題",
+    "title": "具體有吸引力的英文標題",
+    "content": "約 130-165 英文單字的正文（可用 \\n\\n 分兩段）",
+    "audio_text": "供朗讀的純英文正文",
+    "translation": "約 150-200 字的流暢繁體中文全譯",
+    "vocab": [
+      {{
+        "word": "單字或片語",
+        "pos": "n.",
+        "meaning": "繁體中文釋義",
+        "example": "英文例句",
+        "example_zh": "例句繁體中文翻譯"
+      }}
+    ]
+  }},
+  "ja": {{
+    "source_note": "參考來源名稱或歷史主題",
+    "title": "具體有吸引力的日文標題（純文字，不加 ruby）",
+    "content": "約 160-220 字元的日文正文（漢字附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
+    "audio_text": "供朗讀的純日文正文（不含任何 HTML 標籤）",
+    "translation": "約 150-200 字的流暢繁體中文全譯",
+    "vocab": [
+      {{
+        "word": "日文單字（可附假名讀音）",
+        "pos": "名詞",
+        "meaning": "繁體中文釋義",
+        "example": "日文例句（純文字）",
+        "example_zh": "例句繁體中文翻譯"
+      }}
+    ]
+  }},
+  "vi": {{
+    "source_note": "參考來源名稱或歷史主題",
+    "title": "具體有吸引力的純正越南文標題",
+    "content": "約 130-170 詞的純正越南文正文（可用 \\n\\n 分兩段）",
+    "audio_text": "供朗讀的純正越南文正文",
+    "translation": "約 150-200 字的流暢繁體中文全譯",
+    "vocab": [
+      {{
+        "word": "純正越南文單字或片語",
+        "pos": "n.",
+        "meaning": "繁體中文釋義",
+        "example": "純正越南文例句",
+        "example_zh": "例句繁體中文翻譯"
+      }}
+    ]
+  }}
+}}
+"""
 
-            except Exception as e:
-                last_error = e
-                err_str = str(e)
-                print(f"[WARN] 模型 {model_name}（第 {attempt} 次）發生錯誤：{err_str}")
-
-                is_model_not_found = (
-                    "404" in err_str
-                    or "no longer available" in err_str.lower()
-                    or "not found" in err_str.lower()
-                )
-                is_daily_quota = (
-                    "PerDay" in err_str
-                    or "Daily" in err_str
-                    or "quota_value" in err_str
-                    or bool(re.search(r"seconds:\s*\d{4,}", err_str))
-                )
-
-                if is_model_not_found:
-                    print(f"[INFO] {model_name} 無法使用或已下線，立即切換下一個模型...")
-                    break
-
-                if is_daily_quota:
-                    print(f"[INFO] {model_name} 疑似已達每日配額上限，立即切換下一個模型...")
-                    break
-
-                if attempt < MAX_ATTEMPTS_PER_MODEL:
-                    sleep_sec = 3 * attempt
-                    print(f"[INFO] 等待 {sleep_sec} 秒後重試 {model_name}...")
-                    time.sleep(sleep_sec)
-                    continue
-
-                print(f"[INFO] {model_name} 已達最大重試次數，切換下一個模型...")
-                break
-
-    raise RuntimeError(f"所有候選模型皆無法成功生成資料，最後錯誤：{last_error}")
-
-
-data = generate_digest_data(prompt)
-print(
-    f"[INFO] 標題預覽 -> EN: {data['en']['title']} | "
-    f"JA: {data['ja']['title_plain']} | VI: {data['vi']['title']}"
-)
-
-os.makedirs("audio", exist_ok=True)
-
-
-async def make_audio():
-    v_map = {
-        "en": ("en-US-JennyNeural", data["en"]["article"]),
-        "ja": ("ja-JP-NanamiNeural", data["ja"]["article_plain"]),
-        "vi": ("vi-VN-HoaiMyNeural", data["vi"]["article"]),
-    }
-    for k, (v, t) in v_map.items():
-        await edge_tts.Communicate(t, v, rate="-8%").save(f"audio/{d_str}-{k}.mp3")
-        await asyncio.sleep(0.5)
-
-
-asyncio.run(make_audio())
-
-
-def make_card(lang, title, sub, art, voc, trans, label):
-    v_li = "".join([f"<li>{x}</li>" for x in voc])
-    return (
-        f'<article class="card" data-lang="{lang}">'
-        f'<span class="tag">{data[lang]["tag"]}</span>'
-        f"<h2>{title}</h2>"
-        f'<p class="subtitle">{sub}</p>'
-        f'<span class="section-label">🔊 真人發音朗讀 • {label}</span>'
-        f'<audio controls preload="none" src="audio/{d_str}-{lang}.mp3"></audio>'
-        f'<span class="section-label">ARTICLE • {label}報導</span>'
-        f'<p class="article-text">{art}</p>'
-        f'<span class="section-label">VOCABULARY & PHRASES 核心詞彙</span>'
-        f'<ul class="vocab-list">{v_li}</ul>'
-        f'<span class="section-label">TRANSLATION 中文全譯</span>'
-        f'<p class="translation">{trans}</p>'
-        f"</article>"
+    model = genai.GenerativeModel(
+        model_name="gemini-2.5-flash",
+        generation_config={
+            "temperature": 0.75,
+            "response_mime_type": "application/json",
+        },
     )
 
+    response = model.generate_content(prompt)
+    raw_text = response.text.strip()
+    raw_text = re.sub(r"^```json\s*|\s*```$", "", raw_text, flags=re.IGNORECASE).strip()
+    data = json.loads(raw_text)
 
-cards_html = (
-    make_card("en", data["en"]["title"], data["en"]["subtitle"], data["en"]["article"], data["en"]["vocab"], data["en"]["translation"], "英文")
-    + make_card("ja", data["ja"]["title_html"], data["ja"]["subtitle"], data["ja"]["article_html"], data["ja"]["vocab"], data["ja"]["translation"], "日文")
-    + make_card("vi", data["vi"]["title"], data["vi"]["subtitle"], data["vi"]["article"], data["vi"]["vocab"], data["vi"]["translation"], "越南文")
-)
+    # 後處理清洗
+    if "ja" in data:
+        if not data["ja"].get("audio_text"):
+            data["ja"]["audio_text"] = strip_ruby_tags(data["ja"].get("content", ""))
+        else:
+            data["ja"]["audio_text"] = strip_ruby_tags(data["ja"]["audio_text"])
 
-css = ':root{--bg:#f4f5f7;--card:#fff;--text:#1f2937;--muted:#6b7280;--en:#2563eb;--ja:#dc2626;--vi:#059669;--border:#e5e7eb}*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:16px}.container{max-width:680px;margin:0 auto}header{text-align:center;padding:20px 0 12px}.nav-top{text-align:left;margin-bottom:12px}.back-btn{text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500}h1{font-size:1.5rem;margin-bottom:4px}.date-badge{font-size:.9rem;color:var(--muted)}input.lang-radio{display:none}.filter-bar{display:flex;justify-content:center;gap:8px;margin:14px 0 24px;flex-wrap:wrap;position:sticky;top:10px;z-index:10;background:rgba(244,245,247,.92);backdrop-filter:blur(6px);padding:8px;border-radius:12px}.filter-btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:8px 14px;border-radius:20px;font-size:.9rem;font-weight:600;cursor:pointer}#opt-all:checked~.filter-bar label[for="opt-all"],#opt-en:checked~.filter-bar label[for="opt-en"],#opt-ja:checked~.filter-bar label[for="opt-ja"],#opt-vi:checked~.filter-bar label[for="opt-vi"]{background:#1f2937;color:#fff;border-color:#1f2937}#opt-en:checked~.cards-wrapper .card:not([data-lang="en"]),#opt-ja:checked~.cards-wrapper .card:not([data-lang="ja"]),#opt-vi:checked~.cards-wrapper .card:not([data-lang="vi"]){display:none}.card{background:var(--card);border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.04);border-top:4px solid #ccc}.card[data-lang="en"]{border-top-color:var(--en)}.card[data-lang="ja"]{border-top-color:var(--ja)}.card[data-lang="vi"]{border-top-color:var(--vi)}.tag{font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:8px;display:block}h2{font-size:1.25rem;line-height:1.4;margin-bottom:8px}.subtitle{font-size:.95rem;color:var(--muted);margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}audio{width:100%;height:40px;margin:8px 0 14px;border-radius:20px}.section-label{font-size:.75rem;font-weight:700;color:var(--muted);display:block;margin-top:16px}.article-text{font-size:1.05rem;margin-top:6px;text-align:justify}ruby rt{font-size:.6em;color:#555}.vocab-list{list-style:none;background:#f9fafb;padding:14px 16px;border-radius:10px;font-size:.95rem;margin-top:8px}.vocab-list li{margin-bottom:6px}.translation{font-size:.95rem;color:#374151;margin-top:8px;text-align:justify}'
+    if "vi" in data:
+        data["vi"] = sanitize_vi_data(data["vi"])
+        if not data["vi"].get("audio_text"):
+            data["vi"]["audio_text"] = clean_vi_text(data["vi"].get("content", ""))
 
-ENGAGEMENT_SNIPPET = """<style>.digest-engage-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:14px;border-top:1px dashed var(--border);font-size:.9rem;color:var(--muted)}.digest-views{display:inline-flex;align-items:center;gap:4px}.digest-like-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--text);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .15s ease}.digest-like-btn:hover{border-color:#ef4444;color:#ef4444}.digest-like-btn.liked{background:#fef2f2;border-color:#ef4444;color:#dc2626}</style><script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import {
-    getFirestore,
-    doc,
-    getDoc,
-    runTransaction
-  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    return data
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBKzdhel0LCAXv9qoGOdVMQ_K_KhBRpdzk",
-    authDomain: "personal-account-124.firebaseapp.com",
-    projectId: "personal-account-124",
-    storageBucket: "personal-account-124.firebasestorage.app",
-    messagingSenderId: "531857933748",
-    appId: "1:531857933748:web:e7d6afe199bf507f885ee1",
-    measurementId: "G-Z9MVZ43E4J"
-  };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+# ==========================================
+# 6. Edge-TTS 語音生成
+# ==========================================
+VOICE_MAP = {
+    "en": "en-US-JennyNeural",
+    "ja": "ja-JP-NanamiNeural",
+    "vi": "vi-VN-HoaiMyNeural",
+}
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const presetLang = urlParams.get("lang");
-  if (["en", "ja", "vi"].includes(presetLang)) {
-    const radio = document.getElementById(`opt-${presetLang}`);
-    if (radio) radio.checked = true;
-  }
 
-  function getArticleDate() {
-    const fileMatch = window.location.pathname.match(/(\\d{4}-\\d{2}-\\d{2})\\.html$/);
-    if (fileMatch) return fileMatch[1];
+async def synthesize_all_audio(data: dict):
+    for lang, voice in VOICE_MAP.items():
+        lang_obj = data.get(lang, {})
+        text = lang_obj.get("audio_text") or strip_ruby_tags(lang_obj.get("content", ""))
+        if not text:
+            continue
+        out_path = os.path.join(AUDIO_DIR, f"{TODAY_STR}_{lang}.mp3")
+        try:
+            communicate = edge_tts.Communicate(text, voice, rate="-5%")
+            await communicate.save(out_path)
+            print(f"🔊 語音生成完成: {out_path}")
+        except Exception as e:
+            print(f"⚠️ 語音生成失敗 [{lang}]: {e}")
 
-    const titleMatch = document.title.match(/(\\d{4})\\.(\\d{2})\\.(\\d{2})/);
-    if (titleMatch) return `${titleMatch[1]}-${titleMatch[2]}-${titleMatch[3]}`;
 
-    return new Date().toISOString().slice(0, 10);
-  }
+# ==========================================
+# 7. HTML 頁面與互動模組渲染
+# ==========================================
+ENGAGEMENT_SNIPPET = """
+<!-- Firestore 讀者互動與熱門統計模組 -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  function getCleanHeadingText(card) {
-    const h2 = card.querySelector("h2");
-    if (!h2) return "";
-    const clone = h2.cloneNode(true);
-    clone.querySelectorAll("rt").forEach((rt) => rt.remove());
-    return clone.textContent.replace(/\\s+/g, " ").trim();
-  }
-
-  function calcScore(likes, views) {
-    return (Number(likes) || 0) * 5 + (Number(views) || 0);
-  }
-
-  const dateStr = getArticleDate();
-  const cards = document.querySelectorAll(".cards-wrapper .card[data-lang]");
-
-  cards.forEach((card) => {
-    const lang = card.getAttribute("data-lang");
-    if (!["en", "ja", "vi"].includes(lang)) return;
-
-    const docId = `${dateStr}_${lang}`;
-    const docRef = doc(db, "digest_articles", docId);
-    const viewedKey = `digest_viewed_${docId}`;
-    const likedKey = `digest_liked_${docId}`;
-
-    const title = getCleanHeadingText(card);
-    const subtitle = card.querySelector(".subtitle")?.textContent.trim() || "";
-    const articleUrl = `${dateStr}.html?lang=${lang}`;
-
-    const bar = document.createElement("div");
-    bar.className = "digest-engage-bar";
-
-    const viewsSpan = document.createElement("span");
-    viewsSpan.className = "digest-views";
-    viewsSpan.textContent = "👁️ 載入中...";
-
-    const likeBtn = document.createElement("button");
-    likeBtn.type = "button";
-    likeBtn.className = "digest-like-btn";
-    const isInitiallyLiked = localStorage.getItem(likedKey) === "1";
-    if (isInitiallyLiked) likeBtn.classList.add("liked");
-    likeBtn.innerHTML = `<span class="heart">${isInitiallyLiked ? "❤️" : "🤍"}</span><span class="like-count">0</span>`;
-
-    bar.appendChild(viewsSpan);
-    bar.appendChild(likeBtn);
-    card.appendChild(bar);
-
-    const likeCountSpan = likeBtn.querySelector(".like-count");
-    const heartSpan = likeBtn.querySelector(".heart");
-
-    function renderStats(data) {
-      const views = Number(data?.views) || 0;
-      const likes = Number(data?.likes) || 0;
-      viewsSpan.textContent = `👁️ ${views} 次閱讀`;
-      likeCountSpan.textContent = String(likes);
-    }
-
-    getDoc(docRef).then((snap) => {
-      if (snap.exists()) {
-        renderStats(snap.data());
-      } else {
-        renderStats({ views: 0, likes: 0 });
+  const firebaseConfig = window.__FIREBASE_CONFIG__ || null;
+  if (firebaseConfig) {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const articleId = document.body.dataset.articleDate;
+    if (articleId) {
+      const ref = doc(db, "digest_stats", articleId);
+      const viewKey = `viewed_${articleId}`;
+      if (!localStorage.getItem(viewKey)) {
+        localStorage.setItem(viewKey, "1");
+        setDoc(ref, { views: increment(1), date: articleId }, { merge: true }).catch(() => {});
       }
-    }).catch((err) => {
-      console.error("讀取文章統計失敗:", err);
-      viewsSpan.textContent = "👁️ —";
-    });
-
-    let dwellTimer = null;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-            if (localStorage.getItem(viewedKey) === "1") {
-              observer.unobserve(card);
-              return;
-            }
-            dwellTimer = setTimeout(async () => {
-              if (localStorage.getItem(viewedKey) === "1") return;
-              localStorage.setItem(viewedKey, "1");
-              observer.unobserve(card);
-
-              try {
-                const updated = await runTransaction(db, async (tx) => {
-                  const snap = await tx.get(docRef);
-                  const current = snap.exists() ? snap.data() : {};
-                  const nextViews = (Number(current.views) || 0) + 1;
-                  const nextLikes = Number(current.likes) || 0;
-                  const nextScore = calcScore(nextLikes, nextViews);
-
-                  const payload = {
-                    id: docId,
-                    date: dateStr,
-                    lang,
-                    title,
-                    subtitle,
-                    url: articleUrl,
-                    views: nextViews,
-                    likes: nextLikes,
-                    score: nextScore
-                  };
-                  tx.set(docRef, payload, { merge: true });
-                  return payload;
-                });
-                renderStats(updated);
-              } catch (err) {
-                console.error("更新閱覽數失敗:", err);
-              }
-            }, 1500);
-          } else if (dwellTimer) {
-            clearTimeout(dwellTimer);
-            dwellTimer = null;
-          }
-        });
-      },
-      { threshold: [0.4] }
-    );
-    observer.observe(card);
-
-    likeBtn.addEventListener("click", async () => {
-      likeBtn.disabled = true;
-      const currentlyLiked = localStorage.getItem(likedKey) === "1";
-      const delta = currentlyLiked ? -1 : 1;
-
-      try {
-        const updated = await runTransaction(db, async (tx) => {
-          const snap = await tx.get(docRef);
-          const current = snap.exists() ? snap.data() : {};
-          const nextViews = Number(current.views) || 0;
-          const nextLikes = Math.max(0, (Number(current.likes) || 0) + delta);
-          const nextScore = calcScore(nextLikes, nextViews);
-
-          const payload = {
-            id: docId,
-            date: dateStr,
-            lang,
-            title,
-            subtitle,
-            url: articleUrl,
-            views: nextViews,
-            likes: nextLikes,
-            score: nextScore
-          };
-          tx.set(docRef, payload, { merge: true });
-          return payload;
-        });
-
-        if (delta > 0) {
-          localStorage.setItem(likedKey, "1");
-          likeBtn.classList.add("liked");
-          heartSpan.textContent = "❤️";
-        } else {
-          localStorage.removeItem(likedKey);
-          likeBtn.classList.remove("liked");
-          heartSpan.textContent = "🤍";
+      getDoc(ref).then((snap) => {
+        if (snap.exists()) {
+          const d = snap.data();
+          const vEl = document.getElementById("stat-views");
+          const lEl = document.getElementById("stat-likes");
+          if (vEl) vEl.textContent = d.views || 0;
+          if (lEl) lEl.textContent = d.likes || 0;
         }
-        renderStats(updated);
-      } catch (err) {
-        console.error("更新按讚數失敗:", err);
-      } finally {
-        likeBtn.disabled = false;
+      }).catch(() => {});
+
+      const likeBtn = document.getElementById("btn-like");
+      if (likeBtn) {
+        const likeKey = `liked_${articleId}`;
+        if (localStorage.getItem(likeKey)) likeBtn.classList.add("liked");
+        likeBtn.addEventListener("click", async () => {
+          if (localStorage.getItem(likeKey)) return;
+          localStorage.setItem(likeKey, "1");
+          likeBtn.classList.add("liked");
+          const lEl = document.getElementById("stat-likes");
+          if (lEl) lEl.textContent = (parseInt(lEl.textContent || "0", 10) + 1);
+          await setDoc(ref, { likes: increment(1), date: articleId }, { merge: true }).catch(() => {});
+        });
       }
-    });
-  });
-</script>"""
+    }
+  }
+</script>
+"""
 
-page = f'<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Daily Trilingual Digest - {d_disp}</title><style>{css}</style></head><body><div class="container"><div class="nav-top"><a href="index.html" class="back-btn">← 返回日期目錄</a></div><header><h1>Daily Trilingual Digest</h1><div class="date-badge">{d_disp} ({w_str}) • 每日三語精選新聞</div></header><input type="radio" name="lang" id="opt-all" class="lang-radio" checked><input type="radio" name="lang" id="opt-en" class="lang-radio"><input type="radio" name="lang" id="opt-ja" class="lang-radio"><input type="radio" name="lang" id="opt-vi" class="lang-radio"><div class="filter-bar"><label for="opt-all" class="filter-btn">全部閱讀</label><label for="opt-en" class="filter-btn">🇺🇸 英文</label><label for="opt-ja" class="filter-btn">🇯🇵 日文</label><label for="opt-vi" class="filter-btn">🇻🇳 越南文</label></div><div class="cards-wrapper">{cards_html}</div></div></body></html>'
 
-if "</body>" in page:
-    page = page.replace("</body>", ENGAGEMENT_SNIPPET + "</body>", 1)
+def format_paragraphs(text: str) -> str:
+    parts = [p.strip() for p in text.split("\n") if p.strip()]
+    return "".join(f"<p>{p}</p>" for p in parts)
 
-with open(f"{d_str}.html", "w", encoding="utf-8") as f:
-    f.write(page)
 
-new_card = (
-    f'<a href="{d_str}.html" class="digest-item">'
-    f'<div class="item-header"><span class="item-date">{d_disp} ({w_str})</span><span class="item-arrow">閱讀全文 →</span></div>'
-    f'<ul class="topic-list">'
-    f'<li><span class="lang-badge bg-en">EN</span><div class="title-group"><span class="orig-title">{data["en"]["title"]}</span><span class="zh-title">{data["en"]["subtitle"]}</span></div></li>'
-    f'<li><span class="lang-badge bg-ja">JA</span><div class="title-group"><span class="orig-title">{data["ja"]["title_html"]}</span><span class="zh-title">{data["ja"]["subtitle"]}</span></div></li>'
-    f'<li><span class="lang-badge bg-vi">VI</span><div class="title-group"><span class="orig-title">{data["vi"]["title"]}</span><span class="zh-title">{data["vi"]["subtitle"]}</span></div></li>'
-    f"</ul></a>\n"
-)
+def render_lang_section(lang_code: str, lang_label: str, section: dict, audio_rel_path: str) -> str:
+    vocab_html = ""
+    for v in section.get("vocab", []):
+        vocab_html += f"""
+        <li>
+          <div class="vocab-head">
+            <span class="vocab-word">{v.get('word', '')}</span>
+            <span class="vocab-pos">{v.get('pos', '')}</span>
+            <span class="vocab-meaning">{v.get('meaning', '')}</span>
+          </div>
+          <div class="vocab-ex">{v.get('example', '')}</div>
+          <div class="vocab-ex-zh">{v.get('example_zh', '')}</div>
+        </li>
+        """
 
-with open("index.html", "r", encoding="utf-8") as f:
-    idx = f.read()
+    source_badge = f"<span class='source-tag'>素材：{section.get('source_note', '')}</span>" if section.get("source_note") else ""
 
-marker = "<!-- ====== 每天新增的日期卡片請貼在下方這一行之後 ====== -->"
-is_manual_run = os.environ.get("IS_MANUAL_RUN", "").strip().lower() == "true"
+    return f"""
+    <section class="lang-card" id="sec-{lang_code}">
+      <div class="lang-header">
+        <span class="lang-badge">{lang_label}</span>
+        {source_badge}
+      </div>
+      <h2>{section.get('title', '')}</h2>
+      <audio controls preload="none" src="{audio_rel_path}"></audio>
+      <div class="article-body">
+        {format_paragraphs(section.get('content', ''))}
+      </div>
+      <details class="translation-box" open>
+        <summary>繁體中文全譯</summary>
+        <div class="translation-text">
+          {format_paragraphs(section.get('translation', ''))}
+        </div>
+      </details>
+      <div class="vocab-box">
+        <h3>重點詞彙</h3>
+        <ul class="vocab-list">{vocab_html}</ul>
+      </div>
+    </section>
+    """
 
-if is_manual_run and f"{d_str}.html" in idx:
-    card_pattern = re.compile(
-        rf'\s*<a\b[^>]*href="{re.escape(d_str)}\.html"[^>]*class="digest-item"[^>]*>.*?</a>\s*',
-        flags=re.DOTALL | re.IGNORECASE,
-    )
-    idx = card_pattern.sub("\n\n", idx, count=1)
-    print(f"[INFO] 手動執行模式：已移除既有 {d_str} 卡片，準備覆蓋為最新內容")
 
-if f"{d_str}.html" not in idx and marker in idx:
-    idx = idx.replace(marker, marker + "\n" + new_card, 1)
-    with open("index.html", "w", encoding="utf-8") as f:
-        f.write(idx)
-    print(f"[INFO] 已更新 index.html 中的 {d_str} 卡片")
+def build_article_html(data: dict, is_archive: bool = False) -> str:
+    audio_prefix = "../audio" if is_archive else "audio"
+    home_link = "../index.html" if is_archive else "index.html"
+
+    en_html = render_lang_section("en", "English 英文", data["en"], f"{audio_prefix}/{TODAY_STR}_en.mp3")
+    ja_html = render_lang_section("ja", "日本語 日文", data["ja"], f"{audio_prefix}/{TODAY_STR}_ja.mp3")
+    vi_html = render_lang_section("vi", "Tiếng Việt 越南文", data["vi"], f"{audio_prefix}/{TODAY_STR}_vi.mp3")
+
+    return f"""<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Trilingual Digest - {TODAY_STR}</title>
+  <style>
+    :root {{
+      --bg: #f8f9fa; --card: #ffffff; --text: #1f2937; --muted: #6b7280;
+      --accent: #2563eb; --border: #e5e7eb; --vocab-bg: #f3f4f6;
+    }}
+    @media (prefers-color-scheme: dark) {{
+      :root {{
+        --bg: #111827; --card: #1f2937; --text: #f3f4f6; --muted: #9ca3af;
+        --accent: #60a5fa; --border: #374151; --vocab-bg: #273244;
+      }}
+    }}
+    body {{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+      background: var(--bg); color: var(--text); margin: 0; padding: 16px; line-height: 1.75;
+    }}
+    .container {{ max-width: 780px; margin: 0 auto; }}
+    header {{ margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }}
+    .top-nav {{ display: flex; justify-content: space-between; align-items: center; font-size: 0.92rem; }}
+    .top-nav a {{ color: var(--accent); text-decoration: none; }}
+    h1 {{ font-size: 1.5rem; margin: 8px 0 4px; }}
+    .meta {{ color: var(--muted); font-size: 0.9rem; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }}
+    .lang-card {{
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }}
+    .lang-header {{ display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }}
+    .lang-badge {{
+      background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 600;
+      padding: 2px 10px; border-radius: 999px;
+    }}
+    .source-tag {{ font-size: 0.8rem; color: var(--muted); }}
+    h2 {{ font-size: 1.25rem; margin: 12px 0; }}
+    audio {{ width: 100%; margin: 8px 0 14px; height: 38px; }}
+    .article-body p {{ margin: 0 0 12px; font-size: 1.05rem; }}
+    ruby rt {{ font-size: 0.62em; color: var(--muted); }}
+    .translation-box {{
+      background: var(--vocab-bg); border-radius: 8px; padding: 10px 14px; margin: 14px 0;
+    }}
+    .translation-box summary {{ cursor: pointer; font-weight: 600; font-size: 0.95rem; }}
+    .translation-text p {{ margin: 8px 0 0; color: var(--text); font-size: 0.96rem; }}
+    .vocab-box h3 {{ font-size: 1rem; margin: 14px 0 8px; }}
+    .vocab-list {{ list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }}
+    .vocab-list li {{ background: var(--vocab-bg); padding: 10px 12px; border-radius: 8px; }}
+    .vocab-head {{ display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }}
+    .vocab-word {{ font-weight: 700; color: var(--accent); }}
+    .vocab-pos {{ font-size: 0.8rem; color: var(--muted); }}
+    .vocab-meaning {{ font-weight: 600; }}
+    .vocab-ex {{ font-size: 0.92rem; margin-top: 4px; }}
+    .vocab-ex-zh {{ font-size: 0.86rem; color: var(--muted); }}
+    .engage-bar {{
+      display: flex; gap: 14px; align-items: center; justify-content: flex-end;
+      padding: 12px 0 24px; font-size: 0.92rem; color: var(--muted);
+    }}
+    #btn-like {{
+      border: 1px solid var(--border); background: var(--card); color: var(--text);
+      padding: 6px 14px; border-radius: 999px; cursor: pointer; font-size: 0.92rem;
+    }}
+    #btn-like.liked {{ border-color: #ef4444; color: #ef4444; font-weight: 600; }}
+  </style>
+</head>
+<body data-article-date="{TODAY_STR}">
+  <div class="container">
+    <header>
+      <div class="top-nav">
+        <a href="{home_link}">← 返回首頁與歷史總覽</a>
+        <span>{TODAY_STR}</span>
+      </div>
+      <h1>Daily Trilingual Digest 每日三語精選</h1>
+      <div class="meta">
+        <span>今日切角：{data.get('angle', '')}</span>
+        <span>• 閱讀 <strong id="stat-views">-</strong></span>
+      </div>
+    </header>
+
+    {en_html}
+    {ja_html}
+    {vi_html}
+
+    <div class="engage-bar">
+      <button id="btn-like" type="button">❤️ 喜歡這篇 (<span id="stat-likes">0</span>)</button>
+    </div>
+  </div>
+  {ENGAGEMENT_SNIPPET}
+</body>
+</html>
+"""
+
+
+def update_manifest_and_pages(data: dict):
+    # 1. 儲存今日 JSON 供 LINE 推播與歷史索引使用
+    latest_json_path = os.path.join(OUTPUT_DIR, "latest.json")
+    with open(latest_json_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    archive_json_path = os.path.join(ARCHIVE_DIR, f"{TODAY_STR}.json")
+    with open(archive_json_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    # 2. 儲存歷史歸檔 HTML
+    archive_html_path = os.path.join(ARCHIVE_DIR, f"{TODAY_STR}.html")
+    with open(archive_html_path, "w", encoding="utf-8") as f:
+        f.write(build_article_html(data, is_archive=True))
+
+    # 3. 更新歷史目錄 manifest.json（保留既有歷史紀錄並加上今日）
+    manifest_path = os.path.join(OUTPUT_DIR, "manifest.json")
+    manifest = []
+    if os.path.exists(manifest_path):
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                manifest = json.load(f)
+        except Exception:
+            manifest = []
+
+    manifest = [m for m in manifest if m.get("date") != TODAY_STR]
+    manifest.insert(0, {
+        "date": TODAY_STR,
+        "angle": data.get("angle", ""),
+        "en_title": data.get("en", {}).get("title", ""),
+        "ja_title": data.get("ja", {}).get("title", ""),
+        "vi_title": data.get("vi", {}).get("title", ""),
+        "url": f"archive/{TODAY_STR}.html",
+    })
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+
+    # 4. 同步寫出今日最新頁面 today.html（若你的 index.html 為動態讀取 manifest/latest.json 的看板首頁，則不會被覆蓋；若不存在 index.html 則一併建立）
+    today_html_path = os.path.join(OUTPUT_DIR, "today.html")
+    with open(today_html_path, "w", encoding="utf-8") as f:
+        f.write(build_article_html(data, is_archive=False))
+
+    index_html_path = os.path.join(OUTPUT_DIR, "index.html")
+    if not os.path.exists(index_html_path):
+        with open(index_html_path, "w", encoding="utf-8") as f:
+            f.write(build_article_html(data, is_archive=False))
+
+
+# ==========================================
+# 8. 主程式進入點
+# ==========================================
+async def main():
+    print(f"🚀 開始執行 Daily Trilingual Digest 生成流程 ({TODAY_STR})...")
+    seeds = gather_rss_seeds()
+    data = generate_trilingual_digest(seeds)
+    await synthesize_all_audio(data)
+    update_manifest_and_pages(data)
+    print("🎉 今日三語精選、音檔與歸檔更新完成！")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
