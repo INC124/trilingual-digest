@@ -311,15 +311,28 @@ def generate_trilingual_digest(seeds: dict) -> dict:
 }}
 """
 
-    model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
-        generation_config={
-            "temperature": 0.75,
-            "response_mime_type": "application/json",
-        },
-    )
+    candidate_models = ["gemini-3.8-flash", "gemini-3.0-flash", "gemini-2.5-flash-lite"]
+    response = None
+    last_err = None
+    for m_name in candidate_models:
+        try:
+            model = genai.GenerativeModel(
+                model_name=m_name,
+                generation_config={
+                    "temperature": 0.75,
+                    "response_mime_type": "application/json",
+                },
+            )
+            response = model.generate_content(prompt)
+            print(f"✅ 成功使用模型：{m_name}")
+            break
+        except Exception as e:
+            print(f"⚠️ 模型 {m_name} 呼叫失敗，嘗試下一個：{e}")
+            last_err = e
 
-    response = model.generate_content(prompt)
+    if response is None:
+        raise RuntimeError(f"所有候選 Gemini 模型皆無法使用：{last_err}")
+
     raw_text = response.text.strip()
     raw_text = re.sub(r"^```json\s*|\s*```$", "", raw_text, flags=re.IGNORECASE).strip()
     data = json.loads(raw_text)
