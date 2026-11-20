@@ -188,6 +188,14 @@
     }
     #v-latest:checked ~ .digest-list .digest-item:not(:first-child) { display: none; }
 
+    /* 全部日期存檔時：只顯示精簡的日期卡片 */
+    #v-all:checked ~ .digest-list { gap: 12px; }
+    #v-all:checked ~ .digest-list .digest-item { padding: 18px 24px; border-radius: 16px; }
+    #v-all:checked ~ .digest-list .digest-item .item-header {
+      margin-bottom: 0; padding-bottom: 0; border-bottom: none;
+    }
+    #v-all:checked ~ .digest-list .digest-item .topic-list { display: none; }
+
     .digest-list { display: flex; flex-direction: column; gap: 22px; }
     .digest-item {
       display: block; text-decoration: none; background: var(--card-bg);
