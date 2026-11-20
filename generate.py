@@ -9,12 +9,13 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 import edge_tts
 
-# 依穩定度與速度排列模型，避免單一模型逾時拖慢整體執行
+# 依穩定度與能力排列模型，避免單一模型逾時拖慢整體執行
 MODELS = [
-    "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
+    "gemini-3.8-flash",
     "gemini-3.5-flash-lite",
 ]
+
+MAX_ATTEMPTS_PER_MODEL = 3
 
 THEME_POOL = [
     "當地生活與日常習慣",
@@ -151,18 +152,29 @@ def clean_json_text(raw_text: str) -> str:
 def call_single_model(api_key: str, model_name: str, prompt_text: str) -> str:
     try:
         from google import genai  # type: ignore
+        from google.genai import types  # type: ignore
 
         client = genai.Client(api_key=api_key)
         resp = client.models.generate_content(
             model=model_name,
             contents=prompt_text,
+            config=types.GenerateContentConfig(
+                temperature=0.7,
+                response_mime_type="application/json",
+            ),
         )
         return (getattr(resp, "text", None) or "").strip()
     except ImportError:
         import google.generativeai as genai_legacy  # type: ignore
 
         genai_legacy.configure(api_key=api_key)
-        legacy_model = genai_legacy.GenerativeModel(model_name)
+        legacy_model = genai_legacy.GenerativeModel(
+            model_name,
+            generation_config=genai_legacy.GenerationConfig(
+                temperature=0.7,
+                response_mime_type="application/json",
+            ),
+        )
         resp = legacy_model.generate_content(prompt_text)
         return (getattr(resp, "text", None) or "").strip()
 
@@ -175,9 +187,9 @@ def generate_digest_data(prompt_text: str) -> dict:
     last_error = None
 
     for model_name in MODELS:
-        for attempt in range(1, 2):
+        for attempt in range(1, MAX_ATTEMPTS_PER_MODEL + 1):
             try:
-                print(f"[INFO] 嘗試使用模型：{model_name}（第 {attempt} 次）")
+                print(f"[INFO] 嘗試使用模型：{model_name}（第 {attempt}/{MAX_ATTEMPTS_PER_MODEL} 次）")
                 raw = call_single_model(api_key, model_name, prompt_text)
                 if not raw:
                     raise RuntimeError(f"模型 {model_name} 回傳空白內容")
@@ -196,31 +208,35 @@ def generate_digest_data(prompt_text: str) -> dict:
             except Exception as e:
                 last_error = e
                 err_str = str(e)
-                print(f"[WARN] 模型 {model_name} 發生錯誤：{err_str}")
+                print(f"[WARN] 模型 {model_name}（第 {attempt} 次）發生錯誤：{err_str}")
 
+                is_model_not_found = (
+                    "404" in err_str
+                    or "no longer available" in err_str.lower()
+                    or "not found" in err_str.lower()
+                )
                 is_daily_quota = (
                     "PerDay" in err_str
                     or "Daily" in err_str
                     or "quota_value" in err_str
                     or bool(re.search(r"seconds:\s*\d{4,}", err_str))
                 )
-                is_rate_limit = (
-                    "429" in err_str
-                    or "RESOURCE_EXHAUSTED" in err_str
-                    or "503" in err_str
-                    or "UNAVAILABLE" in err_str
-                )
+
+                if is_model_not_found:
+                    print(f"[INFO] {model_name} 無法使用或已下線，立即切換下一個模型...")
+                    break
 
                 if is_daily_quota:
                     print(f"[INFO] {model_name} 疑似已達每日配額上限，立即切換下一個模型...")
                     break
 
-                if is_rate_limit and attempt < 2:
-                    sleep_sec = 3
-                    print(f"[INFO] 遇到速率限制或忙碌，等待 {sleep_sec} 秒後重試...")
+                if attempt < MAX_ATTEMPTS_PER_MODEL:
+                    sleep_sec = 3 * attempt
+                    print(f"[INFO] 等待 {sleep_sec} 秒後重試 {model_name}...")
                     time.sleep(sleep_sec)
                     continue
 
+                print(f"[INFO] {model_name} 已達最大重試次數，切換下一個模型...")
                 break
 
     raise RuntimeError(f"所有候選模型皆無法成功生成資料，最後錯誤：{last_error}")
