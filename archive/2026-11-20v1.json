@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-20v1",
+  "angle": "當日真實新聞與生活影響",
+  "en": {
+    "source_note": "AP News",
+    "title": "Restoring North Carolina Peatlands Before They Dry",
+    "summary": "Neal Flanagan and Curt Richardson conduct soil sample research in Belhaven, N.C. peatlands.",
+    "content": "In the quiet wetlands of Belhaven, North Carolina, research scientists like Neal Flanagan are racing against time to protect fragile ecosystems. Armed with specialized soil-sampling tools, researchers are working tirelessly to evaluate the health of local peatlands before environmental degradation or drying causes irreversible damage to these natural carbon sinks.\n\nFor everyday residents and local farmers, the health of these wetlands directly impacts regional flood control and water quality. As scientists map out urgent restoration strategies, the community watches closely, knowing that preserving this damp terrain is essential for shielding nearby towns from severe weather impacts and maintaining ecological balance in the region.",
+    "audio_text": "In the quiet wetlands of Belhaven, North Carolina, research scientists like Neal Flanagan are racing against time to protect fragile ecosystems. Armed with specialized soil-sampling tools, researchers are working tirelessly to evaluate the health of local peatlands before environmental degradation or drying causes irreversible damage to these natural carbon sinks. For everyday residents and local farmers, the health of these wetlands directly impacts regional flood control and water quality. As scientists map out urgent restoration strategies, the community watches closely, knowing that preserving this damp terrain is essential for shielding nearby towns from severe weather impacts and maintaining ecological balance in the region.",
+    "translation": "在北卡羅來納州貝爾黑文寂靜的濕地中，像尼爾·弗拉納根這樣的科學家正與時間賽跑，以保護脆弱的生態系統。研究人員手持專業的土壤採樣工具，日夜不休地評估當地泥炭地的健康狀況，以免環境惡化或乾涸對這些天然碳匯造成不可逆轉的損害。\n\n對於當地居民與農民而言，這些濕地的健康狀況直接影響區域防洪與水質。隨著科學家們擬定出緊迫的復育策略，社區民眾正密切關注，因為他們深知維護這片濕潤的土地，對於保護鄰近城鎮免受極端天氣衝擊以及維持區域生態平衡至關重要。",
+    "vocab": [
+      {
+        "word": "peatland",
+        "pos": "n.",
+        "meaning": "泥炭地",
+        "example": "Researchers take soil samples from the local peatland.",
+        "example_zh": "研究人員從當地泥炭地採集土壤樣本。"
+      },
+      {
+        "word": "degradation",
+        "pos": "n.",
+        "meaning": "惡化、退化",
+        "example": "Environmental degradation threatens the natural water supply.",
+        "example_zh": "環境惡化威脅著天然供水。"
+      },
+      {
+        "word": "restoration",
+        "pos": "n.",
+        "meaning": "復育、修復",
+        "example": "The urgent restoration project started early this morning.",
+        "example_zh": "這項緊急復育工程於今天清晨啟動。"
+      },
+      {
+        "word": "shield",
+        "pos": "v.",
+        "meaning": "保護、庇護",
+        "example": "Trees and wetlands help shield towns from severe storms.",
+        "example_zh": "樹木與濕地有助於保護城鎮免受強烈風暴侵襲。"
+      }
+    ]
+  },
+  "ja": {
+    "source_note": "KBS World 日文今日新聞",
+    "title": "韓国の株価急落とアジア市場への影響",
+    "summary": "アメリカのAI関連株急落を受け、韓国の株式市場は大幅に下落した。",
+    "summary_zh": "受到美國AI相關股急跌影響，韓國股市大幅下跌。",
+    "content": "アメリカにおける<ruby>人工知能<rt>じんこうちのう</rt></ruby>関連株の急落は、20日の韓国<ruby>株式市場<rt>かぶしきしじょう</rt></ruby>に直撃弾を与えました。総合株価指数は大幅に下落し、サムスン電子などの主要銘柄も軒並み値を下げました。\n\n投資家たちの不安が広がる中、市場では売り注文が一時停止される事態となりました。この金融市場の動揺は一般の消費者の生活心理にも影を落とし、今後の家計や物価への影響が懸念されています。",
+    "audio_text": "アメリカにおける人工知能関連株の急落は、20日の韓国株式市場に直撃弾を与えました。総合株価指数は大幅に下落し、サムスン電子などの主要銘柄も軒並み値を下げました。投資家たちの不安が広がる中、市場では売り注文が一時停止される事態となりました。この金融市場の動揺は一般の消費者の生活心理にも影を落とし、今後の家計や物価への影響が懸念されています。",
+    "translation": "美國人工智慧相關股票的急跌，對20日的韓國股市造成了直接衝擊。綜合股價指數大幅下滑，三星電子等主要股票也全面走低。\n\n在投資人恐慌情緒蔓延的同時，市場一度出現暫停賣單交易的情況。這場金融市場的動盪也為一般消費者的生活心理蒙上陰影，外界正擔憂其對未來家庭財務與物價帶來的影響。",
+    "vocab": [
+      {
+        "word": "急落（きゅうらく）",
+        "pos": "名詞",
+        "meaning": "急跌、暴跌",
+        "example": "米国の株価急落がアジア市場に波及した。",
+        "example_zh": "美國股市的暴跌波及了亞洲市場。"
+      },
+      {
+        "word": "直撃弾（ちょくげきだん）",
+        "pos": "名詞",
+        "meaning": "直接打擊、直擊",
+        "example": "今回の経済ショックは韓国市場に直撃弾となった。",
+        "example_zh": "這次的經濟衝擊對韓國市場造成了直接打擊。"
+      },
+      {
+        "word": "動揺（どうよう）",
+        "pos": "名詞",
+        "meaning": "動搖、不安",
+        "example": "市場の動揺を鎮めるために政府が対策を検討している。",
+        "example_zh": "政府正在研擬對策以平息市場的動盪。"
+      },
+      {
+        "word": "懸念（けねん）",
+        "pos": "名詞",
+        "meaning": "擔憂、掛念",
+        "example": "物価上昇への懸念が強まっている。",
+        "example_zh": "人們對物價上漲的擔憂正在加劇。"
+      }
+    ]
+  },
+  "vi": {
+    "source_note": "Tuổi Trẻ",
+    "title": "Kỷ niệm 50 năm thành lập trường Đại học Tài nguyên và Môi trường TP.HCM",
+    "summary": "Trường ĐH Tài nguyên và Môi trường TP.HCM tổ chức lễ kỷ niệm 50 năm hình thành và phát triển vào sáng 20-11.",
+    "content": "Vào sáng ngày 20 tháng 11, Trường Đại học Tài nguyên và Môi trường Thành phố Hồ Chí Minh đã long trọng tổ chức lễ kỷ niệm 50 năm hình thành và phát triển. Sự kiện này đánh dấu nửa thế kỷ đóng góp quan trọng trong việc đào tạo nguồn nhân lực chất lượng cao cho ngành quản lý tài nguyên và bảo vệ môi trường. Trong buổi lễ, nhà trường đã công bố năm định hướng chiến lược quan trọng nhằm nâng cao chất lượng giảng dạy và nghiên cứu khoa học trong giai đoạn mới. Điều này không chỉ mang lại cơ hội học tập hiện đại cho sinh viên mà còn cung cấp những giải pháp thiết thực cho các vấn đề môi trường đô thị hiện nay.",
+    "audio_text": "Vào sáng ngày 20 tháng 11, Trường Đại học Tài nguyên và Môi trường Thành phố Hồ Chí Minh đã long trọng tổ chức lễ kỷ niệm 50 năm hình thành và phát triển. Sự kiện này đánh dấu nửa thế kỷ đóng góp quan trọng trong việc đào tạo nguồn nhân lực chất lượng cao cho ngành quản lý tài nguyên và bảo vệ môi trường. Trong buổi lễ, nhà trường đã công bố năm định hướng chiến lược quan trọng nhằm nâng cao chất lượng giảng dạy và nghiên cứu khoa học trong giai đoạn mới. Điều này không chỉ mang lại cơ hội học tập hiện đại cho sinh viên mà còn cung cấp những giải pháp thiết thực cho các vấn đề môi trường đô thị hiện nay.",
+    "translation": " vào sáng ngày 20 tháng 11, Trường Đại học Tài nguyên và Môi trường Thành phố Hồ Chí Minh đã long trọng tổ chức lễ kỷ niệm 50 năm hình thành và phát triển. Sự kiện này đánh dấu nửa thế kỷ đóng góp quan trọng trong việc đào tạo nguồn nhân lực chất lượng cao cho ngành quản lý tài nguyên và bảo vệ môi trường.\n\nTrong buổi lễ, nhà trường đã công bố năm định hướng chiến lược quan trọng nhằm nâng cao chất lượng giảng dạy và nghiên cứu khoa học trong giai đoạn mới. Điều này không chỉ mang lại cơ hội học tập hiện đại cho sinh viên mà còn cung cấp những giải pháp thiết thực cho các vấn đề môi trường đô thị hiện nay.",
+    "vocab": [
+      {
+        "word": "định hướng",
+        "pos": "n.",
+        "meaning": "定向、方向",
+        "example": "Nhà trường đã xác định rõ năm định hướng phát triển mới.",
+        "example_zh": "學校已經明確了五個新的發展方向。"
+      },
+      {
+        "word": "nguồn nhân lực",
+        "pos": "n.",
+        "meaning": "人力資源",
+        "example": "Việc đào tạo nguồn nhân lực chất lượng cao là rất quan trọng.",
+        "example_zh": "培養高質量的人力資源非常重要。"
+      },
+      {
+        "word": "giải pháp",
+        "pos": "n.",
+        "meaning": "解決方案",
+        "example": "Các chuyên gia đang tìm kiếm giải pháp cho vấn đề ô nhiễm.",
+        "example_zh": "專家們正在尋找污染問題的解決方案。"
+      },
+      {
+        "word": "thiết thực",
+        "pos": "adj.",
+        "meaning": "切實的、務實的",
+        "example": "Buổi hội thảo mang lại nhiều thông tin thiết thực cho sinh viên.",
+        "example_zh": "研討會為學生帶來了許多切實的資訊。"
+      }
+    ]
+  },
+  "article_id": "2026-11-20v1",
+  "is_test": true
+}
