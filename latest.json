@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-21",
+  "angle": "歷史上同月同日（11月21日 / November 21）的真實事件或文化里程碑",
+  "en": {
+    "source_note": "The Japan Times",
+    "title": "Navigating the Digital Frontier: Japan's Cyber Insurance Surge",
+    "content": "Major property insurers across Japan are reporting an unprecedented jump in cyber insurance claims. This sudden financial strain is directly driven by a surge in sophisticated, artificial intelligence-fueled hacking incidents targeting corporate networks nationwide.\n\nAs businesses increasingly adopt advanced automation, malicious actors are simultaneously leveraging machine learning to bypass traditional security protocols. Industry experts note that safeguarding modern digital infrastructure requires far more than standard reactive defense mechanisms.",
+    "audio_text": "Major property insurers across Japan are reporting an unprecedented jump in cyber insurance claims. This sudden financial strain is directly driven by a surge in sophisticated, artificial intelligence-fueled hacking incidents targeting corporate networks nationwide. As businesses increasingly adopt advanced automation, malicious actors are simultaneously leveraging machine learning to bypass traditional security protocols. Industry experts note that safeguarding modern digital infrastructure requires far more than standard reactive defense mechanisms.",
+    "translation": "日本全國各地的主要財產保險公司回報指出，網路保險理賠案件出現了前所未有的激增。這股突如其來的財務壓力，主要是由針對全日本企業網路、日益精密且由人工智慧驅動的駭客攻擊事件暴增所直接引發的。隨著企業日益普及先進的自動化技術，惡意行為者也同時在利用機器學習來繞過傳統的安全協議。產業專家指出，守護現代數位基礎設施所需的防護，遠遠超過了標準的被動防禦機制。",
+    "vocab": [
+      {
+        "word": "unprecedented",
+        "pos": "adj.",
+        "meaning": "前所未有的，空前的",
+        "example": "The company faced an unprecedented challenge in securing its cloud database.",
+        "example_zh": "該公司在保護其雲端資料庫安全時面臨了前所未有的挑戰。"
+      },
+      {
+        "word": "malicious",
+        "pos": "adj.",
+        "meaning": "惡意的，蓄意的",
+        "example": "Security teams successfully blocked malicious traffic from entering the network.",
+        "example_zh": "安全團隊成功阻擋了惡意流量進入網路。"
+      },
+      {
+        "word": "leverage",
+        "pos": "v.",
+        "meaning": "充份利用，藉助",
+        "example": "Firms leverage machine learning models to detect anomalies faster.",
+        "example_zh": "企業利用機器學習模型來更快地檢測異常情況。"
+      },
+      {
+        "word": "infrastructure",
+        "pos": "n.",
+        "meaning": "基礎設施",
+        "example": "Investing in robust digital infrastructure is vital for modern enterprises.",
+        "example_zh": "投資強健的數位基礎設施對現代企業至關重要。"
+      }
+    ]
+  },
+  "ja": {
+    "source_note": "KBS World 日文今日新聞",
+    "title": "韓国が国連電子政府ランキングで世界一を奪還",
+    "summary_topic": "韓国行政安全部は20日、国連が発表した2026年の電子政府ランキングで、韓国が194か国・地域の中で総合1位となったと明らかにしました。",
+    "content": "韓国の<ruby>行<rt>こう</rt></ruby><ruby>政<rt>せい</rt></ruby><ruby>安<rt>あん</rt></ruby><ruby>全<rt>ぜん</rt></ruby>部ペは、国連が<ruby>発<rt>はっ</rt></ruby><ruby>表<rt>ぴょう</rt></ruby>したランキングで、韓国が百九十余か国の中で<ruby>総<rt>そう</rt></ruby><ruby>合<rt>ごう</rt></ruby>一位に<ruby>返<rt>かえ</rt></ruby>り<ruby>咲<rt>さ</rt></ruby>いたと発表しました。オンライン行政サービスや通信基盤が高く評価されています。\n\n<ruby>都<rt>と</rt></ruby><ruby>市<rt>し</rt></ruby>のインフラが進化するにつれて、私たちの<ruby>日<rt>にち</rt></ruby><ruby>常<rt>じょう</rt></ruby><ruby>生<rt>せい</rt></ruby><ruby>活<rt>かつ</rt></ruby>における<ruby>手<rt>て</rt></ruby><ruby>続<rt>つづ</rt></ruby>きもより<ruby>円<rt>えん</rt></ruby><ruby>滑<rt>かつ</rt></ruby>になりつつあります。デジタル技術の進歩は、行政と市民の距離をさらに縮める重要なカギとなっています。",
+    "audio_text": "韓国の行政安全部は、国連が発表したランキングで、韓国が百九十余か国の中で総合一位に返り咲いたと発表しました。オンライン行政サービスや通信基盤が高く評価されています。都市のインフラが進化するにつれて、私たちの日常生活における手続きもより円滑になりつつあります。デジタル技術の進歩は、行政と市民の距離をさらに縮める重要なカギとなっています。",
+    "translation": "南韓行政安全部於20日宣布，根據聯合國所發布的最新排名，南韓在194個國家與地區中脫穎而出，綜合排名重回世界第一。其線上行政服務與通訊基礎設施獲得了極高的評價。隨著城市基礎設施不斷演進，我們日常生活中的各項行政手續也變得日益順暢。數位技術的進步，已成為進一步拉近政府與市民距離的重要關鍵。",
+    "vocab": [
+      {
+        "word": "発表（はっぴょう）",
+        "pos": "名詞",
+        "meaning": "發表，公布",
+        "example": "政府は新しい経済政策を発表しました。",
+        "example_zh": "政府發表了新的經濟政策。"
+      },
+      {
+        "word": "評価（ひょうか）",
+        "pos": "名詞",
+        "meaning": "評價，評估",
+        "example": "彼の優れた研究成果が高く評価された。",
+        "example_zh": "他優秀的研究成果受到了高度評價。"
+      },
+      {
+        "word": "進歩（しんぽ）",
+        "pos": "名詞",
+        "meaning": "進步，發展",
+        "example": "科学技術の急速な進歩が生活を変える。",
+        "example_zh": "科學技術的迅猛進步改變了生活。"
+      },
+      {
+        "word": "円滑（えんかつ）",
+        "pos": "形容動詞",
+        "meaning": "順暢，順利",
+        "example": "プロジェクトを円滑に進めるための会議を開く。",
+        "example_zh": "召開會議以順利推進專案。"
+      }
+    ]
+  },
+  "vi": {
+    "source_note": "Thanh Niên",
+    "title": "Giải pháp thông minh giảm ùn tắc tại cửa ngõ sân bay Tân Sơn Nhất",
+    "content": "Để giải quyết tình trạng kẹt xe nghiêm trọng ở cửa ngõ sân bay Tân Sơn Nhất, lực lượng cảnh sát giao thông thành phố Hồ Chí Minh đã bắt đầu sử dụng hệ thống hàng rào di động. Biện pháp này nhằm tách biệt các luồng phương tiện thường xuyên xảy ra xung đột tại giao lộ lớn. Sự can thiệp kịp thời này giúp các phương tiện di chuyển trật tự hơn trong giờ cao điểm. Việc áp dụng các công cụ điều tiết linh hoạt trên đường phố đang mang lại những chuyển biến tích cực cho nhịp sống đô thị hàng ngày.",
+    "audio_text": "Để giải quyết tình trạng kẹt xe nghiêm trọng ở cửa ngõ sân bay Tân Sơn Nhất, lực lượng cảnh sát giao thông thành phố Hồ Chí Minh đã bắt đầu sử dụng hệ thống hàng rào di động. Biện pháp này nhằm tách biệt các luồng phương tiện thường xuyên xảy ra xung đột tại giao lộ lớn. Sự can thiệp kịp thời này giúp các phương tiện di chuyển trật tự hơn trong giờ cao điểm. Việc áp dụng các công cụ điều tiết linh hoạt trên đường phố đang mang lại những chuyển biến tích cực cho nhịp sống đô thị hàng ngày.",
+    "translation": "為了緩解新山一機場門戶嚴重的交通堵塞狀況，胡志明市交通警察部隊已開始使用移動式護欄系統。這項措施旨在將大型交叉路口經常發生交織衝突的車流分開。這種及時的干預有助於車輛在尖峰時段更有秩序地通行。在街頭靈活應用交通調節工具，正為日常的都市生活節奏帶來積極的轉變。",
+    "vocab": [
+      {
+        "word": "ùn tắc",
+        "pos": "n.",
+        "meaning": "堵塞，擁擠",
+        "example": "Tình trạng ùn tắc giao thông thường xảy ra vào giờ cao điểm.",
+        "example_zh": "交通堵塞狀況通常在尖峰時段發生。"
+      },
+      {
+        "word": "cửa ngõ",
+        "pos": "n.",
+        "meaning": "門戶，交通要道",
+        "example": "Khu vực cửa ngõ thành phố được đầu tư mở rộng.",
+        "example_zh": "城市的門戶區域得到了投資擴建。"
+      },
+      {
+        "word": "can thiệp",
+        "pos": "v.",
+        "meaning": "介入，干預",
+        "example": "Cần có sự can thiệp nhanh chóng để giải quyết vấn đề.",
+        "example_zh": "需要迅速介入以解決問題。"
+      },
+      {
+        "word": "linh hoạt",
+        "pos": "adj.",
+        "meaning": "靈活的，有彈性的",
+        "example": "Chính sách quản lý cần phải linh hoạt theo thực tế.",
+        "example_zh": "管理政策需要根據實際情況保持靈活性。"
+      }
+    ]
+  },
+  "article_id": "2026-11-21",
+  "is_test": false
+}
