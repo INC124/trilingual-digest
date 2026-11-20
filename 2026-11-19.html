@@ -134,4 +134,70 @@
                     subtitle,
                     url: articleUrl,
                     views: nextViews,
-                    likes: next
+                    likes: nextLikes,
+                    score: nextScore
+                  };
+                  tx.set(docRef, payload, { merge: true });
+                  return payload;
+                });
+                renderStats(updated);
+              } catch (err) {
+                console.error("更新閱覽數失敗:", err);
+              }
+            }, 1500);
+          } else if (dwellTimer) {
+            clearTimeout(dwellTimer);
+            dwellTimer = null;
+          }
+        });
+      },
+      { threshold: [0.4] }
+    );
+    observer.observe(card);
+
+    likeBtn.addEventListener("click", async () => {
+      likeBtn.disabled = true;
+      const currentlyLiked = localStorage.getItem(likedKey) === "1";
+      const delta = currentlyLiked ? -1 : 1;
+
+      try {
+        const updated = await runTransaction(db, async (tx) => {
+          const snap = await tx.get(docRef);
+          const current = snap.exists() ? snap.data() : {};
+          const nextViews = Number(current.views) || 0;
+          const nextLikes = Math.max(0, (Number(current.likes) || 0) + delta);
+          const nextScore = calcScore(nextLikes, nextViews);
+
+          const payload = {
+            id: docId,
+            date: dateStr,
+            lang,
+            title,
+            subtitle,
+            url: articleUrl,
+            views: nextViews,
+            likes: nextLikes,
+            score: nextScore
+          };
+          tx.set(docRef, payload, { merge: true });
+          return payload;
+        });
+
+        if (delta > 0) {
+          localStorage.setItem(likedKey, "1");
+          likeBtn.classList.add("liked");
+          heartSpan.textContent = "❤️";
+        } else {
+          localStorage.removeItem(likedKey);
+          likeBtn.classList.remove("liked");
+          heartSpan.textContent = "🤍";
+        }
+        renderStats(updated);
+      } catch (err) {
+        console.error("更新按讚數失敗:", err);
+      } finally {
+        likeBtn.disabled = false;
+      }
+    });
+  });
+</script></body></html>
