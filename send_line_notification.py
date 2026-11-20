@@ -11,11 +11,16 @@ CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "").strip()
 GROUP_ID = os.environ.get("LINE_GROUP_ID", "").strip()
 GROUP_IDS_RAW = os.environ.get("LINE_GROUP_IDS", "").strip()
 USER_ID = os.environ.get("LINE_USER_ID", "").strip()
+VERSION_SUFFIX = os.environ.get("VERSION_SUFFIX", "").strip()
 
 PAGES_BASE_URL = "https://inc124.github.io/trilingual-digest"
 
 
-def get_target_ids() -> list:
+def get_target_ids(is_test: bool) -> list:
+    # 試閱/測試模式（例如 VERSION_SUFFIX="v1"）：只通知巡檢機器人/管理員 (USER_ID)，絕不發給群組
+    if is_test:
+        return [USER_ID] if USER_ID else []
+
     targets = []
     if GROUP_IDS_RAW:
         for gid in GROUP_IDS_RAW.split(","):
@@ -31,6 +36,8 @@ def get_target_ids() -> list:
 
 def parse_titles_from_html(raw_html: str) -> dict:
     titles = {"en": "", "ja": "", "vi": ""}
+
+    # 支援原本 <article data-lang="en">...<h2>...</h2>
     cards = re.findall(
         r'<article\b[^>]*\bdata-lang="(en|ja|vi)"[^>]*>(.*?)</article>',
         raw_html,
@@ -43,6 +50,22 @@ def parse_titles_from_html(raw_html: str) -> dict:
             clean_title = html.unescape(clean_title)
             clean_title = re.sub(r"\s+", " ", clean_title).strip()
             titles[lang] = clean_title
+
+    # 備援支援 <section class="lang-card" id="sec-en">...<h2>...</h2>
+    if not any(titles.values()):
+        sec_cards = re.findall(
+            r'<section\b[^>]*\bid="sec-(en|ja|vi)"[^>]*>(.*?)</section>',
+            raw_html,
+            flags=re.DOTALL | re.IGNORECASE,
+        )
+        for lang, card_html in sec_cards:
+            h2_match = re.search(r"<h2\b[^>]*>(.*?)</h2>", card_html, flags=re.DOTALL | re.IGNORECASE)
+            if h2_match:
+                clean_title = re.sub(r"<[^>]+>", "", h2_match.group(1))
+                clean_title = html.unescape(clean_title)
+                clean_title = re.sub(r"\s+", " ", clean_title).strip()
+                titles[lang] = clean_title
+
     return titles
 
 
@@ -62,19 +85,45 @@ def fetch_remote_titles(page_url: str) -> dict:
     return parse_titles_from_html(page_html)
 
 
-def fetch_local_titles(d_str: str) -> dict:
-    local_path = f"{d_str}.html"
-    if not os.path.exists(local_path):
-        return {"en": "", "ja": "", "vi": ""}
-    with open(local_path, "r", encoding="utf-8") as f:
-        return parse_titles_from_html(f.read())
+def fetch_local_titles(article_id: str) -> dict:
+    candidate_paths = [
+        f"{article_id}.html",
+        os.path.join("archive", f"{article_id}.html"),
+        os.path.join("docs", "archive", f"{article_id}.html"),
+    ]
+    for path in candidate_paths:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                return parse_titles_from_html(f.read())
+
+    # 若有對應 JSON 也可直接讀標題
+    json_paths = [
+        os.path.join("archive", f"{article_id}.json"),
+        os.path.join("docs", "archive", f"{article_id}.json"),
+        os.path.join("docs", "latest.json"),
+    ]
+    for jpath in json_paths:
+        if os.path.exists(jpath):
+            with open(jpath, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            return {
+                "en": data.get("en", {}).get("title", ""),
+                "ja": data.get("ja", {}).get("title", ""),
+                "vi": data.get("vi", {}).get("title", ""),
+            }
+
+    return {"en": "", "ja": "", "vi": ""}
 
 
-def get_synced_titles(article_url: str, d_str: str) -> dict:
-    local_titles = fetch_local_titles(d_str)
+def get_synced_titles(article_url: str, article_id: str, is_test: bool) -> dict:
+    local_titles = fetch_local_titles(article_id)
     expected_en = local_titles.get("en", "")
 
-    # 給 GitHub Pages 一些時間完成最新部署，最多重試 6 次（每次等 15 秒）
+    # 測試版優先用本機剛產出的標題，避免遠端 GitHub Pages 還沒部署好就等太久
+    if is_test and any(local_titles.values()):
+        print(f"[INFO] 測試版 ({article_id}) 直接使用本機最新產出標題發送巡檢通知")
+        return local_titles
+
     max_attempts = 6
     latest_remote = {"en": "", "ja": "", "vi": ""}
 
@@ -84,7 +133,6 @@ def get_synced_titles(article_url: str, d_str: str) -> dict:
             if any(remote_titles.values()):
                 latest_remote = remote_titles
 
-            # 若有本機剛生成的英文標題，比對遠端是否已經同步成同一篇
             if expected_en:
                 if remote_titles.get("en") == expected_en:
                     print(f"[INFO] 第 {attempt} 次檢查：GitHub Pages 已同步為最新文章標題")
@@ -102,7 +150,6 @@ def get_synced_titles(article_url: str, d_str: str) -> dict:
         if attempt < max_attempts:
             time.sleep(15)
 
-    # 若 GitHub Pages 仍未完成快取更新，退回使用本機剛生成的標題，確保摘要與剛產出的文章一致
     if any(local_titles.values()):
         print("[INFO] 遠端頁面仍在部署中，改用本機最新產出文章的標題發送推播")
         return local_titles
@@ -114,26 +161,44 @@ def main():
     if not CHANNEL_ACCESS_TOKEN:
         raise RuntimeError("缺少環境變數 LINE_CHANNEL_ACCESS_TOKEN")
 
-    target_ids = get_target_ids()
+    is_test = bool(VERSION_SUFFIX)
+    target_ids = get_target_ids(is_test)
     if not target_ids:
+        if is_test:
+            raise RuntimeError("測試模式需要設定環境變數 LINE_USER_ID 才能通知巡檢機器人")
         raise RuntimeError("缺少環境變數 LINE_GROUP_IDS、LINE_GROUP_ID 或 LINE_USER_ID")
 
     now = datetime.now(timezone(timedelta(hours=8)))
     d_str = now.strftime("%Y-%m-%d")
-    article_url = f"{PAGES_BASE_URL}/{d_str}.html"
+    article_id = f"{d_str}{VERSION_SUFFIX}"
 
-    titles = get_synced_titles(article_url, d_str)
+    if is_test:
+        article_url = f"{PAGES_BASE_URL}/archive/{article_id}.html"
+    else:
+        article_url = f"{PAGES_BASE_URL}/{d_str}.html"
+
+    titles = get_synced_titles(article_url, article_id, is_test)
     en_title = titles["en"] or "無"
     ja_title = titles["ja"] or "無"
     vi_title = titles["vi"] or "無"
 
-    message_text = (
-        f"🌅 早安！今天的 Daily Trilingual Digest ({d_str}) 文章已準備好囉：\n\n"
-        f"🇬🇧 EN：{en_title}\n"
-        f"🇯🇵 JA：{ja_title}\n"
-        f"🇻🇳 VI：{vi_title}\n\n"
-        f"👉 立即閱讀全文：\n{article_url}"
-    )
+    if is_test:
+        message_text = (
+            f"🧪 [巡檢試閱版] Daily Trilingual Digest ({article_id})\n"
+            f"（已略過讀者群組，僅通知巡檢機器人）\n\n"
+            f"🇬🇧 EN：{en_title}\n"
+            f"🇯🇵 JA：{ja_title}\n"
+            f"🇻🇳 VI：{vi_title}\n\n"
+            f"👉 試閱網址：\n{article_url}"
+        )
+    else:
+        message_text = (
+            f"🌅 早安！今天的 Daily Trilingual Digest ({d_str}) 文章已準備好囉：\n\n"
+            f"🇬🇧 EN：{en_title}\n"
+            f"🇯🇵 JA：{ja_title}\n"
+            f"🇻🇳 VI：{vi_title}\n\n"
+            f"👉 立即閱讀全文：\n{article_url}"
+        )
 
     success_count = 0
     errors = []
