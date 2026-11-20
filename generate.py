@@ -31,7 +31,8 @@ IS_TEST_VERSION = bool(VERSION_SUFFIX)
 MONTH_DAY_ZH = f"{NOW.month}月{NOW.day}日"
 MONTH_DAY_EN = NOW.strftime("%B %d")
 
-OUTPUT_DIR = "docs"
+# 與 GitHub Pages (/ root) 對齊的根目錄輸出路徑
+OUTPUT_DIR = "."
 AUDIO_DIR = os.path.join(OUTPUT_DIR, "audio")
 ARCHIVE_DIR = os.path.join(OUTPUT_DIR, "archive")
 os.makedirs(AUDIO_DIR, exist_ok=True)
@@ -583,7 +584,7 @@ def update_manifest_and_pages(data: dict):
     data["article_id"] = ARTICLE_ID
     data["is_test"] = IS_TEST_VERSION
 
-    # 1. 儲存歸檔 JSON 與 HTML（例如 archive/2026-11-20v1.json 與 .html）
+    # 1. 儲存歸檔 JSON 與 HTML（根目錄 archive/2026-11-20v1.json 與 .html）
     archive_json_path = os.path.join(ARCHIVE_DIR, f"{ARTICLE_ID}.json")
     with open(archive_json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
