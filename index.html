@@ -28,33 +28,71 @@
     h1 { font-size: 1.75rem; letter-spacing: 0.5px; margin-bottom: 6px; }
     .subtitle { font-size: 1rem; color: var(--text-muted); }
 
-    /* 10 大推薦文章排行榜樣式 */
+    /* 告示牌式 10 大推薦文章 */
     .top10-section {
       background: var(--card-bg);
-      border-radius: 20px;
-      padding: 24px 26px;
-      margin-bottom: 24px;
+      border-radius: 16px;
+      margin-bottom: 22px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.05);
       border: 1px solid var(--border-color);
+      overflow: hidden;
     }
-    .top10-header {
+    .top10-banner {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 15px 20px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: baseline;
+      gap: 12px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text-main);
+      font-family: inherit;
+      transition: background-color 0.15s ease;
+    }
+    .top10-banner:hover {
+      background: #f9fafb;
+    }
+    .top10-banner-left {
+      display: flex;
+      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border-color);
+      min-width: 0;
     }
     .top10-title {
-      font-size: 1.2rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: #111827;
     }
     .top10-hint {
       font-size: 0.82rem;
       color: var(--text-muted);
+    }
+    .top10-toggle {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+      background: #f3f4f6;
+      padding: 5px 12px;
+      border-radius: 999px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease, background-color 0.15s ease;
+    }
+    .top10-banner[aria-expanded="true"] .top10-toggle {
+      background: #1f2937;
+      color: #ffffff;
+    }
+    .top10-panel {
+      display: none;
+      padding: 0 20px 18px;
+      border-top: 1px solid var(--border-color);
+    }
+    .top10-panel.is-open {
+      display: block;
+      padding-top: 14px;
     }
     .top10-list {
       list-style: none;
@@ -132,7 +170,7 @@
     .top10-status {
       font-size: 0.92rem;
       color: var(--text-muted);
-      padding: 8px 0;
+      padding: 6px 0;
     }
 
     input[type="radio"].view-radio { display: none; }
@@ -202,11 +240,22 @@
     </header>
 
     <section class="top10-section" aria-labelledby="top10-heading">
-      <div class="top10-header">
-        <h2 id="top10-heading" class="top10-title">🔥 10 大推薦文章</h2>
-        <span class="top10-hint">依按讚與閱讀熱度排序（各語系獨立計算）</span>
+      <button
+        type="button"
+        id="top10-toggle-btn"
+        class="top10-banner"
+        aria-expanded="false"
+        aria-controls="top10-panel"
+      >
+        <span class="top10-banner-left">
+          <span id="top10-heading" class="top10-title">🔥 10 大推薦文章</span>
+          <span class="top10-hint">依按讚與閱讀熱度排序（點擊展開排行榜）</span>
+        </span>
+        <span id="top10-toggle-label" class="top10-toggle">展開 ▾</span>
+      </button>
+      <div id="top10-panel" class="top10-panel" role="region" aria-labelledby="top10-heading">
+        <div id="top10-content" class="top10-status">點擊上方告示牌載入熱門推薦文章...</div>
       </div>
-      <div id="top10-content" class="top10-status">正在載入熱門推薦文章...</div>
     </section>
 
     <input type="radio" name="view" id="v-latest" class="view-radio" checked>
@@ -286,13 +335,20 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const container = document.getElementById("top10-content");
+
+    const toggleBtn = document.getElementById("top10-toggle-btn");
+    const toggleLabel = document.getElementById("top10-toggle-label");
+    const panel = document.getElementById("top10-panel");
+    const contentEl = document.getElementById("top10-content");
 
     const LANG_MAP = {
       en: { label: "EN", cls: "bg-en" },
       ja: { label: "JA", cls: "bg-ja" },
       vi: { label: "VI", cls: "bg-vi" }
     };
+
+    let hasLoaded = false;
+    let isLoading = false;
 
     function escapeHtml(str) {
       return String(str ?? "")
@@ -303,7 +359,14 @@
         .replace(/'/g, "&#39;");
     }
 
-    async function renderTop10() {
+    async function loadTop10(force = false) {
+      if (isLoading) return;
+      if (hasLoaded && !force) return;
+
+      isLoading = true;
+      contentEl.className = "top10-status";
+      contentEl.textContent = "正在載入熱門推薦文章...";
+
       try {
         const q = query(
           collection(db, "digest_articles"),
@@ -316,8 +379,9 @@
           .filter((item) => item && item.url && item.title);
 
         if (!items.length) {
-          container.className = "top10-status";
-          container.textContent = "目前還沒有累積足夠的閱讀與按讚資料，快去文章頁逛逛吧！";
+          contentEl.className = "top10-status";
+          contentEl.textContent = "目前還沒有累積足夠的閱讀與按讚資料，快去文章頁逛逛吧！";
+          hasLoaded = true;
           return;
         }
 
@@ -356,17 +420,30 @@
           ul.appendChild(li);
         });
 
-        container.className = "";
-        container.innerHTML = "";
-        container.appendChild(ul);
+        contentEl.className = "";
+        contentEl.innerHTML = "";
+        contentEl.appendChild(ul);
+        hasLoaded = true;
       } catch (err) {
         console.error("載入 10 大推薦文章失敗:", err);
-        container.className = "top10-status";
-        container.textContent = "目前無法載入熱門推薦文章，請稍後再試。";
+        contentEl.className = "top10-status";
+        contentEl.textContent = "目前無法載入熱門推薦文章，請稍後再試。";
+      } finally {
+        isLoading = false;
       }
     }
 
-    renderTop10();
+    toggleBtn.addEventListener("click", () => {
+      const expanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      const nextExpanded = !expanded;
+      toggleBtn.setAttribute("aria-expanded", String(nextExpanded));
+      panel.classList.toggle("is-open", nextExpanded);
+      toggleLabel.textContent = nextExpanded ? "收合 ▴" : "展開 ▾";
+
+      if (nextExpanded) {
+        loadTop10(false);
+      }
+    });
   </script>
 </body>
 </html>
