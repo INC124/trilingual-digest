@@ -292,7 +292,214 @@ cards_html = (
 
 css = ':root{--bg:#f4f5f7;--card:#fff;--text:#1f2937;--muted:#6b7280;--en:#2563eb;--ja:#dc2626;--vi:#059669;--border:#e5e7eb}*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding:16px}.container{max-width:680px;margin:0 auto}header{text-align:center;padding:20px 0 12px}.nav-top{text-align:left;margin-bottom:12px}.back-btn{text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500}h1{font-size:1.5rem;margin-bottom:4px}.date-badge{font-size:.9rem;color:var(--muted)}input.lang-radio{display:none}.filter-bar{display:flex;justify-content:center;gap:8px;margin:14px 0 24px;flex-wrap:wrap;position:sticky;top:10px;z-index:10;background:rgba(244,245,247,.92);backdrop-filter:blur(6px);padding:8px;border-radius:12px}.filter-btn{border:1px solid var(--border);background:#fff;color:var(--text);padding:8px 14px;border-radius:20px;font-size:.9rem;font-weight:600;cursor:pointer}#opt-all:checked~.filter-bar label[for="opt-all"],#opt-en:checked~.filter-bar label[for="opt-en"],#opt-ja:checked~.filter-bar label[for="opt-ja"],#opt-vi:checked~.filter-bar label[for="opt-vi"]{background:#1f2937;color:#fff;border-color:#1f2937}#opt-en:checked~.cards-wrapper .card:not([data-lang="en"]),#opt-ja:checked~.cards-wrapper .card:not([data-lang="ja"]),#opt-vi:checked~.cards-wrapper .card:not([data-lang="vi"]){display:none}.card{background:var(--card);border-radius:16px;padding:24px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.04);border-top:4px solid #ccc}.card[data-lang="en"]{border-top-color:var(--en)}.card[data-lang="ja"]{border-top-color:var(--ja)}.card[data-lang="vi"]{border-top-color:var(--vi)}.tag{font-size:.75rem;font-weight:700;color:var(--muted);margin-bottom:8px;display:block}h2{font-size:1.25rem;line-height:1.4;margin-bottom:8px}.subtitle{font-size:.95rem;color:var(--muted);margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}audio{width:100%;height:40px;margin:8px 0 14px;border-radius:20px}.section-label{font-size:.75rem;font-weight:700;color:var(--muted);display:block;margin-top:16px}.article-text{font-size:1.05rem;margin-top:6px;text-align:justify}ruby rt{font-size:.6em;color:#555}.vocab-list{list-style:none;background:#f9fafb;padding:14px 16px;border-radius:10px;font-size:.95rem;margin-top:8px}.vocab-list li{margin-bottom:6px}.translation{font-size:.95rem;color:#374151;margin-top:8px;text-align:justify}'
 
+ENGAGEMENT_SNIPPET = """<style>.digest-engage-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:14px;border-top:1px dashed var(--border);font-size:.9rem;color:var(--muted)}.digest-views{display:inline-flex;align-items:center;gap:4px}.digest-like-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--text);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .15s ease}.digest-like-btn:hover{border-color:#ef4444;color:#ef4444}.digest-like-btn.liked{background:#fef2f2;border-color:#ef4444;color:#dc2626}</style><script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    runTransaction
+  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBKzdhel0LCAXv9qoGOdVMQ_K_KhBRpdzk",
+    authDomain: "personal-account-124.firebaseapp.com",
+    projectId: "personal-account-124",
+    storageBucket: "personal-account-124.firebasestorage.app",
+    messagingSenderId: "531857933748",
+    appId: "1:531857933748:web:e7d6afe199bf507f885ee1",
+    measurementId: "G-Z9MVZ43E4J"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const presetLang = urlParams.get("lang");
+  if (["en", "ja", "vi"].includes(presetLang)) {
+    const radio = document.getElementById(`opt-${presetLang}`);
+    if (radio) radio.checked = true;
+  }
+
+  function getArticleDate() {
+    const fileMatch = window.location.pathname.match(/(\\d{4}-\\d{2}-\\d{2})\\.html$/);
+    if (fileMatch) return fileMatch[1];
+
+    const titleMatch = document.title.match(/(\\d{4})\\.(\\d{2})\\.(\\d{2})/);
+    if (titleMatch) return `${titleMatch[1]}-${titleMatch[2]}-${titleMatch[3]}`;
+
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function getCleanHeadingText(card) {
+    const h2 = card.querySelector("h2");
+    if (!h2) return "";
+    const clone = h2.cloneNode(true);
+    clone.querySelectorAll("rt").forEach((rt) => rt.remove());
+    return clone.textContent.replace(/\\s+/g, " ").trim();
+  }
+
+  function calcScore(likes, views) {
+    return (Number(likes) || 0) * 5 + (Number(views) || 0);
+  }
+
+  const dateStr = getArticleDate();
+  const cards = document.querySelectorAll(".cards-wrapper .card[data-lang]");
+
+  cards.forEach((card) => {
+    const lang = card.getAttribute("data-lang");
+    if (!["en", "ja", "vi"].includes(lang)) return;
+
+    const docId = `${dateStr}_${lang}`;
+    const docRef = doc(db, "digest_articles", docId);
+    const viewedKey = `digest_viewed_${docId}`;
+    const likedKey = `digest_liked_${docId}`;
+
+    const title = getCleanHeadingText(card);
+    const subtitle = card.querySelector(".subtitle")?.textContent.trim() || "";
+    const articleUrl = `${dateStr}.html?lang=${lang}`;
+
+    const bar = document.createElement("div");
+    bar.className = "digest-engage-bar";
+
+    const viewsSpan = document.createElement("span");
+    viewsSpan.className = "digest-views";
+    viewsSpan.textContent = "👁️ 載入中...";
+
+    const likeBtn = document.createElement("button");
+    likeBtn.type = "button";
+    likeBtn.className = "digest-like-btn";
+    const isInitiallyLiked = localStorage.getItem(likedKey) === "1";
+    if (isInitiallyLiked) likeBtn.classList.add("liked");
+    likeBtn.innerHTML = `<span class="heart">${isInitiallyLiked ? "❤️" : "🤍"}</span><span class="like-count">0</span>`;
+
+    bar.appendChild(viewsSpan);
+    bar.appendChild(likeBtn);
+    card.appendChild(bar);
+
+    const likeCountSpan = likeBtn.querySelector(".like-count");
+    const heartSpan = likeBtn.querySelector(".heart");
+
+    function renderStats(data) {
+      const views = Number(data?.views) || 0;
+      const likes = Number(data?.likes) || 0;
+      viewsSpan.textContent = `👁️ ${views} 次閱讀`;
+      likeCountSpan.textContent = String(likes);
+    }
+
+    getDoc(docRef).then((snap) => {
+      if (snap.exists()) {
+        renderStats(snap.data());
+      } else {
+        renderStats({ views: 0, likes: 0 });
+      }
+    }).catch((err) => {
+      console.error("讀取文章統計失敗:", err);
+      viewsSpan.textContent = "👁️ —";
+    });
+
+    let dwellTimer = null;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+            if (localStorage.getItem(viewedKey) === "1") {
+              observer.unobserve(card);
+              return;
+            }
+            dwellTimer = setTimeout(async () => {
+              if (localStorage.getItem(viewedKey) === "1") return;
+              localStorage.setItem(viewedKey, "1");
+              observer.unobserve(card);
+
+              try {
+                const updated = await runTransaction(db, async (tx) => {
+                  const snap = await tx.get(docRef);
+                  const current = snap.exists() ? snap.data() : {};
+                  const nextViews = (Number(current.views) || 0) + 1;
+                  const nextLikes = Number(current.likes) || 0;
+                  const nextScore = calcScore(nextLikes, nextViews);
+
+                  const payload = {
+                    id: docId,
+                    date: dateStr,
+                    lang,
+                    title,
+                    subtitle,
+                    url: articleUrl,
+                    views: nextViews,
+                    likes: nextLikes,
+                    score: nextScore
+                  };
+                  tx.set(docRef, payload, { merge: true });
+                  return payload;
+                });
+                renderStats(updated);
+              } catch (err) {
+                console.error("更新閱覽數失敗:", err);
+              }
+            }, 1500);
+          } else if (dwellTimer) {
+            clearTimeout(dwellTimer);
+            dwellTimer = null;
+          }
+        });
+      },
+      { threshold: [0.4] }
+    );
+    observer.observe(card);
+
+    likeBtn.addEventListener("click", async () => {
+      likeBtn.disabled = true;
+      const currentlyLiked = localStorage.getItem(likedKey) === "1";
+      const delta = currentlyLiked ? -1 : 1;
+
+      try {
+        const updated = await runTransaction(db, async (tx) => {
+          const snap = await tx.get(docRef);
+          const current = snap.exists() ? snap.data() : {};
+          const nextViews = Number(current.views) || 0;
+          const nextLikes = Math.max(0, (Number(current.likes) || 0) + delta);
+          const nextScore = calcScore(nextLikes, nextViews);
+
+          const payload = {
+            id: docId,
+            date: dateStr,
+            lang,
+            title,
+            subtitle,
+            url: articleUrl,
+            views: nextViews,
+            likes: nextLikes,
+            score: nextScore
+          };
+          tx.set(docRef, payload, { merge: true });
+          return payload;
+        });
+
+        if (delta > 0) {
+          localStorage.setItem(likedKey, "1");
+          likeBtn.classList.add("liked");
+          heartSpan.textContent = "❤️";
+        } else {
+          localStorage.removeItem(likedKey);
+          likeBtn.classList.remove("liked");
+          heartSpan.textContent = "🤍";
+        }
+        renderStats(updated);
+      } catch (err) {
+        console.error("更新按讚數失敗:", err);
+      } finally {
+        likeBtn.disabled = false;
+      }
+    });
+  });
+</script>"""
+
 page = f'<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Daily Trilingual Digest - {d_disp}</title><style>{css}</style></head><body><div class="container"><div class="nav-top"><a href="index.html" class="back-btn">← 返回日期目錄</a></div><header><h1>Daily Trilingual Digest</h1><div class="date-badge">{d_disp} ({w_str}) • 每日三語精選新聞</div></header><input type="radio" name="lang" id="opt-all" class="lang-radio" checked><input type="radio" name="lang" id="opt-en" class="lang-radio"><input type="radio" name="lang" id="opt-ja" class="lang-radio"><input type="radio" name="lang" id="opt-vi" class="lang-radio"><div class="filter-bar"><label for="opt-all" class="filter-btn">全部閱讀</label><label for="opt-en" class="filter-btn">🇺🇸 英文</label><label for="opt-ja" class="filter-btn">🇯🇵 日文</label><label for="opt-vi" class="filter-btn">🇻🇳 越南文</label></div><div class="cards-wrapper">{cards_html}</div></div></body></html>'
+
+if "</body>" in page:
+    page = page.replace("</body>", ENGAGEMENT_SNIPPET + "</body>", 1)
 
 with open(f"{d_str}.html", "w", encoding="utf-8") as f:
     f.write(page)
