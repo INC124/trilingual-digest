@@ -88,3 +88,116 @@
 
     function renderStats(data) {
       const views = Number(data?.views) || 0;
+      const likes = Number(data?.likes) || 0;
+      viewsSpan.textContent = `👁️ ${views} 次閱讀`;
+      likeCountSpan.textContent = String(likes);
+    }
+
+    getDoc(docRef).then((snap) => {
+      if (snap.exists()) {
+        renderStats(snap.data());
+      } else {
+        renderStats({ views: 0, likes: 0 });
+      }
+    }).catch((err) => {
+      console.error("讀取文章統計失敗:", err);
+      viewsSpan.textContent = "👁️ —";
+    });
+
+    let dwellTimer = null;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+            if (localStorage.getItem(viewedKey) === "1") {
+              observer.unobserve(card);
+              return;
+            }
+            dwellTimer = setTimeout(async () => {
+              if (localStorage.getItem(viewedKey) === "1") return;
+              localStorage.setItem(viewedKey, "1");
+              observer.unobserve(card);
+
+              try {
+                const updated = await runTransaction(db, async (tx) => {
+                  const snap = await tx.get(docRef);
+                  const current = snap.exists() ? snap.data() : {};
+                  const nextViews = (Number(current.views) || 0) + 1;
+                  const nextLikes = Number(current.likes) || 0;
+                  const nextScore = calcScore(nextLikes, nextViews);
+
+                  const payload = {
+                    id: docId,
+                    date: dateStr,
+                    lang,
+                    title,
+                    subtitle,
+                    url: articleUrl,
+                    views: nextViews,
+                    likes: nextLikes,
+                    score: nextScore
+                  };
+                  tx.set(docRef, payload, { merge: true });
+                  return payload;
+                });
+                renderStats(updated);
+              } catch (err) {
+                console.error("更新閱覽數失敗:", err);
+              }
+            }, 1500);
+          } else if (dwellTimer) {
+            clearTimeout(dwellTimer);
+            dwellTimer = null;
+          }
+        });
+      },
+      { threshold: [0.4] }
+    );
+    observer.observe(card);
+
+    likeBtn.addEventListener("click", async () => {
+      likeBtn.disabled = true;
+      const currentlyLiked = localStorage.getItem(likedKey) === "1";
+      const delta = currentlyLiked ? -1 : 1;
+
+      try {
+        const updated = await runTransaction(db, async (tx) => {
+          const snap = await tx.get(docRef);
+          const current = snap.exists() ? snap.data() : {};
+          const nextViews = Number(current.views) || 0;
+          const nextLikes = Math.max(0, (Number(current.likes) || 0) + delta);
+          const nextScore = calcScore(nextLikes, nextViews);
+
+          const payload = {
+            id: docId,
+            date: dateStr,
+            lang,
+            title,
+            subtitle,
+            url: articleUrl,
+            views: nextViews,
+            likes: nextLikes,
+            score: nextScore
+          };
+          tx.set(docRef, payload, { merge: true });
+          return payload;
+        });
+
+        if (delta > 0) {
+          localStorage.setItem(likedKey, "1");
+          likeBtn.classList.add("liked");
+          heartSpan.textContent = "❤️";
+        } else {
+          localStorage.removeItem(likedKey);
+          likeBtn.classList.remove("liked");
+          heartSpan.textContent = "🤍";
+        }
+        renderStats(updated);
+      } catch (err) {
+        console.error("更新按讚數失敗:", err);
+      } finally {
+        likeBtn.disabled = false;
+      }
+    });
+  });
+</script></body></html>
