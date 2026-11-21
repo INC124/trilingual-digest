@@ -35,6 +35,9 @@ jobs:
           VERSION_SUFFIX: ${{ github.event.inputs.version_suffix || '' }}
         run: python generate.py
 
+      - name: Generate RSS feeds
+        run: python generate_rss.py
+
       - name: Commit and push updates
         run: |
           git config user.name "Daily Digest Bot"
