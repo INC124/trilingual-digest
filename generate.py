@@ -23,6 +23,17 @@ TZ = pytz.timezone("Asia/Taipei")
 NOW = datetime.datetime.now(TZ)
 TODAY_STR = NOW.strftime("%Y-%m-%d")
 
+WEEKDAY_ZH_MAP = {
+    0: "一",
+    1: "二",
+    2: "三",
+    3: "四",
+    4: "五",
+    5: "六",
+    6: "日",
+}
+TODAY_DISPLAY_DATE = f"{NOW.strftime('%Y.%m.%d')} ({WEEKDAY_ZH_MAP[NOW.weekday()]})"
+
 # 試閱/版本後綴：例如傳入 "v1" 會產出 2026-11-20v1，且不覆蓋正式版 latest.json 與首頁清單
 VERSION_SUFFIX = os.environ.get("VERSION_SUFFIX", "").strip()
 ARTICLE_ID = f"{TODAY_STR}{VERSION_SUFFIX}"
@@ -82,8 +93,8 @@ ANGLE_POOL = [
     {
         "name": "當日真實新聞與生活影響",
         "instruction": (
-            f"從下方素材中挑選一則具體真實事件，寫出明確的人事時地物與它對一般人日常生活的影響，"
-            f"避免空泛的總結或口號。"
+            "從下方素材中挑選一則具體真實事件，寫出明確的人事時地物與它對一般人日常生活的影響，"
+            "避免空泛的總結或口號。"
         ),
     },
     {
@@ -97,8 +108,8 @@ ANGLE_POOL = [
     {
         "name": "貼近日常的生活文化與飲食小故事",
         "instruction": (
-            f"從素材或在地文化脈絡中，聚焦一個具體的生活細節、街頭飲食、地方習慣或工藝設計，"
-            f"描述人們實際怎麼做、在哪裡發生、有什麼獨特之處，讓讀者有身歷其境的畫面感。"
+            "從素材或在地文化脈絡中，聚焦一個具體的生活細節、街頭飲食、地方習慣或工藝設計，"
+            "描述人們實際怎麼做、在哪裡發生、有什麼獨特之處，讓讀者有身歷其境的畫面感。"
         ),
     },
     {
@@ -233,6 +244,20 @@ def translate_to_zh_tw(source_text: str, lang_name: str, model_names: list) -> s
     return ""
 
 
+def summarize_zh_subtitle(section: dict, fallback_lang_label: str) -> str:
+    explicit_sub = (section.get("zh_title") or section.get("subtitle") or "").strip()
+    if explicit_sub:
+        return explicit_sub
+
+    trans = (section.get("translation") or "").strip()
+    first_line = trans.splitlines()[0].strip() if trans else ""
+    first_sent = re.split(r"[。！？!?]", first_line)[0].strip()
+    candidate = first_sent or first_line
+    if len(candidate) > 36:
+        candidate = candidate[:35].rstrip() + "…"
+    return candidate or f"{fallback_lang_label}精選短文"
+
+
 # ==========================================
 # 5. Gemini 文章生成
 # ==========================================
@@ -295,6 +320,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   "en": {{
     "source_note": "參考來源名稱或歷史主題",
     "title": "具體有吸引力的英文標題",
+    "zh_title": "12～24 字的繁體中文標題摘要",
     "content": "約 130-165 英文單字的正文（可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純英文正文",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
@@ -311,6 +337,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   "ja": {{
     "source_note": "參考來源名稱或歷史主題",
     "title": "具體有吸引力的日文標題（純文字，不加 ruby）",
+    "zh_title": "12～24 字的繁體中文標題摘要",
     "content": "約 160-220 字元的日文正文（漢字附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純日文正文（不含任何 HTML 標籤）",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
@@ -327,6 +354,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   "vi": {{
     "source_note": "參考來源名稱或歷史主題",
     "title": "具體有吸引力的純正越南文標題",
+    "zh_title": "12～24 字的繁體中文標題摘要",
     "content": "約 130-170 詞的純正越南文正文（可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純正越南文正文",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文，不可照抄越南文）",
@@ -395,6 +423,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
                 if fixed_zh:
                     sec["translation"] = fixed_zh
                     print(f"🛠️ [{k.upper()}] 全譯缺漏或未轉繁體中文，已自動補翻完成。")
+            sec["zh_title"] = summarize_zh_subtitle(sec, zh_label)
 
     return data
 
@@ -431,7 +460,7 @@ ENGAGEMENT_SNIPPET = """
 <!-- Firestore 讀者互動與熱門統計模組 -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = window.__FIREBASE_CONFIG__ || null;
   if (firebaseConfig) {
@@ -627,11 +656,69 @@ def build_article_html(data: dict, is_archive: bool = False) -> str:
 """
 
 
+def build_index_card_html(data: dict) -> str:
+    en_sec = data.get("en", {})
+    ja_sec = data.get("ja", {})
+    vi_sec = data.get("vi", {})
+
+    en_title = en_sec.get("title", "")
+    ja_title = ja_sec.get("title", "")
+    vi_title = vi_sec.get("title", "")
+
+    en_zh = summarize_zh_subtitle(en_sec, "英文")
+    ja_zh = summarize_zh_subtitle(ja_sec, "日文")
+    vi_zh = summarize_zh_subtitle(vi_sec, "越南文")
+
+    return (
+        f'<a href="{ARTICLE_ID}.html" class="digest-item">'
+        f'<div class="item-header"><span class="item-date">{TODAY_DISPLAY_DATE}</span><span class="item-arrow">閱讀全文 →</span></div>'
+        f'<ul class="topic-list">'
+        f'<li><span class="lang-badge bg-en">EN</span><div class="title-group"><span class="orig-title">{en_title}</span><span class="zh-title">{en_zh}</span></div></li>'
+        f'<li><span class="lang-badge bg-ja">JA</span><div class="title-group"><span class="orig-title">{ja_title}</span><span class="zh-title">{ja_zh}</span></div></li>'
+        f'<li><span class="lang-badge bg-vi">VI</span><div class="title-group"><span class="orig-title">{vi_title}</span><span class="zh-title">{vi_zh}</span></div></li>'
+        f'</ul></a>'
+    )
+
+
+def inject_card_into_index(index_html_path: str, card_html: str) -> None:
+    if not os.path.exists(index_html_path):
+        print(f"⚠️ 找不到 {index_html_path}，略過首頁卡片插入。")
+        return
+
+    with open(index_html_path, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    start_marker = "<!-- ====== 每天新增的日期卡片請貼在下方這一行之後 ====== -->"
+    end_marker = "<!-- ====== 每天新增的日期卡片請貼在上方這一行之前 ====== -->"
+
+    if start_marker not in html or end_marker not in html:
+        print("⚠️ index.html 找不到新增卡片標記註解，略過插入。")
+        return
+
+    s_idx = html.index(start_marker) + len(start_marker)
+    e_idx = html.index(end_marker)
+    list_body = html[s_idx:e_idx]
+
+    # 若已存在相同 href 的卡片，先移除避免重複
+    card_pattern = re.compile(
+        rf'\s*<a\s+href="{re.escape(ARTICLE_ID)}\.html"\s+class="digest-item">.*?</a>\s*',
+        flags=re.DOTALL,
+    )
+    list_body_cleaned = re.sub(card_pattern, "\n\n", list_body).strip()
+
+    new_list_body = f"\n{card_html}\n\n{list_body_cleaned}\n\n      " if list_body_cleaned else f"\n{card_html}\n\n      "
+    updated_html = html[:s_idx] + new_list_body + html[e_idx:]
+
+    with open(index_html_path, "w", encoding="utf-8") as f:
+        f.write(updated_html)
+    print(f"✅ 已將 {ARTICLE_ID} 卡片更新至 {index_html_path}")
+
+
 def update_manifest_and_pages(data: dict):
     data["article_id"] = ARTICLE_ID
     data["is_test"] = IS_TEST_VERSION
 
-    # 1. 儲存歸檔 JSON 與 HTML（根目錄 archive/2026-11-20v1.json 與 .html）
+    # 1. 儲存歸檔 JSON 與 HTML（archive/2026-11-21.json 與 .html）
     archive_json_path = os.path.join(ARCHIVE_DIR, f"{ARTICLE_ID}.json")
     with open(archive_json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -640,14 +727,20 @@ def update_manifest_and_pages(data: dict):
     with open(archive_html_path, "w", encoding="utf-8") as f:
         f.write(build_article_html(data, is_archive=True))
 
-    # 2. 只有正式版（非試閱）才更新 manifest.json、latest.json 與 today.html
+    # 2. 只有正式版（非試閱）才更新 manifest.json、latest.json、today.html、根目錄文章頁與 index.html
     if not IS_TEST_VERSION:
+        root_article_html_path = os.path.join(OUTPUT_DIR, f"{ARTICLE_ID}.html")
+        with open(root_article_html_path, "w", encoding="utf-8") as f:
+            f.write(build_article_html(data, is_archive=False))
+
         manifest_path = os.path.join(OUTPUT_DIR, "manifest.json")
         manifest = []
         if os.path.exists(manifest_path):
             try:
                 with open(manifest_path, "r", encoding="utf-8") as f:
-                    manifest = json.load(f)
+                    loaded = json.load(f)
+                    if isinstance(loaded, list):
+                        manifest = loaded
             except Exception:
                 manifest = []
 
@@ -658,7 +751,8 @@ def update_manifest_and_pages(data: dict):
             "en_title": data.get("en", {}).get("title", ""),
             "ja_title": data.get("ja", {}).get("title", ""),
             "vi_title": data.get("vi", {}).get("title", ""),
-            "url": f"archive/{ARTICLE_ID}.html",
+            "url": f"{ARTICLE_ID}.html",
+            "archive_url": f"archive/{ARTICLE_ID}.html",
         })
         with open(manifest_path, "w", encoding="utf-8") as f:
             json.dump(manifest, f, ensure_ascii=False, indent=2)
@@ -672,9 +766,7 @@ def update_manifest_and_pages(data: dict):
             f.write(build_article_html(data, is_archive=False))
 
         index_html_path = os.path.join(OUTPUT_DIR, "index.html")
-        if not os.path.exists(index_html_path):
-            with open(index_html_path, "w", encoding="utf-8") as f:
-                f.write(build_article_html(data, is_archive=False))
+        inject_card_into_index(index_html_path, build_index_card_html(data))
     else:
         print(f"🧪 試閱版模式 ({ARTICLE_ID})：已獨立產出 archive/{ARTICLE_ID}.html 與對應音檔，未更動正式版 latest.json 與首頁清單。")
 
