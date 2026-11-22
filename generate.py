@@ -176,8 +176,93 @@ def gather_rss_seeds() -> dict:
 
 
 # ==========================================
-# 4. 語言清洗與格式防呆
+# 4. 語言清洗、日文假名防呆與格式檢查
 # ==========================================
+KANJI_RE = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff]")
+RUBY_BLOCK_RE = re.compile(r"<ruby>.*?</ruby>", flags=re.DOTALL)
+
+
+def clean_ja_spacing(text: str) -> str:
+    """清理日文漢字與假名之間意外出現的多餘空白（保留換行與正常標點後空白）"""
+    if not text:
+        return ""
+
+    def _clean_ruby_match(m):
+        block = m.group(0)
+        return re.sub(r"[ \u3000]+", "", block)
+
+    text = RUBY_BLOCK_RE.sub(_clean_ruby_match, text)
+    text = re.sub(
+        r"(?<=[\u3400-\u4dbf\u4e00-\u9fff])[ \u3000]+(?=[\u3400-\u4dbf\u4e00-\u9fff\u3040-\u30ff])",
+        "",
+        text,
+    )
+    text = re.sub(
+        r"(?<=[\u3040-\u30ff])[ \u3000]+(?=[\u3400-\u4dbf\u4e00-\u9fff])",
+        "",
+        text,
+    )
+    return text
+
+
+def get_missing_kanji(ruby_html: str) -> list:
+    """找出日文 HTML 中尚未被 <ruby>...</ruby> 包覆的漢字"""
+    without_ruby = RUBY_BLOCK_RE.sub("", ruby_html or "")
+    return KANJI_RE.findall(without_ruby)
+
+
+def ensure_complete_ja_ruby(ruby_html: str, model_names: list, max_retries: int = 2) -> str:
+    """確保日文內容中的常用漢字皆有 <ruby>漢字<rt>ふりがな</rt></ruby> 標音，並移除多餘空白"""
+    current = clean_ja_spacing(ruby_html or "")
+    if not current:
+        return current
+
+    for attempt in range(1, max_retries + 1):
+        missing = get_missing_kanji(current)
+        if not missing:
+            return current
+
+        unique_missing = list(dict.fromkeys(missing))
+        print(f"⚠️ [JA] 第 {attempt} 次假名檢查發現漏標漢字：{', '.join(unique_missing)}")
+
+        fix_prompt = (
+            "請幫以下日文內容補齊所有尚未加上注音的漢字，使用 <ruby>漢字<rt>ふりがな</rt></ruby> 格式。\n"
+            "嚴格規則：\n"
+            "1. 只能針對尚未加上 <ruby> 的漢字加上 <ruby>漢字<rt>...</rt></ruby>，不可擅自改寫原本的句子、詞彙或段落換行（\\n\\n）。\n"
+            "2. 已存在的 <ruby>...</ruby> 標籤請完整保留，不要拆散或改動。\n"
+            "3. 若某個詞的部分漢字已加 ruby 但另一部分漏標（例如詞幹或複合詞），請合併為正確完整的 <ruby>詞彙<rt>...</rt></ruby> 或補齊漏標漢字。\n"
+            "4. 片假名、平假名、標點符號與數字不需加 <ruby>。\n"
+            "5. 只輸出處理後的日文內容，不要加任何說明文字或 Markdown 程式碼區塊。\n\n"
+            f"內容：\n{current}"
+        )
+
+        updated = ""
+        for m_name in model_names:
+            try:
+                m = genai.GenerativeModel(
+                    model_name=m_name,
+                    generation_config={"temperature": 0.2},
+                )
+                res = m.generate_content(fix_prompt)
+                cand = (res.text or "").strip()
+                cand = re.sub(r"^```[a-zA-Z]*\s*|\s*```$", "", cand, flags=re.IGNORECASE).strip()
+                if cand:
+                    updated = clean_ja_spacing(cand)
+                    break
+            except Exception as e:
+                print(f"⚠️ [JA] 補標模型 {m_name} 呼叫失敗：{e}")
+                continue
+
+        if not updated:
+            break
+        current = updated
+
+    remain = get_missing_kanji(current)
+    if remain:
+        print(f"⚠️ [JA] 補標後仍有少數漢字未標註：{', '.join(dict.fromkeys(remain))}")
+    return current
+
+
 def clean_vi_text(text: str) -> str:
     if not text:
         return ""
@@ -293,7 +378,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   - 日文篇從日文素材池（或結合日本季節/生活/歷史同月同日切角）撰寫純正日文短文。
   - 越南文篇從越南文素材池（或結合越南生活飲食/節慶/歷史同月同日切角）撰寫純正越南文短文。
 4. **日文標音規則（ja）**：
-  - 日文 `content` 中的常用漢字請加上 `<ruby>漢字<rt>ふりがな</rt></ruby>` 標音（片假名、平假名與數字不需加 ruby）。
+  - 日文 `content` 中的**每一個漢字**都必須加上 `<ruby>漢字<rt>ふりがな</rt></ruby>` 標音，不可漏標任何一個漢字，也不可只標一半（片假名、平假名、標點與數字不需加 ruby；漢字之間不要多加空白）。
   - `audio_text` 則提供「完全不含 HTML 標籤」的純日文文本供 TTS 朗讀。
 5. **越南文純淨度規則（vi）**：
   - 越南文 `title`、`content`、`audio_text`、`vocab.word`、`vocab.example` **必須 100% 為純正越南文**，嚴禁夾雜任何中文字、日文假名或無關英文單字；而 `vi.translation`、`vocab.meaning`、`vocab.example_zh` 則必須為**繁體中文**。
@@ -338,7 +423,7 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     "source_note": "參考來源名稱或歷史主題",
     "title": "具體有吸引力的日文標題（純文字，不加 ruby）",
     "zh_title": "12～24 字的繁體中文標題摘要",
-    "content": "約 160-220 字元的日文正文（漢字附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
+    "content": "約 160-220 字元的日文正文（每個漢字皆附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純日文正文（不含任何 HTML 標籤）",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
     "vocab": [
@@ -401,13 +486,18 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     raw_text = re.sub(r"^```json\s*|\s*```$", "", raw_text, flags=re.IGNORECASE).strip()
     data = json.loads(raw_text)
 
-    if "ja" in data:
+    if "ja" in data and isinstance(data["ja"], dict):
+        data["ja"]["content"] = ensure_complete_ja_ruby(
+            data["ja"].get("content", ""),
+            candidate_models,
+            max_retries=2,
+        )
         if not data["ja"].get("audio_text"):
             data["ja"]["audio_text"] = strip_ruby_tags(data["ja"].get("content", ""))
         else:
-            data["ja"]["audio_text"] = strip_ruby_tags(data["ja"]["audio_text"])
+            data["ja"]["audio_text"] = clean_ja_spacing(strip_ruby_tags(data["ja"]["audio_text"]))
 
-    if "vi" in data:
+    if "vi" in data and isinstance(data["vi"], dict):
         data["vi"] = sanitize_vi_data(data["vi"])
         if not data["vi"].get("audio_text"):
             data["vi"]["audio_text"] = clean_vi_text(data["vi"].get("content", ""))
