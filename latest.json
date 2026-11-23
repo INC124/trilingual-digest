@@ -1,121 +1,121 @@
 {
-  "date": "2026-11-23",
-  "angle": "節慶習俗、季節更迭與地方風情",
+  "date": "2026-11-24",
+  "angle": "當日真實新聞與生活影響",
   "en": {
     "source_note": "Tokyo Weekender",
-    "title": "A New Chapter for Okinawa’s Shuri Castle",
-    "zh_title": "沖繩首里城浴火重生重迎大眾",
-    "content": "Seven years after a devastating fire reduced much of Shuri Castle’s main hall to ashes, the historic landmark is finally preparing to welcome visitors once again. On November 23, the restored heart of the former Ryukyu Kingdom opens its gates to the public, marking a major milestone for local residents.\n\nCraftsmen have spent years meticulously rebuilding the traditional architecture using Okinawan pine and vibrant vermilion lacquer. Visitors walking through the newly completed courtyards can smell the fresh timber and witness the enduring spirit of a community reclaiming its cultural heritage.",
-    "audio_text": "Seven years after a devastating fire reduced much of Shuri Castle’s main hall to ashes, the historic landmark is finally preparing to welcome visitors once again. On November 23, the restored heart of the former Ryukyu Kingdom opens its gates to the public, marking a major milestone for local residents. Craftsmen have spent years meticulously rebuilding the traditional architecture using Okinawan pine and vibrant vermilion lacquer. Visitors walking through the newly completed courtyards can smell the fresh timber and witness the enduring spirit of a community reclaiming its cultural heritage.",
-    "translation": "在經歷了一場毀滅性大火將首里城正殿大片燒成灰燼的七年之後，這個歷史地標終於準備好再次迎接訪客。11月23日，這座前琉球王國修復後的心臟地帶將對公眾大門敞開，對當地居民而言，這標誌著一個重大的里程碑。工匠們多年來一直使用沖繩松木和鮮豔的朱漆，細緻地重建傳統建築。漫步在全新完工庭院中的遊客，可以聞到新鮮木材的氣味，並見證一個社區重新找回其文化遺產的堅韌精神。",
+    "title": "¥12 Million Reward for Missing Mount Fuji Climber Raises Safety Concerns",
+    "zh_title": "富士山懸賞金引發的冬季登山安全警訊",
+    "content": "A desperate father is offering a massive reward of up to ¥12 million for any information leading to his missing son on Mount Fuji. The young Chinese man disappeared after attempting to scale the famous peak, triggering a complex search operation in treacherous weather.\n\nWhile the father's persistence is understandable, this huge bounty has sparked severe safety concerns among local authorities. Mountain rescue teams warn that such financial incentives might tempt unprepared members of the public to venture onto dangerous winter slopes, ultimately risking their own lives for a payout.",
+    "audio_text": "A desperate father is offering a massive reward of up to 12 million yen for any information leading to his missing son on Mount Fuji. The young Chinese man disappeared after attempting to scale the famous peak, triggering a complex search operation in treacherous weather. While the father's persistence is understandable, this huge bounty has sparked severe safety concerns among local authorities. Mountain rescue teams warn that such financial incentives might tempt unprepared members of the public to venture onto dangerous winter slopes, ultimately risking their own lives for a payout.",
+    "translation": "一位絕望的父親懸賞高達一千兩百萬日圓，徵求尋找在富士山失蹤兒子的線索。這名年輕的中國男子在試圖攀登這座著名山峰後失蹤，在險惡的天氣中引發了複雜的搜救行動。\n\n儘管這位父親的堅持可以理解，但這筆巨額懸賞金卻在當地權威機構之間引發了嚴重的安全擔憂。山地救援隊警告說，這種金錢誘因可能會誘使毫無準備的民眾冒險涉足危險的冬季山坡，最終為了報酬而置自己的生命於險境。",
     "vocab": [
       {
-        "word": "devastating",
+        "word": "desperate",
         "pos": "adj.",
-        "meaning": "毀滅性的，破壞極大的",
-        "example": "The town suffered devastating losses during the winter storm.",
-        "example_zh": "這個城鎮在冬季風暴中遭受了毀滅性的損失。"
+        "meaning": "絕望的、拼命的",
+        "example": "The desperate family searched every corner of the town for their lost dog.",
+        "example_zh": "這家人心急如焚地在鎮上的每個角落尋找他們走失的狗。"
       },
       {
-        "word": "meticulously",
-        "pos": "adv.",
-        "meaning": " meticulosly 仔細地，一絲不苟地",
-        "example": "The artisan meticulously carved the wooden panels.",
-        "example_zh": "這位工匠一絲不苟地雕刻著木板。"
-      },
-      {
-        "word": "milestone",
+        "word": "bounty",
         "pos": "n.",
-        "meaning": "里程碑，重大轉折點",
-        "example": "Opening the new library was a major milestone for the town.",
-        "example_zh": "開設新圖書館對該城鎮而言是一大重要里程碑。"
+        "meaning": "懸賞金、獎金",
+        "example": "The government offered a large bounty for the capture of the criminal.",
+        "example_zh": "政府懸賞巨額獎金以捉拿該名罪犯。"
       },
       {
-        "word": "heritage",
+        "word": "incentive",
         "pos": "n.",
-        "meaning": "遺產，傳統",
-        "example": "They work hard to preserve their local cultural heritage.",
-        "example_zh": "他們努力保護當地的文化遺產。"
+        "meaning": "誘因、刺激",
+        "example": "Tax breaks provide an incentive for companies to invest in green energy.",
+        "example_zh": "稅收減免為企業投資綠能提供了誘因。"
+      },
+      {
+        "word": "treacherous",
+        "pos": "adj.",
+        "meaning": "險惡的、變化莫測的",
+        "example": "Driving becomes treacherous when heavy snow covers the mountain roads.",
+        "example_zh": "當大雪覆蓋山路時，開車變得相當險惡危險。"
       }
     ]
   },
   "ja": {
-    "source_note": "SoraNews24",
-    "title": "渋谷の蕎麦店で出会う新しいコロッケ蕎麦の魅力",
-    "zh_title": "澀谷蕎麥麵店的全新可樂餅吃法",
-    "zh_title_len": 18,
-    "content": "<ruby>日本<rt>にほん</rt></ruby><ruby>中<rt>じゅう</rt></ruby>で<ruby>愛<rt>あい</rt></ruby>される<ruby>蕎麦<rt>そば</rt></ruby>とコロッケを<ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせた<ruby>名物<rt>めいぶつ</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>は、その<ruby>味<rt>あじ</rt></ruby>わいをめぐって<ruby>常<rt>つね</rt></ruby>に<ruby>賛否両論<rt>さんぴりょうろん</rt></ruby>が<ruby>分<rt>わ</rt></ruby>かれてきた。しかし、<ruby>渋谷<rt>しぶや</rt></ruby>の<ruby>一角<rt>いっかく</rt></ruby>にある<ruby>専門<rt>せんもん</rt></ruby><ruby>店<rt>てん</rt></ruby>が、その<ruby>論争<rt>ろんそう</rt></ruby>に<ruby>新風<rt>しんぷう</rt></ruby>を<ruby>吹<rt>ふ</rt></ruby>き<ruby>込<rt>こ</rt></ruby>む<ruby>工夫<rt>くふう</rt></ruby>を<ruby>凝<rt>こ</rt></ruby>らした。\n\nサクサクした<ruby>衣<rt>ころも</rt></ruby>の<ruby>食感<rt>しょっかん</rt></ruby>を<ruby>残<rt>のこ</rt></ruby>したまま<ruby>熱々<rt>あつあつ</rt></ruby>の<ruby>出汁<rt>だし</rt></ruby>に<ruby>浸<rt>ひた</rt></ruby>すことで、<ruby>汁<rt>しる</rt></ruby>を<ruby>吸<rt>す</rt></ruby>った<ruby>部分<rt>ぶぶん</rt></ruby>と<ruby>香<rt>こう</rt></ruby>ばしい<ruby>部分<rt>ぶぶん</rt></ruby>の<ruby>両方<rt>りょうほう</rt></ruby>を<ruby>最後<rt>さいご</rt></ruby>まで<ruby>味<rt>あじ</rt></ruby>わうことができるという。この<ruby>工夫<rt>くふう</rt></ruby>により、これまで<ruby>敬遠<rt>けいえん</rt></ruby>していた<ruby>客<rt>きゃく</rt></ruby><ruby>層<rt>そう</rt></ruby>からも<ruby>絶賛<rt>ぜっさん</rt></ruby>の<ruby>声<rt>こえ</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まっている。",
-    "audio_text": "日本中で愛される蕎麦とコロッケを組み合わせた名物料理は、その味わいをめぐって常に賛否両論が分かれてきた。しかし、渋谷の一角にある専門店が、その論争に新風を吹き込む工夫を凝らした。サクサクした衣の食感を残したまま熱々の出汁に浸すことで、汁を吸った部分と香ばしい部分の両方を最後まで味わうことができるという。この工夫により、これまで敬遠していた客層からも絶賛の声が集まっている。",
-    "translation": "在日本全國受到喜愛的蕎麥麵與可樂餅組合名物料理，針對其風味一直以來都存在著正反兩極的評價。然而，位於澀谷一角的一家專門店，精心設計了為這場爭論注入新風貌的烹調方式。藉由在保留酥脆外衣口感的同時，將其浸入熱騰騰的高湯中，讓客人能同時品嘗到吸附湯汁的部分與香氣四溢的部分，直到最後一口。透過這項巧思，連以往避而遠之的客群也紛紛給予極高的讚賞。",
+    "source_note": "NHK News / 気象防災",
+    "title": "北日本と東日本中心 大気の状態が非常に不安定",
+    "zh_title": "日本北方大氣極度不穩定的防災警示",
+    "zh_title_check": "12～24 字的繁體中文標題摘要",
+    "content": "<ruby>北<rt>きた</rt></ruby><ruby>日<rt>にっ</rt></ruby><ruby>本<rt>ぽん</rt></ruby><ruby>広<rt>ひろ</rt></ruby><ruby>範<rt>はん</rt></ruby><ruby>囲<rt>い</rt></ruby>から<ruby>東<rt>ひがし</rt></ruby><ruby>日<rt>にっ</rt></ruby><ruby>本<rt>ぽん</rt></ruby>にかけての<ruby>地<rt>ち</rt></ruby><ruby>域<rt>いき</rt></ruby>では、<ruby>大<rt>だい</rt></ruby><ruby>気<rt>き</rt></ruby>の<ruby>状<rt>じょう</rt></ruby><ruby>態<rt>たい</rt></ruby>が<ruby>非<rt>ひ</rt></ruby><ruby>常<rt>じょう</rt></ruby>に<ruby>不<rt>ふ</rt></ruby><ruby>安<rt>あん</rt></ruby><ruby>定<rt>てい</rt></ruby>となっています。これにともない、<ruby>局<rt>きょく</rt></ruby><ruby>地<rt>ち</rt></ruby><ruby>的<rt>てき</rt></ruby>な<ruby>激<rt>はげ</rt></ruby>しい<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り、<ruby>気<rt>き</rt></ruby><ruby>象<rt>しょう</rt></ruby><ruby>庁<rt>ちょう</rt></ruby>は<ruby>早<rt>はや</rt></ruby>めのお<ruby>願<rt>ねが</rt></ruby>いを<ruby>発<rt>はっ</rt></ruby><ruby>表<rt>ぴょう</rt></ruby>しました。\n\n<ruby>低<rt>ひく</rt></ruby>い<ruby>土<rt>と</rt></ruby><ruby>地<rt>ち</rt></ruby>での<ruby>浸<rt>しん</rt></ruby><ruby>水<rt>すい</rt></ruby>や<ruby>急<rt>きゅう</rt></ruby>な<ruby>川<rt>かわ</rt></ruby>の<ruby>増<rt>ぞう</rt></ruby><ruby>水<rt>すい</rt></ruby>といった<ruby>危<rt>き</rt></ruby><ruby>険<rt>けん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>まっています。<ruby>日<rt>にち</rt></ruby><ruby>常<rt>じょう</rt></ruby>の<ruby>通<rt>つう</rt></ruby><ruby>勤<rt>きん</rt></ruby>や<ruby>通<rt>つう</rt></ruby><ruby>学<rt>がく</rt></ruby>の<ruby>際<rt>さい</rt></ruby>には、<ruby>自<rt>じ</rt></ruby><ruby>分<rt>ぶん</rt></ruby>の<ruby>身<rt>み</rt></ruby>の<ruby>安<rt>あん</rt></ruby><ruby>全<rt>ぜん</rt></ruby>を<ruby>最<rt>さい</rt></ruby><ruby>優<rt>ゆう</rt></ruby><ruby>先<rt>せん</rt></ruby>し、<ruby>無<rt>む</rt></ruby><ruby>理<rt>り</rt></ruby>な<ruby>行<rt>こう</rt></ruby><ruby>動<rt>どう</rt></ruby>を<ruby>控<rt>ひか</rt></ruby>えることが<ruby>大<rt>たい</rt></ruby><ruby>切<rt>せつ</rt></ruby>です。",
+    "audio_text": "北日本広範囲から東日本にかけての地域では、大気の状態が非常に不安定となっています。これにともない、局地的な激しい雨が降り、気象庁は早めのお願いを発表しました。低い土地での浸水や急な川の増水といった危険が高まっています。日常の通勤や通学の際には、自分の身の安全を最優先し、無理な行動を控えることが大切です。",
+    "translation": "從日本北部廣泛地區到東日本的區域，大氣狀態變得極度不穩定。隨之而來的是局地強降雨，氣象廳已發布了及時的防範提醒。\n\n低窪地區浸水以及河川水位急劇上升等危險正在增加。在日常的通勤與通學過程中，將自身安全放在第一位、避免勉強出行是非常重要的。",
     "vocab": [
       {
-        "word": "賛否両論（さんぴりょうろん）",
+        "word": "広範囲（こうはんい）",
         "pos": "名詞",
-        "meaning": "正反兩論，眾說紛紜",
-        "example": "その提案には社内で賛否両論があった。",
-        "example_zh": "那個提案在公司內部引發了正反兩極的討論。"
+        "meaning": "廣範圍、大範圍",
+        "example": "台風の影響で広範囲にわたって雨が降っている。",
+        "example_zh": "受颱風影響，大範圍地區都在下雨。"
       },
       {
-        "word": "工夫（くふう）",
-        "pos": "名詞",
-        "meaning": "巧妙的心思，辦法的琢磨",
-        "example": "毎日の食事にちょっとした工夫を取り入れる。",
-        "example_zh": "在每天的飲食中加入一點巧思。"
+        "word": "不安定（ふあんてい）",
+        "pos": "形容動詞",
+        "meaning": "不穩定",
+        "example": "天気が不安定なので、傘を持っていったほうがいい。",
+        "example_zh": "因為天氣很不穩定，最好帶把傘出門。"
       },
       {
-        "word": "食感（しょっかん）",
+        "word": "浸水（しんすい）",
         "pos": "名詞",
-        "meaning": "食物的口感",
-        "example": "この野菜はシャキシャキした食感が特徴だ。",
-        "example_zh": "這種蔬菜的特徵是具有爽脆的口感。"
+        "meaning": "浸水、淹水",
+        "example": "大雨のため、いくつかの家屋で床下浸水が発生した。",
+        "example_zh": "由於大雨，幾棟房屋發生了地板下浸水的情況。"
       },
       {
-        "word": "敬遠（けいえん）",
+        "word": "最優先（さいゆうせん）",
         "pos": "名詞",
-        "meaning": "敬而遠之，迴避",
-        "example": "彼は独特の性格で、周囲から敬遠されがちだ。",
-        "example_zh": "他個性獨特，往往被周遭的人敬而遠之。"
+        "meaning": "最優先",
+        "example": "災害時には、命の安全を最优先に行動してください。",
+        "example_zh": "在災害發生時，請將生命安全放在最優先來行動。"
       }
     ]
   },
   "vi": {
-    "source_note": "Thanh Niên",
-    "title": "Vũ hội khăn rằn lan tỏa nét đẹp văn hóa Việt Nam",
-    "zh_title": "越南傳統方巾舞會傳遞團結精神",
-    "content": "Trong không khí se lạnh cuối tháng mười một, hàng trăm nghệ sĩ và người dân địa phương đã cùng nhau quy tụ tại ngày hội văn hóa lớn. Sự kiện nổi bật với màn biểu diễn vũ hội khăn rằn rực rỡ sắc màu, mang lại bầu không khí vô cùng náo nhiệt và đầy ắp tình đoàn kết. Mọi người cùng diện trang phục truyền thống, tay quấn chiếc khăn rằn đặc trưng và hòa mình vào các điệu múa dân gian uyển chuyển trên đường phố. Hoạt động này không chỉ giúp lưu giữ nét đẹp văn hóa lâu đời mà còn gắn kết cộng đồng, tạo nên những kỷ niệm khó quên cho bất kỳ ai tham gia.",
-    "audio_text": "Trong không khí se lạnh cuối tháng mười một, hàng trăm nghệ sĩ và người dân địa phương đã cùng nhau quy tụ tại ngày hội văn hóa lớn. Sự kiện nổi bật với màn biểu diễn vũ hội khăn rằn rực rỡ sắc màu, mang lại bầu không khí vô cùng náo nhiệt và đầy ắp tình đoàn kết. Mọi người cùng diện trang phục truyền thống, tay quấn chiếc khăn rằn đặc trưng và hòa mình vào các điệu múa dân gian uyển chuyển trên đường phố. Hoạt động này không chỉ giúp lưu giữ nét đẹp văn hóa lâu đời mà còn gắn kết cộng đồng, tạo nên những kỷ niệm khó quên cho bất kỳ ai tham gia.",
-    "translation": "在十一月底微涼的空氣中，數百名藝術家與當地居民齊聚一堂參加大型文化節慶。活動中最受矚目的是色彩繽紛的傳統方巾舞會表演，帶來了無比熱鬧且充滿團結情誼的氛圍。大家紛紛穿上傳統服飾，手上繫著具代表性的方巾，在街頭融入流暢優雅的民間舞蹈中。這項活動不僅有助於保存悠久的文化之美，更凝聚了社區向心力，為所有參與者留下難忘的回憶。",
+    "source_note": "Tuổi Trẻ",
+    "title": "Thời tiết miền Bắc chuyển rét và mưa to ảnh hưởng sinh hoạt",
+    "zh_title": "越南北部迎來降溫降雨對日常生活的影響",
+    "content": "Miền Bắc và miền Trung Việt Nam bắt đầu đón đợt không khí lạnh mạnh, khiến thời tiết chuyển rét đậm và có mưa to diện rộng. Sự thay đổi đột ngột này làm gián đoạn các hoạt động ngoài trời và việc di chuyển thường ngày của người dân. Trên các tuyến phố, người đi làm và học sinh phải chật vật mặc áo mưa, di chuyển chậm chạp giữa dòng nước ngập úng nhẹ. Các hàng quán vỉa hè cũng thưa vắng khách hơn, trong khi nhu cầu sử dụng các thiết bị sưởi ấm tại các hộ gia đình tăng cao rõ rệt.",
+    "audio_text": "Miền Bắc và miền Trung Việt Nam bắt đầu đón đợt không khí lạnh mạnh, khiến thời tiết chuyển rét đậm và có mưa to diện rộng. Sự thay đổi đột ngột này làm gián đoạn các hoạt động ngoài trời và việc di chuyển thường ngày của người dân. Trên các tuyến phố, người đi làm và học sinh phải chật vật mặc áo mưa, di chuyển chậm chạp giữa dòng nước ngập úng nhẹ. Các hàng quán vỉa hè cũng thưa vắng khách hơn, trong khi nhu cầu sử dụng các thiết bị sưởi ấm tại các hộ gia đình tăng cao rõ rệt.",
+    "translation": "越南北部與中部地區開始迎來強烈的冷空氣，導致天氣轉為嚴寒並伴隨大範圍豪雨。這種突如其來的氣候轉變打亂了民眾的戶外活動與日常通勤。\n\n在各條街道上，上班族與學生們不得不狼狽地穿著雨衣，在微幅積水中緩慢移動。街頭路邊攤的顧客也變得稀少，而各家庭對取暖設備的需求則明顯大幅增加。",
     "vocab": [
       {
-        "word": "quy tụ",
-        "pos": "v.",
-        "meaning": "聚集，匯聚",
-        "example": "Nhiều nghệ sĩ nổi tiếng đã quy tụ tại buổi hòa nhạc tối qua.",
-        "example_zh": "許多知名藝術家昨晚齊聚在音樂會上。"
+        "word": "không khí lạnh",
+        "pos": "n.",
+        "meaning": "冷空氣",
+        "example": "Đợt không khí lạnh đầu mùa khiến nhiệt độ giảm mạnh vào sáng sớm.",
+        "example_zh": "初冬的冷空氣讓清晨氣溫驟降。"
       },
       {
-        "word": "náo nhiệt",
+        "word": "đột ngột",
         "pos": "adj.",
-        "meaning": "熱鬧的",
-        "example": "Đường phố trở nên rất náo nhiệt vào dịp lễ hội.",
-        "example_zh": "街道在節慶期間變得非常熱鬧。"
+        "meaning": "突然的、倉促的",
+        "example": "Sự thay đổi thời tiết đột ngột khiến nhiều người dễ bị cảm lạnh.",
+        "example_zh": "天氣的突然轉變讓許多人容易感冒。"
       },
       {
-        "word": "uyển chuyển",
-        "pos": "adj.",
-        "meaning": "優雅的，流暢柔和的",
-        "example": "Các vũ biểu diễn những động tác múa rất uyển chuyển.",
-        "example_zh": "舞者們表演了非常優雅流暢的舞蹈動作。"
+        "word": "ngập úng",
+        "pos": "n.",
+        "meaning": "積水、淹水",
+        "example": "Cơn mưa lớn chiều qua gây ngập úng ở nhiều tuyến đường trung tâm.",
+        "example_zh": "昨天下午的大雨造成許多市中心幹道積水。"
       },
       {
-        "word": "lưu giữ",
+        "word": "sưởi ấm",
         "pos": "v.",
-        "meaning": "保存，留存",
-        "example": "Họ cố gắng lưu giữ những phong tục truyền thống của làng.",
-        "example_zh": "他們努力保存村莊的傳統習俗。"
+        "meaning": "取暖、加熱",
+        "example": "Mọi người quây quần bên nhau để sưởi ấm trong những ngày đông giá rét.",
+        "example_zh": "每當寒冬臘月，大家便圍坐在一起取暖。"
       }
     ]
   },
-  "article_id": "2026-11-23",
+  "article_id": "2026-11-24",
   "is_test": false
 }
