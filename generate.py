@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import json
 import random
 import asyncio
@@ -38,6 +39,9 @@ TODAY_DISPLAY_DATE = f"{NOW.strftime('%Y.%m.%d')} ({WEEKDAY_ZH_MAP[NOW.weekday()
 VERSION_SUFFIX = os.environ.get("VERSION_SUFFIX", "").strip()
 ARTICLE_ID = f"{TODAY_STR}{VERSION_SUFFIX}"
 IS_TEST_VERSION = bool(VERSION_SUFFIX)
+
+# 若需強制重產已存在的今日正式版，可設 FORCE_REGENERATE=true
+FORCE_REGENERATE = os.environ.get("FORCE_REGENERATE", "").strip().lower() in {"1", "true", "yes"}
 
 MONTH_DAY_ZH = f"{NOW.month}月{NOW.day}日"
 MONTH_DAY_EN = NOW.strftime("%B %d")
@@ -861,10 +865,30 @@ def update_manifest_and_pages(data: dict):
         print(f"🧪 試閱版模式 ({ARTICLE_ID})：已獨立產出 archive/{ARTICLE_ID}.html 與對應音檔，未更動正式版 latest.json 與首頁清單。")
 
 
+def is_article_already_generated() -> bool:
+    """若今日正式版（HTML、JSON、MP3）已完整存在，跳過生成以防重複執行覆蓋"""
+    if IS_TEST_VERSION or FORCE_REGENERATE:
+        return False
+
+    root_html = os.path.join(OUTPUT_DIR, f"{ARTICLE_ID}.html")
+    archive_json = os.path.join(ARCHIVE_DIR, f"{ARTICLE_ID}.json")
+    audio_en = os.path.join(AUDIO_DIR, f"{ARTICLE_ID}_en.mp3")
+
+    html_ok = os.path.exists(root_html) and os.path.getsize(root_html) > 1000
+    json_ok = os.path.exists(archive_json) and os.path.getsize(archive_json) > 500
+    audio_ok = os.path.exists(audio_en) and os.path.getsize(audio_en) > 1000
+
+    return html_ok and json_ok and audio_ok
+
+
 # ==========================================
 # 8. 主程式進入點
 # ==========================================
 async def main():
+    if is_article_already_generated():
+        print(f"⏭️ 今日正式版（{ARTICLE_ID}）已存在且完整，略過重複生成以防覆蓋。")
+        sys.exit(0)
+
     print(f"🚀 開始執行 Daily Trilingual Digest 生成流程 ({ARTICLE_ID})...")
     seeds = gather_rss_seeds()
     data = generate_trilingual_digest(seeds)
