@@ -1,121 +1,120 @@
 {
-  "date": "2026-11-24",
-  "angle": "當日真實新聞與生活影響",
+  "date": "2026-11-25",
+  "angle": "歷史上同月同日（11月25日 / November 25）的真實事件或文化里程碑",
   "en": {
-    "source_note": "Tokyo Weekender",
-    "title": "Suica Unveils New Purple Rabbit Mascot for 2027",
-    "zh_title": "Suica企鵝將卸任：2027年起由紫色兔子接棒",
-    "content": "The iconic penguin that has guided millions of commuters through ticket gates across Japan is finally stepping down. Suica has officially announced that a purple rabbit will take over as its new official mascot starting April 1, 2027, bringing an end to a long-standing era for the popular transit card brand.\n\nFor daily travelers, this character shift means a fresh visual identity on station posters, app interfaces, and commemorative merchandise. While commuters might initially miss the familiar penguin that has defined station culture for decades, the upcoming purple rabbit promises a new chapter for millions of daily passengers navigating urban transit networks.",
-    "audio_text": "The iconic penguin that has guided millions of commuters through ticket gates across Japan is finally stepping down. Suica has officially announced that a purple rabbit will take over as its new official mascot starting April 1, 2027, bringing an end to a long-standing era for the popular transit card brand. For daily travelers, this character shift means a fresh visual identity on station posters, app interfaces, and commemorative merchandise. While commuters might initially miss the familiar penguin that has defined station culture for decades, the upcoming purple rabbit promises a new chapter for millions of daily passengers navigating urban transit networks.",
-    "translation": "帶領無數通勤族通過日本各地檢票口的標誌性企鵝終於要卸任了。Suica官方已正式宣布，從2027年4月1日起，一隻紫色兔子將接任成為全新的官方吉祥物，為這個熱門交通卡品牌長達數年的時代畫下句點。對日常通勤族來說，這項角色轉變意味著車站海報、應用程式介面以及紀念商品都將展現全新的視覺形象。雖然通勤族一開始可能會想念這個定義了數十年車站文化的熟悉企鵝，但即將登場的紫色兔子也為無數穿梭於城市交通網路的每日乘客開啟了嶄新篇章。",
+    "source_note": "Spoon & Tamago",
+    "title": "Tokyo Transforms Into an Open-Air Gallery During ARTE TOKYO",
+    "zh_title": "東京街頭化身大型露天藝術藝廊",
+    "content": "As autumn deepens in the Japanese capital, ARTE TOKYO is actively redefining how residents and travelers experience urban spaces. Running across various public areas through the end of the year, this citywide festival transforms everyday streets into an expansive outdoor gallery for contemporary creators.\n\nVisitors strolling through major districts can encounter striking installations created by visionary artists, architects, and designers. By bringing cutting-edge public art directly into neighborhoods rather than traditional museums, the initiative invites the public to pause and rediscover the hidden creative dimensions of Tokyo's familiar concrete landscape.",
+    "audio_text": "As autumn deepens in the Japanese capital, ARTE TOKYO is actively redefining how residents and travelers experience urban spaces. Running across various public areas through the end of the year, this citywide festival transforms everyday streets into an expansive outdoor gallery for contemporary creators. Visitors strolling through major districts can encounter striking installations created by visionary artists, architects, and designers. By bringing cutting-edge public art directly into neighborhoods rather than traditional museums, the initiative invites the public to pause and rediscover the hidden creative dimensions of Tokyo's familiar concrete landscape.",
+    "translation": "隨著日本首都的秋意漸濃，ARTE TOKYO 正積極重新定義居民與旅客體驗城市空間的方式。這項橫跨全市多個公共區域、持續到年底的藝術節，將日常街道化身為當代創作者的廣闊戶外藝廊。\n\n漫步於主要街區的訪客，可以偶遇由前衛藝術家、建築師和設計師所創作的引人注目裝置藝術。透過將尖端公共藝術直接帶入社區而非傳統美術館，這項計畫邀請大眾駐足停留，重新發現東京熟悉水泥景觀中隱藏的創意維度。",
     "vocab": [
       {
-        "word": "iconic",
+        "word": "redefine",
+        "pos": "v.",
+        "meaning": "重新定義",
+        "example": "The public art project helps redefine the urban landscape of Tokyo.",
+        "example_zh": "這項公共藝術計畫有助於重新定義東京的城市景觀。"
+      },
+      {
+        "word": "expansive",
         "pos": "adj.",
-        "meaning": "標誌性的，具代表性的",
-        "example": "The penguin has been an iconic symbol for Japanese railway commuters for decades.",
-        "example_zh": "這隻企鵝數十年來一直是日本鐵路通勤族的標誌性象徵。"
+        "meaning": "廣闊的、開闊的",
+        "example": "The exhibition turns the streets into an expansive outdoor gallery.",
+        "example_zh": "該展覽將街道變成了廣闊的戶外藝廊。"
       },
       {
-        "word": "commuter",
+        "word": "installation",
         "pos": "n.",
-        "meaning": "通勤族",
-        "example": "Millions of commuters pass through the ticket gates every single morning.",
-        "example_zh": "每天早晨都有數以百萬計的通勤族通過檢票口。"
+        "meaning": "裝置藝術、設施",
+        "example": "Visitors stopped to admire the striking art installation in the plaza.",
+        "example_zh": "訪客停下腳步欣賞廣場上引人注目的藝術裝置。"
       },
       {
-        "word": "mascot",
+        "word": "dimension",
         "pos": "n.",
-        "meaning": "吉祥物",
-        "example": "The brand introduced a cute animal mascot to appeal to younger generations.",
-        "example_zh": "該品牌推出了一隻可愛的動物吉祥物來吸引年輕世代。"
-      },
-      {
-        "word": "identity",
-        "pos": "n.",
-        "meaning": "識別，身份",
-        "example": "The company gave its mobile application a fresh visual identity.",
-        "example_zh": "該公司為其行動應用程式賦予了全新的視覺識別。"
+        "meaning": "維度、層面",
+        "example": "Public art adds a new creative dimension to familiar neighborhoods.",
+        "example_zh": "公共藝術為熟悉的社區增添了新的創意維度。"
       }
     ]
   },
   "ja": {
-    "source_note": "KBS World 日文今日新聞",
-    "title": "韓国の対中自動車貿易赤字が過去最高を記録",
-    "zh_title": "韓國對中汽車貿易赤字激增、創下歷史新高",
-    "summary": "韓國對中國的汽車貿易赤字因中國製電動車進口激增而達到歷史新高。這項轉變直接影響了當地的汽車市場與消費者的購車選擇。",
-    "content": "<ruby>韓国<rt>かんこく</rt></ruby>における<ruby>中国<rt>ちゅうごく</rt></ruby>との<ruby>自動車<rt>じどうしゃ</rt></ruby><ruby>貿易<rt>ぼうえき</rt></ruby><ruby>赤字<rt>あかじ</rt></ruby>が、<ruby>今年<rt>ことし</rt></ruby>は<ruby>過去<rt>かこ</rt></ruby><ruby>最高<rt>さいこう</rt></ruby>を<ruby>記録<rt>きろく</rt></ruby>しました。<ruby>中国製<rt>ちゅうごくせい</rt></ruby>の<ruby>電気<rt>でんき</rt></ruby><ruby>自動車<rt>じどうしゃ</rt></ruby>の<ruby>輸入<rt>ゆにゅう</rt></ruby>が<ruby>急増<rt>きゅうぞう</rt></ruby>したことがその<ruby>主<rt>おも</rt></ruby>な<ruby>原因<rt>げんいん</rt></ruby>であり、1<ruby>月<rt>がつ</rt></ruby>から10<ruby>月<rt>がつ</rt></ruby>までの<ruby>赤字<rt>あかじ</rt></ruby><ruby>額<rt>がく</rt></ruby>は6700<ruby>億円<rt>おくえん</rt></ruby>にのぼりました。\n\nこの<ruby>急速<rt>きゅうそく</rt></ruby>な<ruby>変化<rt>へんか</rt></ruby>は、<ruby>現地<rt>げんち</rt></ruby>の<ruby>自動車<rt>じどうしゃ</rt></ruby><ruby>市場<rt>しじょう</rt></ruby>における<ruby>競争<rt>きょうそう</rt></ruby>を<ruby>激化<rt>げきか</rt></ruby>させています。<ruby>手頃<rt>てごろ</rt></ruby>な<ruby>価格<rt>かかく</rt></ruby>の<ruby>輸入車<rt>ゆにゅうしゃ</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えたことで、<ruby>一般<rt>いっぱん</rt></ruby>の<ruby>消費者<rt>しょうひしゃ</rt></ruby>にとっても<ruby>車<rt>くるま</rt></ruby>の<ruby>選択肢<rt>せんたくし</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きく<ruby>変<rt>か</rt></ruby>わりつつあります。",
-    "audio_text": "韓国における中国との自動車貿易赤字が、今年は過去最高を記録しました。中国製の電気自動車の輸入が急増したことがその主な原因であり、1月から10月までの赤字額は6700億円にのぼりました。この急速な変化は、現地の自動車市場における競争を激化させています。手頃な価格の輸入車が増えたことで、一般の消費者にとっても車の選択肢が大きく変わりつつあります。",
-    "translation": "韓國與中國之間的汽車貿易赤字今年創下歷史新高。中國製電動車進口量的急劇增加是主要原因，1月至10月的赤字金額高達6700億日圓。這項急劇的變化加劇了當地汽車市場的競爭。隨著價格實惠的進口車增加，一般消費者的購車選擇也正在發生巨大轉變。",
+    "source_note": "SoraNews24",
+    "title": "大阪の黒門市場が地元の買い物客を取り戻す試み",
+    "zh_title": "大阪黑門市場力求找回在地消費者",
+    "content": "<ruby>長<rt>なが</rt></ruby>い<ruby>間<rt>あいだ</rt></ruby>、<ruby>多<rt>おお</rt></ruby>くの<ruby>外<rt>がい</rt></ruby><ruby>国<rt>こく</rt></ruby><ruby>人<rt>じん</rt></ruby><ruby>観<rt>かん</rt></ruby><ruby>光<rt>こう</rt></ruby><ruby>客<rt>きゃく</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えてきた<ruby>大<rt>おお</rt></ruby><ruby>坂<rt>さか</rt></ruby>の<ruby>台<rt>だい</rt></ruby><ruby>所<rt>どころ</rt></ruby>「<ruby>黒<rt>くろ</rt></ruby><ruby>門<rt>もん</rt></ruby><ruby>市<rt>いち</rt></ruby><ruby>場<rt>ば</rt></ruby>」が、<ruby>地<rt>じ</rt></ruby><ruby>元<rt>もと</rt></ruby>の<ruby>住<rt>じゅう</rt></ruby><ruby>民<rt>みん</rt></ruby>をふたたび<ruby>呼<rt>よ</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>すための<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みへ<ruby>力<rt>ちから</rt></ruby>を<ruby>入<rt>い</rt></ruby>れています。600メートルの<ruby>アーケード<rt>あーけーど</rt></ruby>に<ruby>約<rt>やく</rt></ruby>150の<ruby>店<rt>みせ</rt></ruby>が<ruby>並<rt>なら</rt></ruby>ぶこの<ruby>場<rt>ば</rt></ruby>で、<ruby>地<rt>じ</rt></ruby><ruby>元<rt>もと</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>びとが<ruby>日常<rt>にちじょう</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しめる<ruby>空<rt>くう</rt></ruby><ruby>間<rt>かん</rt></ruby>を<ruby>再<rt>さい</rt></ruby><ruby>構<rt>こう</rt></ruby><ruby>築<rt>ちく</rt></ruby>しようとしています。\n\n<ruby>観<rt>かん</rt></ruby><ruby>光<rt>こう</rt></ruby><ruby>地<rt>ち</rt></ruby>としての<ruby>顔<rt>かお</rt></ruby>だけでなく、<ruby>近<rt>きん</rt></ruby><ruby>隣<rt>りん</rt></ruby>の<ruby>住<rt>じゅう</rt></ruby><ruby>民<rt>みん</rt></ruby>が<ruby>鮮<rt>せん</rt></ruby><ruby>度<rt>ど</rt></ruby>の<ruby>高<rt>たか</rt></ruby>い<ruby>食材<rt>しょくざい</rt></ruby>を<ruby>求<rt>もと</rt></ruby>めて<ruby>通<rt>かよ</rt></ruby>う<ruby>温<rt>あたた</rt></ruby>かいコミュニティの<ruby>場<rt>ば</rt></ruby>をどう<ruby>守<rt>まも</rt></ruby>るか。これからの<ruby>商<rt>しょう</rt></ruby><ruby>店<rt>てん</rt></ruby><ruby>街<rt>がい</rt></ruby>のあり<ruby>方<rt>かた</rt></ruby>が<ruby>注<rt>ちゅう</rt></ruby><ruby>目<rt>め</rt></ruby>されています。",
+    "audio_text": "長い間、多くの外国人観光客迎えてきた大阪の台所「黒門市場」が、地元の住民をふたたび呼び戻すための取り組みへ力を入れています。600メートルのアーケードに約150の店が並ぶこの場で、地元の人びとが日常の買い物を楽しめる空間を再構築しようとしています。観光地としての顔だけでなく、近隣の住民が鮮度の高い食材を求めて通う温かいコミュニティの場をどう守るか。これからの商店街のあり方が注目されています。",
+    "translation": "長久以來迎接著許多外國觀光客的大阪廚房「黑門市場」，正致力於將當地居民重新吸引回來的措施。在這條有 600 公尺拱廊、並排著約 150 家店舖的市場裡，大家正試圖重塑讓當地人能享受日常購物的空間。\n\n不僅是作為觀光地的面貌，如何守護鄰近居民尋求高鮮度食材而造訪的溫暖社區場所，未來商店街的發展方向正受到矚目。",
     "vocab": [
       {
-        "word": "貿易赤字（ぼうえきあかじ）",
+        "word": "呼び戻す（よびもどす）",
+        "pos": "動詞",
+        "meaning": "叫回、喚回、重新吸引",
+        "example": "商店街は地元の買い物客を呼び戻すために新しいイベントを企画した。",
+        "example_zh": "商店街為了喚回當地的購物客，規劃了新的活動。"
+      },
+      {
+        "word": "再構築（さいこうちく）",
         "pos": "名詞",
-        "meaning": "貿易赤字",
-        "example": "自動車の輸入増により貿易赤字が拡大した。",
-        "example_zh": "由於汽車進口增加，貿易赤字進一步擴大。"
+        "meaning": "重新建構、重塑",
+        "example": "地域コミュニティのつながりを再構築することが急務である。",
+        "example_zh": "重新建構社區連結是當務之急。"
       },
       {
-        "word": "急増（きゅうぞう）",
-        "pos": "名詞・動詞",
-        "meaning": "急增，暴增",
-        "example": "中国製電気自動車の登録台数が急増している。",
-        "example_zh": "中國製電動車的登記數量正在急劇增加。"
-      },
-      {
-        "word": "激化（げきか）",
-        "pos": "名詞・動詞",
-        "meaning": "激化，加劇",
-        "example": "市場での価格競争が日増しに激化している。",
-        "example_zh": "市場上的價格競爭日趨激烈。"
-      },
-      {
-        "word": "選択肢（せんたくし）",
+        "word": "鮮度（せんど）",
         "pos": "名詞",
-        "meaning": "選擇項目，選擇空間",
-        "example": "消費者のための車の選択肢が多様になった。",
-        "example_zh": "消費者的汽車選擇變得更加多樣化。"
+        "meaning": "新鮮度",
+        "example": "この市場の魅力は野菜や魚の鮮度が高いことだ。",
+        "example_zh": "這個市場的魅力在於蔬菜和魚類的鮮度很高。"
+      },
+      {
+        "word": "商店街（しょうてんがい）",
+        "pos": "名詞",
+        "meaning": "商店街",
+        "example": "週末になると、多くの人が近くの商店街に買い物に出かける。",
+        "example_zh": "到了週末，許多人都會去附近的商店街購物。"
       }
     ]
   },
   "vi": {
     "source_note": "Tuổi Trẻ",
-    "title": "TP.HCM tổ chức hội nghị giới thiệu Luật Phát triển đô thị",
-    "zh_title": "胡志明市舉辦都市發展法國際推介會",
-    "content": "Thành phố Hồ Chí Minh đang tích cực chuẩn bị tổ chức hội nghị quan trọng nhằm giới thiệu Luật Phát triển đô thị đến các đối tác quốc tế. Sự kiện này nhằm thu hút nguồn lực và kinh nghiệm quản lý từ các chuyên gia nước ngoài để thúc đẩy quá trình hiện đại hóa các khu đô thị lớn trong thời gian tới. Đối với người dân sinh sống tại các khu vực đô thị, những thay đổi này sẽ tác động trực tiếp đến quy hoạch hạ tầng, giao thông và nhà ở. Người dân có thể kỳ vọng vào một không gian sống tiện nghi hơn, hệ thống giao thông công cộng được đồng bộ hóa và các dịch vụ công cộng được cải thiện rõ rệt trong đời sống hằng ngày.",
-    "audio_text": "Thành phố Hồ Chí Minh đang tích cực chuẩn bị tổ chức hội nghị quan trọng nhằm giới thiệu Luật Phát triển đô thị đến các đối tác quốc tế. Sự kiện này nhằm thu hút nguồn lực và kinh nghiệm quản lý từ các chuyên gia nước ngoài để thúc đẩy quá trình hiện đại hóa các khu đô thị lớn trong thời gian tới. Đối với người dân sinh sống tại các khu vực đô thị, những thay đổi này sẽ tác động trực tiếp đến quy hoạch hạ tầng, giao thông và nhà ở. Người dân có thể kỳ vọng vào một không gian sống tiện nghi hơn, hệ thống giao thông công cộng được đồng bộ hóa và các dịch vụ công cộng được cải thiện rõ rệt trong đời sống hằng ngày.",
-    "translation": "胡志明市正積極籌備舉辦一場重要會議，向國際合作夥伴介紹《都市發展法》。此活動旨在吸引外國專家的資源與管理經驗，以推動未來大型都會區的現代化進程。對於生活在都市地區的居民而言，這些變革將直接影響基礎設施、交通與住宅規劃。民眾可以期待在日常生活中享有更便利的生活空間、同步化的公共交通系統以及明顯改善的公共服務。",
+    "title": "Thể Công - Viettel tái đấu Melbourne Victory tại AFC Champions League Two",
+    "zh_title": "體工威妥出征亞冠二級聯賽再戰墨爾本勝利",
+    "content": "Vào lúc chiều nay, câu lạc bộ Thể Công - Viettel có cuộc chạm trán đầy thử thách với đối thủ quen thuộc Melbourne Victory FC trên sân khách tại Úc. Đây là trận đấu quan trọng trong khuôn khổ vòng bảng giải bóng đá châu Á, thu hút sự quan tâm lớn từ người hâm mộ thể thao nước nhà. Sau những trận đấu căng thẳng trước đó, toàn đội đang nỗ lực duy trì tinh thần tập trung cao độ và chiến thuật hợp lý. Các cầu thủ kỳ vọng sẽ giành được kết quả thuận lợi trên sân khách, qua đó tiếp tục tiến xa hơn tại đấu trường quốc tế uy tín này.",
+    "audio_text": "Vào lúc chiều nay, câu lạc bộ Thể Công - Viettel có cuộc chạm trán đầy thử thách với đối thủ quen thuộc Melbourne Victory FC trên sân khách tại Úc. Đây là trận đấu quan trọng trong khuôn khổ vòng bảng giải bóng đá châu Á, thu hút sự quan tâm lớn từ người hâm mộ thể thao nước nhà. Sau những trận đấu căng thẳng trước đó, toàn đội đang nỗ lực duy trì tinh thần tập trung cao độ và chiến thuật hợp lý. Các cầu thủ kỳ vọng sẽ giành được kết quả thuận lợi trên sân khách, qua đó tiếp tục tiến xa hơn tại đấu trường quốc tế uy tín này.",
+    "translation": "今天下午，體工威妥俱樂部在澳洲客場與熟悉對手墨爾本勝利俱樂部進行了一場充滿挑戰的交鋒。這是亞洲足球賽事小組賽框架中的重要比賽，吸引了國內體育迷的極大關注。\n\n在先前緊張的比賽之後，全體隊員正努力保持高度集中的精神與合理的戰術。球員們期望能在客場取得有利結果，藉此在這個聲譽卓著的國際賽場上繼續走得更遠。",
     "vocab": [
       {
-        "word": "đối tác",
+        "word": "chạm trán",
+        "pos": "v.",
+        "meaning": "交鋒、遭遇",
+        "example": "Đội tuyển chuẩn bị rất kỹ cho cuộc chạm trán quan trọng này.",
+        "example_zh": "代表隊為這次重要的交鋒做了非常充分的準備。"
+      },
+      {
+        "word": "sân khách",
         "pos": "n.",
-        "meaning": "合作夥伴",
-        "example": "Thành phố luôn chào đón các đối tác quốc tế đến đầu tư.",
-        "example_zh": "城市總是歡迎國際合作夥伴前來投資。"
+        "meaning": "客場",
+        "example": "Thi đấu trên sân khách luôn mang lại nhiều áp lực cho cầu thủ.",
+        "example_zh": "在客場比賽總是給球員帶來許多壓力。"
       },
       {
-        "word": "quy hoạch",
-        "pos": "n. / v.",
-        "meaning": "規劃",
-        "example": "Quy hoạch hạ tầng đô thị đóng vai trò quyết định đến chất lượng sống.",
-        "example_zh": "都市基礎設施規劃對生活品質起著決定性作用。"
-      },
-      {
-        "word": "hạ tầng",
+        "word": "người hâm mộ",
         "pos": "n.",
-        "meaning": "基礎設施",
-        "example": "Việc nâng cấp hạ tầng giao thông giúp giảm bớt tình trạng ùn tắc.",
-        "example_zh": "升級交通基礎設施有助於減少交通擁堵情況。"
+        "meaning": "球迷、支持者",
+        "example": "Hàng ngàn người hâm mộ đã đến sân để cổ vũ cho đội bóng.",
+        "example_zh": "成千上萬的球迷來到球場為球隊加油。"
       },
       {
-        "word": "tiện nghi",
-        "pos": "adj. / n.",
-        "meaning": "便利的，舒適的 / 設施",
-        "example": "Khu dân cư mới được trang bị đầy đủ các tiện nghi hiện đại.",
-        "example_zh": "新住宅區配備了齊全的現代化便利設施。"
+        "word": "chiến thuật",
+        "pos": "n.",
+        "meaning": "戰術",
+        "example": "Huấn luyện viên đã đưa ra một chiến thuật hợp lý cho trận đấu.",
+        "example_zh": "教練為比賽制定了合理的戰術。"
       }
     ]
   },
-  "article_id": "2026-11-24",
+  "article_id": "2026-11-25",
   "is_test": false
 }
