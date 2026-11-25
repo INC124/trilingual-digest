@@ -1,120 +1,120 @@
 {
-  "date": "2026-11-25",
-  "angle": "歷史上同月同日（11月25日 / November 25）的真實事件或文化里程碑",
+  "date": "2026-11-26",
+  "angle": "貼近日常的生活文化與飲食小故事",
   "en": {
     "source_note": "Spoon & Tamago",
-    "title": "Tokyo Transforms Into an Open-Air Gallery During ARTE TOKYO",
-    "zh_title": "東京街頭化身大型露天藝術藝廊",
-    "content": "As autumn deepens in the Japanese capital, ARTE TOKYO is actively redefining how residents and travelers experience urban spaces. Running across various public areas through the end of the year, this citywide festival transforms everyday streets into an expansive outdoor gallery for contemporary creators.\n\nVisitors strolling through major districts can encounter striking installations created by visionary artists, architects, and designers. By bringing cutting-edge public art directly into neighborhoods rather than traditional museums, the initiative invites the public to pause and rediscover the hidden creative dimensions of Tokyo's familiar concrete landscape.",
-    "audio_text": "As autumn deepens in the Japanese capital, ARTE TOKYO is actively redefining how residents and travelers experience urban spaces. Running across various public areas through the end of the year, this citywide festival transforms everyday streets into an expansive outdoor gallery for contemporary creators. Visitors strolling through major districts can encounter striking installations created by visionary artists, architects, and designers. By bringing cutting-edge public art directly into neighborhoods rather than traditional museums, the initiative invites the public to pause and rediscover the hidden creative dimensions of Tokyo's familiar concrete landscape.",
-    "translation": "隨著日本首都的秋意漸濃，ARTE TOKYO 正積極重新定義居民與旅客體驗城市空間的方式。這項橫跨全市多個公共區域、持續到年底的藝術節，將日常街道化身為當代創作者的廣闊戶外藝廊。\n\n漫步於主要街區的訪客，可以偶遇由前衛藝術家、建築師和設計師所創作的引人注目裝置藝術。透過將尖端公共藝術直接帶入社區而非傳統美術館，這項計畫邀請大眾駐足停留，重新發現東京熟悉水泥景觀中隱藏的創意維度。",
+    "title": "OrySnack: Where Tiny Robots Pour Drinks in Tokyo",
+    "zh_title": "東京巷弄裡的機械人酒吧：機器手臂與日常對話",
+    "content": "As autumn twilight fades across Tokyo, the city's narrow alleyways illuminate with the warm, nostalgic glow of traditional snack bars. Yet tucked inside this bustling nightlife scene, one establishment glows under an entirely different kind of light. At OrySnack, patrons are greeted not by a human host, but by the gentle, blinking eyes of six small humanoid robots serving drinks behind the counter.\n\nThese compact machines are operated remotely by human bartenders who work entirely from home due to various physical constraints. As customers sip their highballs, they engage in lively, real-time conversations with operators miles away, bridging the gap between cutting-edge technology and Tokyo's intimate drinking culture.",
+    "audio_text": "As autumn twilight fades across Tokyo, the city's narrow alleyways illuminate with the warm, nostalgic glow of traditional snack bars. Yet tucked inside this bustling nightlife scene, one establishment glows under an entirely different kind of light. At OrySnack, patrons are greeted not by a human host, but by the gentle, blinking eyes of six small humanoid robots serving drinks behind the counter. These compact machines are operated remotely by human bartenders who work entirely from home due to various physical constraints. As customers sip their highballs, they engage in lively, real-time conversations with operators miles away, bridging the gap between cutting-edge technology and Tokyo's intimate drinking culture.",
+    "translation": "當秋日的暮色籠罩東京，城市狹窄的巷弄裡亮起了傳統小酒吧溫暖懷舊的微光。然而，在這熱鬧滾滾的夜生活街區中，有一家店鋪卻散發著截然不同的光芒。在「OrySnack」酒吧裡，迎賓的不是人類店長，而是櫃檯後方六個眨著溫柔雙眼、為客人倒酒的小型人形機器人。\n\n這些精巧的機器是由因各種身體限制而完全在家工作的遠距調酒師所操作。當顧客啜飲著高球雞尾酒時，他們正與數英里外的操作員進行生動即時的對話，完美地將尖端科技與東京親密的小酒館文化連結在一起。",
     "vocab": [
       {
-        "word": "redefine",
-        "pos": "v.",
-        "meaning": "重新定義",
-        "example": "The public art project helps redefine the urban landscape of Tokyo.",
-        "example_zh": "這項公共藝術計畫有助於重新定義東京的城市景觀。"
+        "word": "twilight",
+        "pos": "n.",
+        "meaning": "暮色、黃昏",
+        "example": "We walked through the narrow alleyways as twilight fell.",
+        "example_zh": "當黃昏降臨時，我們穿梭在狹窄的巷弄中。"
       },
       {
-        "word": "expansive",
+        "word": "tucked inside",
+        "pos": "phr.",
+        "meaning": "藏匿在……裡面、隱蔽於",
+        "example": "A cozy café is tucked inside the busy street.",
+        "example_zh": "喧鬧的街道中隱藏著一家舒適的小咖啡館。"
+      },
+      {
+        "word": "humanoid",
         "pos": "adj.",
-        "meaning": "廣闊的、開闊的",
-        "example": "The exhibition turns the streets into an expansive outdoor gallery.",
-        "example_zh": "該展覽將街道變成了廣闊的戶外藝廊。"
+        "meaning": "人形的、擬人的",
+        "example": "The laboratory introduced a new humanoid robot today.",
+        "example_zh": "該實驗室今天推出了一款新的人形機器人。"
       },
       {
-        "word": "installation",
-        "pos": "n.",
-        "meaning": "裝置藝術、設施",
-        "example": "Visitors stopped to admire the striking art installation in the plaza.",
-        "example_zh": "訪客停下腳步欣賞廣場上引人注目的藝術裝置。"
-      },
-      {
-        "word": "dimension",
-        "pos": "n.",
-        "meaning": "維度、層面",
-        "example": "Public art adds a new creative dimension to familiar neighborhoods.",
-        "example_zh": "公共藝術為熟悉的社區增添了新的創意維度。"
+        "word": "remotely",
+        "pos": "adv.",
+        "meaning": "遠距地、遙遠地",
+        "example": "Many designers now work remotely from home.",
+        "example_zh": "許多設計師現在都在家遠距工作。"
       }
     ]
   },
   "ja": {
-    "source_note": "SoraNews24",
-    "title": "大阪の黒門市場が地元の買い物客を取り戻す試み",
-    "zh_title": "大阪黑門市場力求找回在地消費者",
-    "content": "<ruby>長<rt>なが</rt></ruby>い<ruby>間<rt>あいだ</rt></ruby>、<ruby>多<rt>おお</rt></ruby>くの<ruby>外<rt>がい</rt></ruby><ruby>国<rt>こく</rt></ruby><ruby>人<rt>じん</rt></ruby><ruby>観<rt>かん</rt></ruby><ruby>光<rt>こう</rt></ruby><ruby>客<rt>きゃく</rt></ruby>を<ruby>迎<rt>むか</rt></ruby>えてきた<ruby>大<rt>おお</rt></ruby><ruby>坂<rt>さか</rt></ruby>の<ruby>台<rt>だい</rt></ruby><ruby>所<rt>どころ</rt></ruby>「<ruby>黒<rt>くろ</rt></ruby><ruby>門<rt>もん</rt></ruby><ruby>市<rt>いち</rt></ruby><ruby>場<rt>ば</rt></ruby>」が、<ruby>地<rt>じ</rt></ruby><ruby>元<rt>もと</rt></ruby>の<ruby>住<rt>じゅう</rt></ruby><ruby>民<rt>みん</rt></ruby>をふたたび<ruby>呼<rt>よ</rt></ruby>り<ruby>戻<rt>もど</rt></ruby>すための<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みへ<ruby>力<rt>ちから</rt></ruby>を<ruby>入<rt>い</rt></ruby>れています。600メートルの<ruby>アーケード<rt>あーけーど</rt></ruby>に<ruby>約<rt>やく</rt></ruby>150の<ruby>店<rt>みせ</rt></ruby>が<ruby>並<rt>なら</rt></ruby>ぶこの<ruby>場<rt>ば</rt></ruby>で、<ruby>地<rt>じ</rt></ruby><ruby>元<rt>もと</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>びとが<ruby>日常<rt>にちじょう</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しめる<ruby>空<rt>くう</rt></ruby><ruby>間<rt>かん</rt></ruby>を<ruby>再<rt>さい</rt></ruby><ruby>構<rt>こう</rt></ruby><ruby>築<rt>ちく</rt></ruby>しようとしています。\n\n<ruby>観<rt>かん</rt></ruby><ruby>光<rt>こう</rt></ruby><ruby>地<rt>ち</rt></ruby>としての<ruby>顔<rt>かお</rt></ruby>だけでなく、<ruby>近<rt>きん</rt></ruby><ruby>隣<rt>りん</rt></ruby>の<ruby>住<rt>じゅう</rt></ruby><ruby>民<rt>みん</rt></ruby>が<ruby>鮮<rt>せん</rt></ruby><ruby>度<rt>ど</rt></ruby>の<ruby>高<rt>たか</rt></ruby>い<ruby>食材<rt>しょくざい</rt></ruby>を<ruby>求<rt>もと</rt></ruby>めて<ruby>通<rt>かよ</rt></ruby>う<ruby>温<rt>あたた</rt></ruby>かいコミュニティの<ruby>場<rt>ば</rt></ruby>をどう<ruby>守<rt>まも</rt></ruby>るか。これからの<ruby>商<rt>しょう</rt></ruby><ruby>店<rt>てん</rt></ruby><ruby>街<rt>がい</rt></ruby>のあり<ruby>方<rt>かた</rt></ruby>が<ruby>注<rt>ちゅう</rt></ruby><ruby>目<rt>め</rt></ruby>されています。",
-    "audio_text": "長い間、多くの外国人観光客迎えてきた大阪の台所「黒門市場」が、地元の住民をふたたび呼び戻すための取り組みへ力を入れています。600メートルのアーケードに約150の店が並ぶこの場で、地元の人びとが日常の買い物を楽しめる空間を再構築しようとしています。観光地としての顔だけでなく、近隣の住民が鮮度の高い食材を求めて通う温かいコミュニティの場をどう守るか。これからの商店街のあり方が注目されています。",
-    "translation": "長久以來迎接著許多外國觀光客的大阪廚房「黑門市場」，正致力於將當地居民重新吸引回來的措施。在這條有 600 公尺拱廊、並排著約 150 家店舖的市場裡，大家正試圖重塑讓當地人能享受日常購物的空間。\n\n不僅是作為觀光地的面貌，如何守護鄰近居民尋求高鮮度食材而造訪的溫暖社區場所，未來商店街的發展方向正受到矚目。",
+    "source_note": "苫小牧民報 / 日本日常文化",
+    "title": "朝市で味わう熱々の蟹汁と北国の活気",
+    "zh_title": "北海道朝市的熱騰騰蟹汁與在地人情味",
+    "content": "<ruby>冷<rt>つめ</rt></ruby>たい<ruby>朝<rt>あさ</rt></ruby>の<ruby>空<rt>そら</rt></ruby><ruby>気<rt>き</rt></ruby>が<ruby>漂<rt>ただよ</rt></ruby>う<ruby>北国<rt>きたぐに</rt></ruby>の<ruby>市場<rt>いちば</rt></ruby>では、<ruby>早朝<rt>そうちょう</rt></ruby>から<ruby>湯気<rt>ゆげ</rt></ruby>が<ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がっている。<ruby>新鮮<rt>しんせん</rt></ruby>な<ruby>魚介<rt>ぎょかい</rt></ruby>が<ruby>並<rt>なら</rt></ruby>ぶ<ruby>通路<rt>つうろ</rt></ruby>の<ruby>一角<rt>いっかく</rt></ruby>で、おばちゃんが<ruby>大<rt>おお</rt></ruby>きな<ruby>鍋<rt>なべ</rt></ruby>でたっぷりのお<ruby>味噌汁<rt>みそしる</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っている。その<ruby>中<rt>なか</rt></ruby>には、たっぷりと<ruby>身<rt>み</rt></ruby>の<ruby>詰<rt>つ</rt></ruby>まった<ruby>毛蟹<rt>けがに</rt></ruby>の<ruby>足<rt>あし</rt></ruby>が<ruby>惜<rt>お</rt></ruby>しげもなく<ruby>放<rt>ほう</rt></ruby>りこまれている。\n\n「はい、お<ruby>待<rt>ま</rt></ruby>たせ！」と<ruby>差<rt>さ</rt></ruby>し<ruby>出<rt>だ</rt></ruby>されたお<ruby>椀<rt>わん</rt></ruby>を<ruby>両手<rt>りょうて</rt></ruby>で<ruby>包<rt>つつ</rt></ruby>みこむと、<ruby>濃厚<rt>のうこう</rt></ruby>な<ruby>磯<rt>いそ</rt></ruby>の<ruby>香<rt>か</rt></ruby>りが<ruby>鼻腔<rt>びくう</rt></ruby>をくすぐる。ひとくち<ruby>飲<rt>の</rt></ruby>めば、<ruby>凍<rt>こ</rt></ruby>えそうな<ruby>身体<rt>からだ</rt></ruby>の<ruby>芯<rt>しん</rt></ruby>からじわっと<ruby>温<rt>あたた</rt></ruby>まり、<ruby>地元<rt>じもと</rt></ruby>の<ruby>常連<rt>じょうれん</rt></ruby><ruby>客<rt>きゃく</rt></ruby>たちとのたわいない<ruby>会話<rt>かいわ</rt></ruby>に<ruby>笑顔<rt>えがお</rt></ruby>がこぼれる。",
+    "audio_text": "冷たい朝の空気が漂う北国の市場では、早朝から湯気が立ち上がっている。新鮮な魚介が並ぶ通路の一角で、おばちゃんが大きな鍋でたっぷりのお味噌汁を作っている。その中には、たっぷりと身の詰まった毛蟹の足が惜しげもなく放りこまれている。「はい、お待たせ！」と差し出されたお椀を両手で包みこむと、濃厚な磯の香りが鼻腔をくすぐる。ひとくち飲めば、凍えそうな身体の芯からじわっと温まり、地元の常連客たちとのたわいない会話に笑顔がこぼれる。",
+    "translation": "在飄著寒冷晨間空氣的北方市場裡，一大早便蒸氣騰騰。在擺滿新鮮海產的通道角落裡，大嬸正用大鍋煮著滿滿的味噌湯。鍋裡豪邁地放進了充滿紮實蟹肉的毛蟹腳。\n\n「來，久等了！」雙手捧起遞過來的碗，濃郁的海鮮香氣搔動著鼻腔。喝上一口，冰冷的身體從心底暖和起來，與當地常連客們無拘無束的閒聊也讓人不禁展現笑容。",
     "vocab": [
       {
-        "word": "呼び戻す（よびもどす）",
-        "pos": "動詞",
-        "meaning": "叫回、喚回、重新吸引",
-        "example": "商店街は地元の買い物客を呼び戻すために新しいイベントを企画した。",
-        "example_zh": "商店街為了喚回當地的購物客，規劃了新的活動。"
+        "word": "湯気（ゆげ）",
+        "pos": "名詞",
+        "meaning": "蒸氣、熱氣",
+        "example": "熱いお茶から湯気が上がっている。",
+        "example_zh": "熱茶正冒著熱氣。"
       },
       {
-        "word": "再構築（さいこうちく）",
+        "word": "魚介（ぎょかい）",
         "pos": "名詞",
-        "meaning": "重新建構、重塑",
-        "example": "地域コミュニティのつながりを再構築することが急務である。",
-        "example_zh": "重新建構社區連結是當務之急。"
+        "meaning": "魚貝類、海鮮",
+        "example": "この市場では新鮮な魚介が手に入る。",
+        "example_zh": "在這個市場可以買到新鮮海鮮。"
       },
       {
-        "word": "鮮度（せんど）",
+        "word": "お椀（おわん）",
         "pos": "名詞",
-        "meaning": "新鮮度",
-        "example": "この市場の魅力は野菜や魚の鮮度が高いことだ。",
-        "example_zh": "這個市場的魅力在於蔬菜和魚類的鮮度很高。"
+        "meaning": "碗、湯碗",
+        "example": "彼は温かいスープをお椀に注いだ。",
+        "example_zh": "他把熱湯倒進碗裡。"
       },
       {
-        "word": "商店街（しょうてんがい）",
+        "word": "常連（じょうれん）",
         "pos": "名詞",
-        "meaning": "商店街",
-        "example": "週末になると、多くの人が近くの商店街に買い物に出かける。",
-        "example_zh": "到了週末，許多人都會去附近的商店街購物。"
+        "meaning": "老顧客、常客",
+        "example": "その居酒屋には多くの常連が集まる。",
+        "example_zh": "那間居酒屋聚集了許多老顧客。"
       }
     ]
   },
   "vi": {
-    "source_note": "Tuổi Trẻ",
-    "title": "Thể Công - Viettel tái đấu Melbourne Victory tại AFC Champions League Two",
-    "zh_title": "體工威妥出征亞冠二級聯賽再戰墨爾本勝利",
-    "content": "Vào lúc chiều nay, câu lạc bộ Thể Công - Viettel có cuộc chạm trán đầy thử thách với đối thủ quen thuộc Melbourne Victory FC trên sân khách tại Úc. Đây là trận đấu quan trọng trong khuôn khổ vòng bảng giải bóng đá châu Á, thu hút sự quan tâm lớn từ người hâm mộ thể thao nước nhà. Sau những trận đấu căng thẳng trước đó, toàn đội đang nỗ lực duy trì tinh thần tập trung cao độ và chiến thuật hợp lý. Các cầu thủ kỳ vọng sẽ giành được kết quả thuận lợi trên sân khách, qua đó tiếp tục tiến xa hơn tại đấu trường quốc tế uy tín này.",
-    "audio_text": "Vào lúc chiều nay, câu lạc bộ Thể Công - Viettel có cuộc chạm trán đầy thử thách với đối thủ quen thuộc Melbourne Victory FC trên sân khách tại Úc. Đây là trận đấu quan trọng trong khuôn khổ vòng bảng giải bóng đá châu Á, thu hút sự quan tâm lớn từ người hâm mộ thể thao nước nhà. Sau những trận đấu căng thẳng trước đó, toàn đội đang nỗ lực duy trì tinh thần tập trung cao độ và chiến thuật hợp lý. Các cầu thủ kỳ vọng sẽ giành được kết quả thuận lợi trên sân khách, qua đó tiếp tục tiến xa hơn tại đấu trường quốc tế uy tín này.",
-    "translation": "今天下午，體工威妥俱樂部在澳洲客場與熟悉對手墨爾本勝利俱樂部進行了一場充滿挑戰的交鋒。這是亞洲足球賽事小組賽框架中的重要比賽，吸引了國內體育迷的極大關注。\n\n在先前緊張的比賽之後，全體隊員正努力保持高度集中的精神與合理的戰術。球員們期望能在客場取得有利結果，藉此在這個聲譽卓著的國際賽場上繼續走得更遠。",
+    "source_note": "Gia đình & Xã hội",
+    "title": "Hơi ấm buổi sớm bên gánh xôi gấc phố cổ",
+    "zh_title": "古街清晨裡的一抹鮮紅：傳遞溫暖的傳統糯米飯",
+    "content": "Khi những tia nắng đầu tiên rọi qua các mái ngói rêu phong, góc phố cổ Hà Nội bỗng rộn ràng mùi thơm ngọt ngào của xôi gấc. Gánh hàng rong của bà Mai nằm khiêm tốn dưới gốc cây bàng cổ thụ, nơi quen thuộc của bao người đi làm sớm. Hạt xôi đỏ au dẻo quánh, trộn lẫn với vị béo ngậy của nước cốt dừa và đậu xanh giã nhuyễn, được gói khéo léo trong lá chuối xanh mướt. Một gói xôi nóng hổi không chỉ xua tan cái lạnh se sắt của đầu đông mà còn chứa đựng cả một nét văn hóa ẩm thực bình dị. Vừa thổi vừa ăn từng muỗng xôi dẻo thơm, ngắm nhìn dòng xe cộ chầm chậm lướt qua, ta chợt nhận ra sự bình yên nằm ngay trong những điều mộc mạc nhất của nhịp sống thường ngày.",
+    "audio_text": "Khi những tia nắng đầu tiên rọi qua các mái ngói rêu phong, góc phố cổ Hà Nội bỗng rộn ràng mùi thơm ngọt ngào của xôi gấc. Gánh hàng rong của bà Mai nằm khiêm tốn dưới gốc cây bàng cổ thụ, nơi quen thuộc của bao người đi làm sớm. Hạt xôi đỏ au dẻo quánh, trộn lẫn với vị béo ngậy của nước cốt dừa và đậu xanh giã nhuyễn, được gói khéo léo trong lá chuối xanh mướt. Một gói xôi nóng hổi không chỉ xua tan cái lạnh se sắt của đầu đông mà còn chứa đựng cả một nét văn hóa ẩm thực bình dị. Vừa thổi vừa ăn từng muỗng xôi dẻo thơm, ngắm nhìn dòng xe cộ chầm chậm lướt qua, ta chợt nhận ra sự bình yên nằm ngay trong những điều mộc mạc nhất của nhịp sống thường ngày.",
+    "translation": "當第一道陽光穿透長滿青苔的瓦片屋頂時，河內古街的轉角突然瀰漫著木鱉果糯米飯的香甜氣味。梅阿嬤的小攤販低調地坐落在古老的大樹下，這裡是許多早起上班族的熟悉去處。紅潤軟糯的糯米飯，拌入椰奶的濃郁香氣與搗碎的綠豆泥，被巧妙地包裹在翠綠的芭蕉葉中。\n\n熱騰騰的一包糯米飯不僅驅散了初冬微微的寒意，更蘊含著樸實的飲食文化。一邊吹著氣一邊品嚐著軟糯香甜的糯米飯，看著車流緩緩駛過，我們突然發現，寧靜其實就藏在日常生活的樸實細節裡。",
     "vocab": [
       {
-        "word": "chạm trán",
-        "pos": "v.",
-        "meaning": "交鋒、遭遇",
-        "example": "Đội tuyển chuẩn bị rất kỹ cho cuộc chạm trán quan trọng này.",
-        "example_zh": "代表隊為這次重要的交鋒做了非常充分的準備。"
+        "word": "mái ngói",
+        "pos": "n.",
+        "meaning": "屋瓦、瓦片屋頂",
+        "example": "Những ngôi nhà cổ có mái ngói phủ đầy rêu phong.",
+        "example_zh": "那些古老房屋有著佈滿青苔的瓦片屋頂。"
       },
       {
-        "word": "sân khách",
-        "pos": "n.",
-        "meaning": "客場",
-        "example": "Thi đấu trên sân khách luôn mang lại nhiều áp lực cho cầu thủ.",
-        "example_zh": "在客場比賽總是給球員帶來許多壓力。"
+        "word": "gánh hàng rong",
+        "pos": "phr.",
+        "meaning": "街頭挑擔小販、流動攤販",
+        "example": "Gánh hàng rong bán nhiều món quà vặt quen thuộc.",
+        "example_zh": "街頭挑擔小販賣著許多熟悉的小吃。"
       },
       {
-        "word": "người hâm mộ",
-        "pos": "n.",
-        "meaning": "球迷、支持者",
-        "example": "Hàng ngàn người hâm mộ đã đến sân để cổ vũ cho đội bóng.",
-        "example_zh": "成千上萬的球迷來到球場為球隊加油。"
+        "word": "dẻo quánh",
+        "pos": "adj.",
+        "meaning": "軟糯黏稠的",
+        "example": "Hạt xôi nấu vừa tới nên rất dẻo quánh và thơm.",
+        "example_zh": "糯米飯煮得剛好，所以非常軟糯且香氣四溢。"
       },
       {
-        "word": "chiến thuật",
-        "pos": "n.",
-        "meaning": "戰術",
-        "example": "Huấn luyện viên đã đưa ra một chiến thuật hợp lý cho trận đấu.",
-        "example_zh": "教練為比賽制定了合理的戰術。"
+        "word": "mộc mạc",
+        "pos": "adj.",
+        "meaning": "樸實的、質樸的",
+        "example": "Chúng tôi yêu thích cuộc sống mộc mạc ở vùng quê.",
+        "example_zh": "我們喜愛鄉村樸實的生活。"
       }
     ]
   },
-  "article_id": "2026-11-25",
+  "article_id": "2026-11-26",
   "is_test": false
 }

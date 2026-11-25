@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-26",
+  "angle": "貼近日常的生活文化與飲食小故事",
+  "en": {
+    "source_note": "Spoon & Tamago",
+    "title": "OrySnack: Where Tiny Robots Pour Drinks in Tokyo",
+    "zh_title": "東京巷弄裡的機械人酒吧：機器手臂與日常對話",
+    "content": "As autumn twilight fades across Tokyo, the city's narrow alleyways illuminate with the warm, nostalgic glow of traditional snack bars. Yet tucked inside this bustling nightlife scene, one establishment glows under an entirely different kind of light. At OrySnack, patrons are greeted not by a human host, but by the gentle, blinking eyes of six small humanoid robots serving drinks behind the counter.\n\nThese compact machines are operated remotely by human bartenders who work entirely from home due to various physical constraints. As customers sip their highballs, they engage in lively, real-time conversations with operators miles away, bridging the gap between cutting-edge technology and Tokyo's intimate drinking culture.",
+    "audio_text": "As autumn twilight fades across Tokyo, the city's narrow alleyways illuminate with the warm, nostalgic glow of traditional snack bars. Yet tucked inside this bustling nightlife scene, one establishment glows under an entirely different kind of light. At OrySnack, patrons are greeted not by a human host, but by the gentle, blinking eyes of six small humanoid robots serving drinks behind the counter. These compact machines are operated remotely by human bartenders who work entirely from home due to various physical constraints. As customers sip their highballs, they engage in lively, real-time conversations with operators miles away, bridging the gap between cutting-edge technology and Tokyo's intimate drinking culture.",
+    "translation": "當秋日的暮色籠罩東京，城市狹窄的巷弄裡亮起了傳統小酒吧溫暖懷舊的微光。然而，在這熱鬧滾滾的夜生活街區中，有一家店鋪卻散發著截然不同的光芒。在「OrySnack」酒吧裡，迎賓的不是人類店長，而是櫃檯後方六個眨著溫柔雙眼、為客人倒酒的小型人形機器人。\n\n這些精巧的機器是由因各種身體限制而完全在家工作的遠距調酒師所操作。當顧客啜飲著高球雞尾酒時，他們正與數英里外的操作員進行生動即時的對話，完美地將尖端科技與東京親密的小酒館文化連結在一起。",
+    "vocab": [
+      {
+        "word": "twilight",
+        "pos": "n.",
+        "meaning": "暮色、黃昏",
+        "example": "We walked through the narrow alleyways as twilight fell.",
+        "example_zh": "當黃昏降臨時，我們穿梭在狹窄的巷弄中。"
+      },
+      {
+        "word": "tucked inside",
+        "pos": "phr.",
+        "meaning": "藏匿在……裡面、隱蔽於",
+        "example": "A cozy café is tucked inside the busy street.",
+        "example_zh": "喧鬧的街道中隱藏著一家舒適的小咖啡館。"
+      },
+      {
+        "word": "humanoid",
+        "pos": "adj.",
+        "meaning": "人形的、擬人的",
+        "example": "The laboratory introduced a new humanoid robot today.",
+        "example_zh": "該實驗室今天推出了一款新的人形機器人。"
+      },
+      {
+        "word": "remotely",
+        "pos": "adv.",
+        "meaning": "遠距地、遙遠地",
+        "example": "Many designers now work remotely from home.",
+        "example_zh": "許多設計師現在都在家遠距工作。"
+      }
+    ]
+  },
+  "ja": {
+    "source_note": "苫小牧民報 / 日本日常文化",
+    "title": "朝市で味わう熱々の蟹汁と北国の活気",
+    "zh_title": "北海道朝市的熱騰騰蟹汁與在地人情味",
+    "content": "<ruby>冷<rt>つめ</rt></ruby>たい<ruby>朝<rt>あさ</rt></ruby>の<ruby>空<rt>そら</rt></ruby><ruby>気<rt>き</rt></ruby>が<ruby>漂<rt>ただよ</rt></ruby>う<ruby>北国<rt>きたぐに</rt></ruby>の<ruby>市場<rt>いちば</rt></ruby>では、<ruby>早朝<rt>そうちょう</rt></ruby>から<ruby>湯気<rt>ゆげ</rt></ruby>が<ruby>立<rt>た</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>がっている。<ruby>新鮮<rt>しんせん</rt></ruby>な<ruby>魚介<rt>ぎょかい</rt></ruby>が<ruby>並<rt>なら</rt></ruby>ぶ<ruby>通路<rt>つうろ</rt></ruby>の<ruby>一角<rt>いっかく</rt></ruby>で、おばちゃんが<ruby>大<rt>おお</rt></ruby>きな<ruby>鍋<rt>なべ</rt></ruby>でたっぷりのお<ruby>味噌汁<rt>みそしる</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っている。その<ruby>中<rt>なか</rt></ruby>には、たっぷりと<ruby>身<rt>み</rt></ruby>の<ruby>詰<rt>つ</rt></ruby>まった<ruby>毛蟹<rt>けがに</rt></ruby>の<ruby>足<rt>あし</rt></ruby>が<ruby>惜<rt>お</rt></ruby>しげもなく<ruby>放<rt>ほう</rt></ruby>りこまれている。\n\n「はい、お<ruby>待<rt>ま</rt></ruby>たせ！」と<ruby>差<rt>さ</rt></ruby>し<ruby>出<rt>だ</rt></ruby>されたお<ruby>椀<rt>わん</rt></ruby>を<ruby>両手<rt>りょうて</rt></ruby>で<ruby>包<rt>つつ</rt></ruby>みこむと、<ruby>濃厚<rt>のうこう</rt></ruby>な<ruby>磯<rt>いそ</rt></ruby>の<ruby>香<rt>か</rt></ruby>りが<ruby>鼻腔<rt>びくう</rt></ruby>をくすぐる。ひとくち<ruby>飲<rt>の</rt></ruby>めば、<ruby>凍<rt>こ</rt></ruby>えそうな<ruby>身体<rt>からだ</rt></ruby>の<ruby>芯<rt>しん</rt></ruby>からじわっと<ruby>温<rt>あたた</rt></ruby>まり、<ruby>地元<rt>じもと</rt></ruby>の<ruby>常連<rt>じょうれん</rt></ruby><ruby>客<rt>きゃく</rt></ruby>たちとのたわいない<ruby>会話<rt>かいわ</rt></ruby>に<ruby>笑顔<rt>えがお</rt></ruby>がこぼれる。",
+    "audio_text": "冷たい朝の空気が漂う北国の市場では、早朝から湯気が立ち上がっている。新鮮な魚介が並ぶ通路の一角で、おばちゃんが大きな鍋でたっぷりのお味噌汁を作っている。その中には、たっぷりと身の詰まった毛蟹の足が惜しげもなく放りこまれている。「はい、お待たせ！」と差し出されたお椀を両手で包みこむと、濃厚な磯の香りが鼻腔をくすぐる。ひとくち飲めば、凍えそうな身体の芯からじわっと温まり、地元の常連客たちとのたわいない会話に笑顔がこぼれる。",
+    "translation": "在飄著寒冷晨間空氣的北方市場裡，一大早便蒸氣騰騰。在擺滿新鮮海產的通道角落裡，大嬸正用大鍋煮著滿滿的味噌湯。鍋裡豪邁地放進了充滿紮實蟹肉的毛蟹腳。\n\n「來，久等了！」雙手捧起遞過來的碗，濃郁的海鮮香氣搔動著鼻腔。喝上一口，冰冷的身體從心底暖和起來，與當地常連客們無拘無束的閒聊也讓人不禁展現笑容。",
+    "vocab": [
+      {
+        "word": "湯気（ゆげ）",
+        "pos": "名詞",
+        "meaning": "蒸氣、熱氣",
+        "example": "熱いお茶から湯気が上がっている。",
+        "example_zh": "熱茶正冒著熱氣。"
+      },
+      {
+        "word": "魚介（ぎょかい）",
+        "pos": "名詞",
+        "meaning": "魚貝類、海鮮",
+        "example": "この市場では新鮮な魚介が手に入る。",
+        "example_zh": "在這個市場可以買到新鮮海鮮。"
+      },
+      {
+        "word": "お椀（おわん）",
+        "pos": "名詞",
+        "meaning": "碗、湯碗",
+        "example": "彼は温かいスープをお椀に注いだ。",
+        "example_zh": "他把熱湯倒進碗裡。"
+      },
+      {
+        "word": "常連（じょうれん）",
+        "pos": "名詞",
+        "meaning": "老顧客、常客",
+        "example": "その居酒屋には多くの常連が集まる。",
+        "example_zh": "那間居酒屋聚集了許多老顧客。"
+      }
+    ]
+  },
+  "vi": {
+    "source_note": "Gia đình & Xã hội",
+    "title": "Hơi ấm buổi sớm bên gánh xôi gấc phố cổ",
+    "zh_title": "古街清晨裡的一抹鮮紅：傳遞溫暖的傳統糯米飯",
+    "content": "Khi những tia nắng đầu tiên rọi qua các mái ngói rêu phong, góc phố cổ Hà Nội bỗng rộn ràng mùi thơm ngọt ngào của xôi gấc. Gánh hàng rong của bà Mai nằm khiêm tốn dưới gốc cây bàng cổ thụ, nơi quen thuộc của bao người đi làm sớm. Hạt xôi đỏ au dẻo quánh, trộn lẫn với vị béo ngậy của nước cốt dừa và đậu xanh giã nhuyễn, được gói khéo léo trong lá chuối xanh mướt. Một gói xôi nóng hổi không chỉ xua tan cái lạnh se sắt của đầu đông mà còn chứa đựng cả một nét văn hóa ẩm thực bình dị. Vừa thổi vừa ăn từng muỗng xôi dẻo thơm, ngắm nhìn dòng xe cộ chầm chậm lướt qua, ta chợt nhận ra sự bình yên nằm ngay trong những điều mộc mạc nhất của nhịp sống thường ngày.",
+    "audio_text": "Khi những tia nắng đầu tiên rọi qua các mái ngói rêu phong, góc phố cổ Hà Nội bỗng rộn ràng mùi thơm ngọt ngào của xôi gấc. Gánh hàng rong của bà Mai nằm khiêm tốn dưới gốc cây bàng cổ thụ, nơi quen thuộc của bao người đi làm sớm. Hạt xôi đỏ au dẻo quánh, trộn lẫn với vị béo ngậy của nước cốt dừa và đậu xanh giã nhuyễn, được gói khéo léo trong lá chuối xanh mướt. Một gói xôi nóng hổi không chỉ xua tan cái lạnh se sắt của đầu đông mà còn chứa đựng cả một nét văn hóa ẩm thực bình dị. Vừa thổi vừa ăn từng muỗng xôi dẻo thơm, ngắm nhìn dòng xe cộ chầm chậm lướt qua, ta chợt nhận ra sự bình yên nằm ngay trong những điều mộc mạc nhất của nhịp sống thường ngày.",
+    "translation": "當第一道陽光穿透長滿青苔的瓦片屋頂時，河內古街的轉角突然瀰漫著木鱉果糯米飯的香甜氣味。梅阿嬤的小攤販低調地坐落在古老的大樹下，這裡是許多早起上班族的熟悉去處。紅潤軟糯的糯米飯，拌入椰奶的濃郁香氣與搗碎的綠豆泥，被巧妙地包裹在翠綠的芭蕉葉中。\n\n熱騰騰的一包糯米飯不僅驅散了初冬微微的寒意，更蘊含著樸實的飲食文化。一邊吹著氣一邊品嚐著軟糯香甜的糯米飯，看著車流緩緩駛過，我們突然發現，寧靜其實就藏在日常生活的樸實細節裡。",
+    "vocab": [
+      {
+        "word": "mái ngói",
+        "pos": "n.",
+        "meaning": "屋瓦、瓦片屋頂",
+        "example": "Những ngôi nhà cổ có mái ngói phủ đầy rêu phong.",
+        "example_zh": "那些古老房屋有著佈滿青苔的瓦片屋頂。"
+      },
+      {
+        "word": "gánh hàng rong",
+        "pos": "phr.",
+        "meaning": "街頭挑擔小販、流動攤販",
+        "example": "Gánh hàng rong bán nhiều món quà vặt quen thuộc.",
+        "example_zh": "街頭挑擔小販賣著許多熟悉的小吃。"
+      },
+      {
+        "word": "dẻo quánh",
+        "pos": "adj.",
+        "meaning": "軟糯黏稠的",
+        "example": "Hạt xôi nấu vừa tới nên rất dẻo quánh và thơm.",
+        "example_zh": "糯米飯煮得剛好，所以非常軟糯且香氣四溢。"
+      },
+      {
+        "word": "mộc mạc",
+        "pos": "adj.",
+        "meaning": "樸實的、質樸的",
+        "example": "Chúng tôi yêu thích cuộc sống mộc mạc ở vùng quê.",
+        "example_zh": "我們喜愛鄉村樸實的生活。"
+      }
+    ]
+  },
+  "article_id": "2026-11-26",
+  "is_test": false
+}
