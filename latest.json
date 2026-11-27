@@ -1,120 +1,123 @@
 {
-  "date": "2026-11-27",
-  "angle": "節慶習俗、季節更迭與地方風情",
+  "date": "2026-11-28",
+  "angle": "當日真實新聞與生活影響",
   "en": {
-    "source_note": "Spoon & Tamago",
-    "title": "The Art of Japanese Packaging Design and Gift-Giving",
-    "zh_title": "日本傳統包裝美學與送禮藝術的延續",
-    "content": "Long before industrial materials like plastic and cardboard dominated global commerce, Japan cultivated a sophisticated packaging tradition rooted in natural elements. Craftsmen wrapped seasonal gifts using straw, bamboo, delicate leaves, and handmade paper, turning the presentation into an art form as meaningful as the gift itself. This historical reverence for materials reflects a deep cultural connection to seasonal shifts and aesthetic appreciation.\n\nToday, this centuries-old philosophy thrives in modern design competitions across Tokyo, where contemporary creators reinterpret ancient wrapping techniques for modern goods. By utilizing biodegradable fibers and minimalist folds, local designers honor their heritage while reducing environmental waste. Every carefully folded package tells a silent story of respect, season, and the enduring warmth of human connection.",
-    "audio_text": "Long before industrial materials like plastic and cardboard dominated global commerce, Japan cultivated a sophisticated packaging tradition rooted in natural elements. Craftsmen wrapped seasonal gifts using straw, bamboo, delicate leaves, and handmade paper, turning the presentation into an art form as meaningful as the gift itself. This historical reverence for materials reflects a deep cultural connection to seasonal shifts and aesthetic appreciation. Today, this centuries-old philosophy thrives in modern design competitions across Tokyo, where contemporary creators reinterpret ancient wrapping techniques for modern goods. By utilizing biodegradable fibers and minimalist folds, local designers honor their heritage while reducing environmental waste. Every carefully folded package tells a silent story of respect, season, and the enduring warmth of human connection.",
-    "translation": "遠在塑膠和紙板等工業材料主宰全球商業之前，日本就已經培育出植根於自然元素的精緻包裝傳統。工匠們使用稻草、竹子、纖細的樹葉和手工紙來包裹季節性禮品，將外觀呈現轉化為一種與禮物本身同樣具有意義的藝術形式。這種對材料的歷史崇敬，反映了對季節更迭與美學鑑賞的深厚文化連結。今天，這種擁有數百年歷史的哲學在東京的現代設計競賽中蓬勃發展，當代創作者在那裡為現代商品重新詮釋古代的包裝技術。透過利用可生物降解的纖維和極簡的摺疊方式，當地設計師在減少環境廢棄物的同時也向傳統致敬。每個精心摺疊的包裹都訴說著關於尊重、季節與人際連結持久溫暖的無聲故事。",
+    "level": "GEPT Intermediate",
+    "source_note": "Tokyo Weekender",
+    "title": "Tokyo Issues Urgent Warning Over Dangerous Nightlife Scams",
+    "zh_title": "東京發布夜生活詐騙警報提醒遊客",
+    "content": "Japan is widely regarded as one of the safest travel destinations in the world, yet recent incidents have revealed a troubling rise in nightlife scams. The British Embassy in Tokyo recently launched an urgent social media campaign to warn tourists about dangerous situations involving spiked drinks and massive credit card fraud in entertainment districts.\n\nVisitors have reported waking up with blank memories and receiving unexpected bills reaching up to six million yen after visiting certain bars. Authorities strongly advise travelers to watch their drinks closely at all times and avoid following strangers into unverified venues to ensure personal safety while enjoying Japan's vibrant nightlife.",
+    "audio_text": "Japan is widely regarded as one of the safest travel destinations in the world, yet recent incidents have revealed a troubling rise in nightlife scams. The British Embassy in Tokyo recently launched an urgent social media campaign to warn tourists about dangerous situations involving spiked drinks and massive credit card fraud in entertainment districts. Visitors have reported waking up with blank memories and receiving unexpected bills reaching up to six million yen after visiting certain bars. Authorities strongly advise travelers to watch their drinks closely at all times and avoid following strangers into unverified venues to ensure personal safety while enjoying Japan's vibrant nightlife.",
+    "translation": "日本長期被視為世界上最安全的旅遊目的地之一，然而近期發生的事件顯示夜生活詐騙案件正在令人擔憂地增加。英國駐東京大使館最近發起了一項緊急社群媒體活動，警告遊客注意娛樂場所中涉及被下藥飲料和巨額信用卡詐騙的危險情況。許多遊客通報稱，在造訪某些酒吧後醒來時記憶一片空白，並收到高達六百萬日圓的意外帳單。當局強烈建議旅客隨時密切注意自己的飲料，並避免跟隨陌生人進入未經核實的場所，以確保在享受日本充滿活力的夜生活時的人身安全。",
     "vocab": [
       {
-        "word": "commerce",
+        "word": "destination",
         "pos": "n.",
-        "meaning": "商業，貿易",
-        "example": "Global commerce has changed dramatically over the past decade.",
-        "example_zh": "過去十年中，全球商業發生了巨大變化。"
+        "meaning": "目的地",
+        "example": "Kyoto is a popular tourist destination in Japan.",
+        "example_zh": "京都 fração 是日本熱門的旅遊目的地。"
       },
       {
-        "word": "reverence",
+        "word": "campaign",
         "pos": "n.",
-        "meaning": "崇敬，敬意",
-        "example": "The craftsmen showed deep reverence for natural materials.",
-        "example_zh": "工匠們對自然材料表現出深厚的崇敬之情。"
+        "meaning": "活動、宣傳運動",
+        "example": "The government launched a safety campaign for drivers.",
+        "example_zh": "政府為駕駛發起了一項安全宣導活動。"
       },
       {
-        "word": "biodegradable",
+        "word": "unexpected",
         "pos": "adj.",
-        "meaning": "可生物降解的，可自然分解的",
-        "example": "The store uses biodegradable fibers for all gift wrapping.",
-        "example_zh": "這家店所有的禮品包裝都使用可生物降解的纖維。"
+        "meaning": "意料之外的",
+        "example": "We received an unexpected bill in the mail today.",
+        "example_zh": "我們今天在郵件中收到了一張意料之外的帳單。"
       },
       {
-        "word": "heritage",
-        "pos": "n.",
-        "meaning": "遺產，傳統",
-        "example": "Local designers take great pride in preserving their cultural heritage.",
-        "example_zh": "當地設計師以守護他們的文化傳統為榮。"
+        "word": "vibrant",
+        "pos": "adj.",
+        "meaning": "充滿活力的",
+        "example": "The city has a vibrant nightlife scene.",
+        "example_zh": "這座城市擁有充滿活力的夜生活。"
       }
     ]
   },
   "ja": {
-    "source_note": "東京散策と季節の伝統",
-    "title": "深秋の東京で味わう伝統的な和菓子と温かいお茶の文化",
-    "zh_title": "深秋東京的傳統和菓子與熱茶文化",
-    "content": "<ruby>冷<rt>つめ</rt></ruby>たい<ruby>木枯<rt>こがらし</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>き<ruby>抜<rt>ぬ</rt></ruby>ける<ruby>晩秋<rt>ばんしゅう</rt></ruby>の<ruby>東京<rt>とうきょう</rt></ruby>では、<ruby>街角<rt>まちかど</rt></ruby>の<ruby>和菓子屋<rt>わがしや</rt></ruby>から<ruby>立<rt>た</rt></ruby>ちこめる<ruby>香ば<rt>こうば</rt></ruby>しい<ruby>匂<rt>にお</rt></ruby>いが<ruby>道行<rt>みちゆ</rt></ruby>く<ruby>人<rt>ひと</rt></ruby>の<ruby>足<rt>あし</rt></ruby>を<ruby>止<rt>と</rt></ruby>めさせます。<ruby>店頭<rt>てんとう</rt></ruby>には<ruby>紅葉<rt>こうよう</rt></ruby>を<ruby>模<rt>も</rt></ruby>した<ruby>生菓子<rt>なまがし</rt></ruby>や、<ruby>温<rt>あたた</rt></ruby>かい<ruby>餡子<rt>あんこ</rt></ruby>がたっぷり<ruby>詰<rt>つ</rt></ruby>まった<ruby>大判焼<rt>おおばんやき</rt></ruby>が<ruby>並<rt>なら</rt></ruby>び、<ruby>訪<rt>とず</rt></ruby>れる<ruby>人々<rt>ひとびと</rt></ruby>に<ruby>季節<rt>きせつ</rt></ruby>の<ruby>移<rt>うつ</rt></ruby>り<ruby>変<rt>か</rt></ruby>わりを<ruby>肌<rt>はだ</rt></ruby>で<ruby>感<rt>かん</rt></ruby>じさせます。\n\n<ruby>地元<rt>じもと</rt></ruby>の<ruby>人々<rt>ひとびと</rt></ruby>は、こうして<ruby>手<rt>て</rt></ruby>に<ruby>入<rt>い</rt></ruby>れたばかりの<ruby>温<rt>あたた</rt></ruby>かいお<ruby>菓子<rt>かし</rt></ruby>を<ruby>頬張<rt>ほおば</rt></ruby>りながら、<ruby>冷<rt>冷</rt></ruby>え<ruby>込<rt>こ</rt></ruby>む<ruby>夕暮<rt>ゆうぐれ</rt></ruby>れの<ruby>神社<rt>じんじゃ</rt></ruby>の<ruby>境内<rt>けいだい</rt></ruby>を<ruby>散歩<rt>さんぽ</rt></ruby>します。<ruby>黄色<rt>きいろ</rt></ruby>く<ruby>色付<rt>いろづ</rt></ruby>いたイチョウの<ruby>落葉<rt>らくよう</rt></ruby>が<ruby>敷<rt>し</rt></ruby>き<ruby>詰<rt>つ</rt></ruby>められた<ruby>参道<rt>さんどう</rt></ruby>には、<ruby>静寂<rt>せいじゃく</rt></ruby>と<ruby>共<rt>とも</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>ならではの<ruby>素朴<rt>そぼく</rt></ruby>な<ruby>風情<rt>ふぜい</rt></ruby>が<ruby>漂<rt>ただよ</rt></ruby>っています。ささやかな<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>と<ruby>景色<rt>けしき</rt></ruby>が、<ruby>忙<rt>いそが</rt></ruby>しい<ruby>日常<rt>にちじょう</rt></ruby>のなかで<ruby>心<rt>こころ</rt></ruby>を<ruby>穏<rt>おだ</rt></ruby>やかにしてくれます。",
-    "audio_text": "冷たい木枯らしが吹き抜ける晩秋の東京では、街角の和菓子屋から立ちこめる香ばしい匂いが道行く人の足を止めさせます。店頭には紅葉を模した生菓子や、暖かい餡子がたっぷり詰まった大判焼きが並び、訪れる人々に季節の移り変わりを肌で感じさせます。地元の人々は、こうして手に入れたばかりの温かいお菓子を頬張りながら、冷え込む夕暮れの神社の境内を散歩します。黄色く色付いたイチョウの落葉が敷き詰められた参道には、静寂と共に日本ならではの素朴な風情が漂っています。ささやかな食べ物と景色が、忙しい日常のなかで心を穏やかにしてくれます。",
-    "translation": "在寒冷強風吹拂的深秋東京，街角和菓子店飄散出的香氣讓路人紛紛停下腳步。店鋪前擺滿了模仿紅葉造型的生菓子，以及塞滿溫熱紅豆餡的大判燒，讓造訪的人們切實感受到季節的更迭。當地人一邊咬著剛買到手的溫熱點心，一邊在漸漸變冷的黃昏神社境內散步。鋪滿金黃色銀杏落葉的參道上，伴隨著寂靜，流露出日本特有的樸實風情。這些微小的食物與景色，在忙碌的日常中平靜了我們的心靈。",
+    "level": "JLPT N3",
+    "source_note": "KBS World 日文今日新聞",
+    "title": "韓国の大学入試で不正行為が急増し対策強化へ",
+    "zh_title": "韓國大學入試作弊激增將強化防範",
+    "content": "今月<ruby>行<rt>おこな</rt></ruby>われた<ruby>韓国<rt>かんこく</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby><ruby>修学<rt>しゅうがく</rt></ruby><ruby>能力<rt>のうりょく</rt></ruby><ruby>試験<rt>しけん</rt></ruby>で<ruby>摘発<rt>てきはつ</rt></ruby>された<ruby>不正<rt>ふせい</rt></ruby><ruby>行為<rt>こうい</rt></ruby>の<ruby>件数<rt>けんすう</rt></ruby>が、<ruby>去年<rt>きょねん</rt></ruby>よりもおよそ<ruby>七<rt>なな</rt></ruby><ruby>割<rt>わり</rt></ruby><ruby>増加<rt>ぞうか</rt></ruby>しました。そのなかでもスマートフォンのような<ruby>機器<rt>きき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>った<ruby>不正<rt>ふせい</rt></ruby>が<ruby>目立<rt>めだ</rt></ruby>って<ruby>増<rt>ふ</rt></ruby>えています。\n\nこうした<ruby>状況<rt>じょうきょう</rt></ruby>を<ruby>受<rt>う</rt></ruby>けて<ruby>政府<rt>せいふ</rt></ruby>は、ほかの<ruby>國家<rt>こっか</rt></ruby><ruby>試験<rt>しけん</rt></ruby>でも<ruby>不正<rt>ふせい</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>の<ruby>対策<rt>たいさく</rt></ruby>や<ruby>処分<rt>しょぶん</rt></ruby>を<ruby>厳<rt>きび</rt></ruby>しくする<ruby>方針<rt>ほうしん</rt></ruby>を<ruby>示<rt>しめ</rt></ruby>しました。<ruby>受験生<rt>じゅけんせい</rt></ruby>にとって<ruby>公平<rt>こうへい</rt></ruby>な<ruby>環境<rt>かんきょう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るため、より<ruby>厳格<rt>げんかく</rt></ruby>なチェックが<ruby>求<rt>もと</rt></ruby>められています。",
+    "audio_text": "今月行われた韓国の大学修学能力試験で摘発された不正行為の件数が、去年よりもおよそ七割増加しました。そのなかでもスマートフォンのような機器を使った不正が目立って増えています。こうした状況を受けて政府は、ほかの国家試験でも不正防止の対策や処分を厳しくする方針を示しました。受験生にとって公平な環境を守るため、より厳格なチェックが求められています。",
+    "translation": "本月舉行的韓國大學修學能力考試中，被查獲的違規作弊行為件數比去年增加了約七成。其中，使用智慧型手機等電子設備的作弊行為顯著增加。面對這種情況，政府表明方針，將在其他國家考試中也加強防範作弊的對策與處分。為了守護考生公平的環境，未來將需要更嚴格的檢查。",
     "vocab": [
       {
-        "word": "木枯らし（こがらし）",
-        "pos": "名詞",
-        "meaning": "枯木風，初冬吹襲的寒風",
-        "example": "木枯らしが吹くと、いよいよ冬の訪れを感じます。",
-        "example_zh": "當枯木風吹起時，便能真正感受到冬天的到來。"
+        "word": "摘発する（てきはつする）",
+        "pos": "動詞",
+        "meaning": "揭發、查獲",
+        "example": "警察が不正な取引を摘発した。",
+        "example_zh": "警察查獲了違法交易。"
       },
       {
-        "word": "餡子（あんこ）",
-        "pos": "名詞",
-        "meaning": "紅豆泥，豆沙餡",
-        "example": "この大判焼きは甘さ控えめの餡子がたっぷり入っています。",
-        "example_zh": "這個大判燒裡塞滿了甜度適中的紅豆沙餡。"
+        "word": "増加する（ぞうかする）",
+        "pos": "動詞",
+        "meaning": "增加",
+        "example": "観光客の数が年々増加している。",
+        "example_zh": "觀光客人數逐年增加。"
       },
       {
-        "word": "境内（けいだい）",
+        "word": "方針（ほうしん）",
         "pos": "名詞",
-        "meaning": "寺廟或神社的院內、境內",
-        "example": "夕方の神社の一画で、静かな境内の雰囲気を楽しんだ。",
-        "example_zh": "在傍晚的神社一隅，享受著安靜的境內氛圍。"
+        "meaning": "方針、政策",
+        "example": "会社は新しい方針を発表した。",
+        "example_zh": "公司發表了新的方針。"
       },
       {
-        "word": "風情（ふぜい）",
-        "pos": "名詞",
-        "meaning": "風情，趣味，情調",
-        "example": "古い町並みには日本の独特な風情が残っている。",
-        "example_zh": "古老的街道上保留著日本獨特的風情。"
+        "word": "公平な（こうへいな）",
+        "pos": "形容動詞",
+        "meaning": "公平的",
+        "example": "すべての学生に公平な試験を行うべきだ。",
+        "example_zh": "應該對所有學生進行公平的考試。"
       }
     ]
   },
   "vi": {
+    "level": "CEFR B1",
     "source_note": "Gia đình & Xã hội",
-    "title": "Mùa mua sắm nhộn nhịp cuối năm và văn hóa săn hàng giảm giá tại các con phố Hà Nội",
-    "zh_title": "河內街頭熱鬧的年終購物季與折扣搶購文化",
-    "content": "Những ngày cuối tháng mười một, khi gió mùa đông bắc bắt đầu tràn về từng con phố, không khí mua sắm tại thủ đô Hà Nội bỗng trở nên nhộn nhịp hơn bao giờ hết. Các cửa hàng thời trang và trung tâm thương mại rực rỡ ánh đèn, giăng đầy những tấm biển giảm giá lớn để chào đón mùa mua sắm cuối năm. Người dân tranh thủ giờ nghỉ trưa hoặc buổi tối dạo quanh các gian hàng để chọn mua những chiếc áo khoác ấm áp và quà tặng cho người thân. Không chỉ dừng lại ở các trung tâm lớn, những khu chợ truyền thống cũng tất bật kẻ bán người mua chuẩn bị cho mùa đông. Các bà nội trợ tỉ mỉ lựa chọn từng bó rau củ tươi ngon và thực phẩm đậm đà hương vị truyền thống cho bữa cơm gia đình trong cái lạnh đầu đông. Sự tất bật và rộn ràng ấy tạo nên một bức chân dung sinh động về nhịp sống đời thường tại địa phương trước thềm năm mới.",
-    "audio_text": "Những ngày cuối tháng mười một, khi gió mùa đông bắc bắt đầu tràn về từng con phố, không khí mua sắm tại thủ đô Hà Nội bỗng trở nên nhộn nhịp hơn bao giờ hết. Các cửa hàng thời trang và trung tâm thương mại rực rỡ ánh đèn, giăng đầy những tấm biển giảm giá lớn để chào đón mùa mua sắm cuối năm. Người dân tranh thủ giờ nghỉ trưa hoặc buổi tối dạo quanh các gian hàng để chọn mua những chiếc áo khoác ấm áp và quà tặng cho người thân. Không chỉ dừng lại ở các trung tâm lớn, những khu chợ truyền thống cũng tất bật kẻ bán người mua chuẩn bị cho mùa đông. Các bà nội trợ tỉ mỉ lựa chọn từng bó rau củ tươi ngon và thực phẩm đậm đà hương vị truyền thống cho bữa cơm gia đình trong cái lạnh đầu đông. Sự tất bật và rộn ràng ấy tạo nên một bức chân dung sinh động về nhịp sống đời thường tại địa phương trước thềm năm mới.",
-    "translation": "十一月下旬的日子裡，當東北季風開始吹拂著每條街道，河內首都的購物氣氛變得比以往任何時候都更加熱鬧。服飾店和購物中心燈火輝煌，掛滿了大型折扣看板以迎接年終購物季。民眾趁著午休時間或傍晚逛逛各個攤位，為親人挑選溫暖的外套與禮物。不僅限於大型中心，傳統市場也人頭攢動，買賣雙方正為冬天忙碌著。家庭主婦們在初冬的寒意中，細心挑選著每一把新鮮蔬菜和帶有傳統風味的食材，為家庭餐桌作準備。這種忙碌與熱鬧，在新年即將到來前勾勒出一幅生動的當地日常生活畫卷。",
+    "title": "Bắt giam người quảng bá khóa học khởi nghiệp vì hành vi trốn thuế",
+    "zh_title": "知名網路創業講師因逃漏稅遭逮捕",
+    "content": "Cơ quan Công an thành phố Hải Phòng vừa tiến hành khởi tố và bắt tạm giam Nguyễn Anh Đức, người thường được biết đến với tên gọi \"Master Anh Đức\". Ông này là một gương mặt nổi tiếng chuyên quảng bá các khóa học khởi nghiệp kinh doanh trên các trang mạng xã hội trong thời gian qua. Kết quả điều tra ban đầu cho thấy bị can này đã có hành vi trốn thuế với số tiền lên đến hơn 1,2 tỷ đồng thông qua việc kinh doanh các khóa học trực tuyến. Vụ việc này là bài học cảnh tỉnh cho nhiều người làm kinh doanh trên mạng về tầm quan trọng của việc tuân thủ pháp luật thuế.",
+    "audio_text": "Cơ quan Công an thành phố Hải Phòng vừa tiến hành khởi tố và bắt tạm giam Nguyễn Anh Đức, người thường được biết đến với tên gọi \"Master Anh Đức\". Ông này là một gương mặt nổi tiếng chuyên quảng bá các khóa học khởi nghiệp kinh doanh trên các trang mạng xã hội trong thời gian qua. Kết quả điều tra ban đầu cho thấy bị can này đã có hành vi trốn thuế với số tiền lên đến hơn 1,2 tỷ đồng thông qua việc kinh doanh các khóa học trực tuyến. Vụ việc này là bài học cảnh tỉnh cho nhiều người làm kinh doanh trên mạng về tầm quan trọng của việc tuân thủ pháp luật thuế.",
+    "translation": "海防市公安機關剛對常被稱為「Master Anh Đức」的阮英德進行起訴並暫時拘留。這名男子是近期在社交網路上專門推廣創業課程的知名人物。初步調查結果顯示，該嫌疑人透過經營線上課程進行逃漏稅，金額高達12億越南盾以上。此事件為許多網路從商者敲響了警鐘，凸顯了遵守稅法的重要性。",
     "vocab": [
       {
-        "word": "nhộn nhịp",
-        "pos": "adj.",
-        "meaning": "熱鬧的，繁華的",
-        "example": "Khu chợ vào dịp cuối năm lúc nào cũng tấp nập và nhộn nhịp.",
-        "example_zh": "年終時期的市場總是人潮洶湧且熱鬧非凡。"
-      },
-      {
-        "word": "tranh thủ",
+        "word": "khởi tố",
         "pos": "v.",
-        "meaning": "爭取，利用（時間）",
-        "example": "Anh ấy tranh thủ giờ nghỉ trưa để đi mua sắm.",
-        "example_zh": "他利用午休時間去購物。"
+        "meaning": "起訴",
+        "example": "Cảnh sát đã quyết định khởi tố nghi phạm.",
+        "example_zh": "警方已決定起訴嫌疑人。"
       },
       {
-        "word": "tỉ mỉ",
-        "pos": "adj.",
-        "meaning": "細心，仔細",
-        "example": "Mẹ tôi rất tỉ mỉ khi chọn mua thực phẩm tươi sống.",
-        "example_zh": "我媽媽在挑選生鮮食品時非常細心。"
+        "word": "trốn thuế",
+        "pos": "phr.",
+        "meaning": "逃漏稅",
+        "example": "Trốn thuế là hành vi vi phạm pháp luật nghiêm trọng.",
+        "example_zh": "逃漏稅是嚴重的違法行為。"
       },
       {
-        "word": "rộn ràng",
-        "pos": "adj.",
-        "meaning": "歡騰的，熱鬧的",
-        "example": "Âm thanh rộn ràng của phố phường báo hiệu mùa đông đã đến.",
-        "example_zh": "街道上歡騰的聲音預示著冬天已經到來。"
+        "word": "điều tra",
+        "pos": "v.",
+        "meaning": "調查",
+        "example": "Cảnh sát đang điều tra vụ việc này.",
+        "example_zh": "警察正在調查這起事件。"
+      },
+      {
+        "word": "tuân thủ",
+        "pos": "v.",
+        "meaning": "遵守",
+        "example": "Mọi công dân phải tuân thủ pháp luật.",
+        "example_zh": "所有公民都必須遵守法律。"
       }
     ]
   },
-  "article_id": "2026-11-27",
+  "article_id": "2026-11-28",
   "is_test": false
 }

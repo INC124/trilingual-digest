@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-28",
+  "angle": "當日真實新聞與生活影響",
+  "en": {
+    "level": "GEPT Intermediate",
+    "source_note": "Tokyo Weekender",
+    "title": "Tokyo Issues Urgent Warning Over Dangerous Nightlife Scams",
+    "zh_title": "東京發布夜生活詐騙警報提醒遊客",
+    "content": "Japan is widely regarded as one of the safest travel destinations in the world, yet recent incidents have revealed a troubling rise in nightlife scams. The British Embassy in Tokyo recently launched an urgent social media campaign to warn tourists about dangerous situations involving spiked drinks and massive credit card fraud in entertainment districts.\n\nVisitors have reported waking up with blank memories and receiving unexpected bills reaching up to six million yen after visiting certain bars. Authorities strongly advise travelers to watch their drinks closely at all times and avoid following strangers into unverified venues to ensure personal safety while enjoying Japan's vibrant nightlife.",
+    "audio_text": "Japan is widely regarded as one of the safest travel destinations in the world, yet recent incidents have revealed a troubling rise in nightlife scams. The British Embassy in Tokyo recently launched an urgent social media campaign to warn tourists about dangerous situations involving spiked drinks and massive credit card fraud in entertainment districts. Visitors have reported waking up with blank memories and receiving unexpected bills reaching up to six million yen after visiting certain bars. Authorities strongly advise travelers to watch their drinks closely at all times and avoid following strangers into unverified venues to ensure personal safety while enjoying Japan's vibrant nightlife.",
+    "translation": "日本長期被視為世界上最安全的旅遊目的地之一，然而近期發生的事件顯示夜生活詐騙案件正在令人擔憂地增加。英國駐東京大使館最近發起了一項緊急社群媒體活動，警告遊客注意娛樂場所中涉及被下藥飲料和巨額信用卡詐騙的危險情況。許多遊客通報稱，在造訪某些酒吧後醒來時記憶一片空白，並收到高達六百萬日圓的意外帳單。當局強烈建議旅客隨時密切注意自己的飲料，並避免跟隨陌生人進入未經核實的場所，以確保在享受日本充滿活力的夜生活時的人身安全。",
+    "vocab": [
+      {
+        "word": "destination",
+        "pos": "n.",
+        "meaning": "目的地",
+        "example": "Kyoto is a popular tourist destination in Japan.",
+        "example_zh": "京都 fração 是日本熱門的旅遊目的地。"
+      },
+      {
+        "word": "campaign",
+        "pos": "n.",
+        "meaning": "活動、宣傳運動",
+        "example": "The government launched a safety campaign for drivers.",
+        "example_zh": "政府為駕駛發起了一項安全宣導活動。"
+      },
+      {
+        "word": "unexpected",
+        "pos": "adj.",
+        "meaning": "意料之外的",
+        "example": "We received an unexpected bill in the mail today.",
+        "example_zh": "我們今天在郵件中收到了一張意料之外的帳單。"
+      },
+      {
+        "word": "vibrant",
+        "pos": "adj.",
+        "meaning": "充滿活力的",
+        "example": "The city has a vibrant nightlife scene.",
+        "example_zh": "這座城市擁有充滿活力的夜生活。"
+      }
+    ]
+  },
+  "ja": {
+    "level": "JLPT N3",
+    "source_note": "KBS World 日文今日新聞",
+    "title": "韓国の大学入試で不正行為が急増し対策強化へ",
+    "zh_title": "韓國大學入試作弊激增將強化防範",
+    "content": "今月<ruby>行<rt>おこな</rt></ruby>われた<ruby>韓国<rt>かんこく</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby><ruby>修学<rt>しゅうがく</rt></ruby><ruby>能力<rt>のうりょく</rt></ruby><ruby>試験<rt>しけん</rt></ruby>で<ruby>摘発<rt>てきはつ</rt></ruby>された<ruby>不正<rt>ふせい</rt></ruby><ruby>行為<rt>こうい</rt></ruby>の<ruby>件数<rt>けんすう</rt></ruby>が、<ruby>去年<rt>きょねん</rt></ruby>よりもおよそ<ruby>七<rt>なな</rt></ruby><ruby>割<rt>わり</rt></ruby><ruby>増加<rt>ぞうか</rt></ruby>しました。そのなかでもスマートフォンのような<ruby>機器<rt>きき</rt></ruby>を<ruby>使<rt>つか</rt></ruby>った<ruby>不正<rt>ふせい</rt></ruby>が<ruby>目立<rt>めだ</rt></ruby>って<ruby>増<rt>ふ</rt></ruby>えています。\n\nこうした<ruby>状況<rt>じょうきょう</rt></ruby>を<ruby>受<rt>う</rt></ruby>けて<ruby>政府<rt>せいふ</rt></ruby>は、ほかの<ruby>國家<rt>こっか</rt></ruby><ruby>試験<rt>しけん</rt></ruby>でも<ruby>不正<rt>ふせい</rt></ruby><ruby>防止<rt>ぼうし</rt></ruby>の<ruby>対策<rt>たいさく</rt></ruby>や<ruby>処分<rt>しょぶん</rt></ruby>を<ruby>厳<rt>きび</rt></ruby>しくする<ruby>方針<rt>ほうしん</rt></ruby>を<ruby>示<rt>しめ</rt></ruby>しました。<ruby>受験生<rt>じゅけんせい</rt></ruby>にとって<ruby>公平<rt>こうへい</rt></ruby>な<ruby>環境<rt>かんきょう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るため、より<ruby>厳格<rt>げんかく</rt></ruby>なチェックが<ruby>求<rt>もと</rt></ruby>められています。",
+    "audio_text": "今月行われた韓国の大学修学能力試験で摘発された不正行為の件数が、去年よりもおよそ七割増加しました。そのなかでもスマートフォンのような機器を使った不正が目立って増えています。こうした状況を受けて政府は、ほかの国家試験でも不正防止の対策や処分を厳しくする方針を示しました。受験生にとって公平な環境を守るため、より厳格なチェックが求められています。",
+    "translation": "本月舉行的韓國大學修學能力考試中，被查獲的違規作弊行為件數比去年增加了約七成。其中，使用智慧型手機等電子設備的作弊行為顯著增加。面對這種情況，政府表明方針，將在其他國家考試中也加強防範作弊的對策與處分。為了守護考生公平的環境，未來將需要更嚴格的檢查。",
+    "vocab": [
+      {
+        "word": "摘発する（てきはつする）",
+        "pos": "動詞",
+        "meaning": "揭發、查獲",
+        "example": "警察が不正な取引を摘発した。",
+        "example_zh": "警察查獲了違法交易。"
+      },
+      {
+        "word": "増加する（ぞうかする）",
+        "pos": "動詞",
+        "meaning": "增加",
+        "example": "観光客の数が年々増加している。",
+        "example_zh": "觀光客人數逐年增加。"
+      },
+      {
+        "word": "方針（ほうしん）",
+        "pos": "名詞",
+        "meaning": "方針、政策",
+        "example": "会社は新しい方針を発表した。",
+        "example_zh": "公司發表了新的方針。"
+      },
+      {
+        "word": "公平な（こうへいな）",
+        "pos": "形容動詞",
+        "meaning": "公平的",
+        "example": "すべての学生に公平な試験を行うべきだ。",
+        "example_zh": "應該對所有學生進行公平的考試。"
+      }
+    ]
+  },
+  "vi": {
+    "level": "CEFR B1",
+    "source_note": "Gia đình & Xã hội",
+    "title": "Bắt giam người quảng bá khóa học khởi nghiệp vì hành vi trốn thuế",
+    "zh_title": "知名網路創業講師因逃漏稅遭逮捕",
+    "content": "Cơ quan Công an thành phố Hải Phòng vừa tiến hành khởi tố và bắt tạm giam Nguyễn Anh Đức, người thường được biết đến với tên gọi \"Master Anh Đức\". Ông này là một gương mặt nổi tiếng chuyên quảng bá các khóa học khởi nghiệp kinh doanh trên các trang mạng xã hội trong thời gian qua. Kết quả điều tra ban đầu cho thấy bị can này đã có hành vi trốn thuế với số tiền lên đến hơn 1,2 tỷ đồng thông qua việc kinh doanh các khóa học trực tuyến. Vụ việc này là bài học cảnh tỉnh cho nhiều người làm kinh doanh trên mạng về tầm quan trọng của việc tuân thủ pháp luật thuế.",
+    "audio_text": "Cơ quan Công an thành phố Hải Phòng vừa tiến hành khởi tố và bắt tạm giam Nguyễn Anh Đức, người thường được biết đến với tên gọi \"Master Anh Đức\". Ông này là một gương mặt nổi tiếng chuyên quảng bá các khóa học khởi nghiệp kinh doanh trên các trang mạng xã hội trong thời gian qua. Kết quả điều tra ban đầu cho thấy bị can này đã có hành vi trốn thuế với số tiền lên đến hơn 1,2 tỷ đồng thông qua việc kinh doanh các khóa học trực tuyến. Vụ việc này là bài học cảnh tỉnh cho nhiều người làm kinh doanh trên mạng về tầm quan trọng của việc tuân thủ pháp luật thuế.",
+    "translation": "海防市公安機關剛對常被稱為「Master Anh Đức」的阮英德進行起訴並暫時拘留。這名男子是近期在社交網路上專門推廣創業課程的知名人物。初步調查結果顯示，該嫌疑人透過經營線上課程進行逃漏稅，金額高達12億越南盾以上。此事件為許多網路從商者敲響了警鐘，凸顯了遵守稅法的重要性。",
+    "vocab": [
+      {
+        "word": "khởi tố",
+        "pos": "v.",
+        "meaning": "起訴",
+        "example": "Cảnh sát đã quyết định khởi tố nghi phạm.",
+        "example_zh": "警方已決定起訴嫌疑人。"
+      },
+      {
+        "word": "trốn thuế",
+        "pos": "phr.",
+        "meaning": "逃漏稅",
+        "example": "Trốn thuế là hành vi vi phạm pháp luật nghiêm trọng.",
+        "example_zh": "逃漏稅是嚴重的違法行為。"
+      },
+      {
+        "word": "điều tra",
+        "pos": "v.",
+        "meaning": "調查",
+        "example": "Cảnh sát đang điều tra vụ việc này.",
+        "example_zh": "警察正在調查這起事件。"
+      },
+      {
+        "word": "tuân thủ",
+        "pos": "v.",
+        "meaning": "遵守",
+        "example": "Mọi công dân phải tuân thủ pháp luật.",
+        "example_zh": "所有公民都必須遵守法律。"
+      }
+    ]
+  },
+  "article_id": "2026-11-28",
+  "is_test": false
+}
