@@ -348,7 +348,7 @@ def summarize_zh_subtitle(section: dict, fallback_lang_label: str) -> str:
 
 
 # ==========================================
-# 5. Gemini 文章生成
+# 5. Gemini 文章生成（已整合 GEPT 中級 / JLPT N3 / CEFR B1 分級規範）
 # ==========================================
 def generate_trilingual_digest(seeds: dict) -> dict:
     day_index = NOW.toordinal()
@@ -372,21 +372,34 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   - 絕對不要寫「這展現了文化之美」「隨著時代變遷」「令人深思」這類空洞套話。
   - 每篇必須鎖定 **單一具體事件、歷史同月同日真實故事、或具體的生活/飲食/節慶場景**，寫出清楚的「誰、在哪裡、做了什麼、有什麼具體細節或有趣轉折」。
   - 若引用歷史上 {MONTH_DAY_ZH} 的事件，必須是真實確切的歷史事件，不可杜撰年份或虛構人物。
-2. **篇幅設定（約 150 字左右）**：
+2. **三語難度分級規範（降低閱讀負擔，提升學習成就感）**：
+  - **英文（en）— 目標約「全民英檢 GEPT 中級」**：
+    - 句長適中、主從句結構清楚，避免過度複雜的倒裝、艱深分詞構句或冗長修飾語堆疊。
+    - 詞彙以常見新聞與日常／職場核心字彙為主；遇到較難詞彙或專有名詞時，透過自然上下文或簡短同位語帶出意思，不硬塞艱澀學術字。
+    - 精選詞彙（`vocab`）也以 GEPT 中級左右實用單字／片語為主。
+  - **日文（ja）— 目標約「JLPT N3」**：
+    - 文法與句型以 N4～N3 常見表現為主（如原因理由、對比、傳聞、假設、輕微推測等），減少 N1/N2 偏書面或硬派敬語的文言結構。
+    - 詞彙與漢字貼近日常與基礎新聞閱讀，避免冷僻生硬的抽象詞彙；段落節奏明快。
+    - 精選詞彙（`vocab`）以 N3 程度常用詞彙為主。
+  - **越南文（vi）— 目標約「CEFR B1」**：
+    - 句型自然連貫，能清楚交代事件背景、因果關係與人物行動／觀點，避免過度口語碎念或過於艱深的文言／專業術語。
+    - 詞彙聚焦在生活、社會、文化與日常時事的中階核心詞彙；遇到較專業或抽象的詞彙時，用簡單說明句帶出重點。
+    - 精選詞彙（`vocab`）以 B1 程度實用詞彙為主。
+3. **篇幅設定（約 150 字左右）**：
   - **英文（en）`content`**：約 **130～165 個英文單字（words）**，分成 2 個自然段落，敘事流暢、有畫面感。
   - **日文（ja）`content`**：約 **160～220 個日文字元（含標點，不含 `<ruby>` 標籤字元）**，自然道地的書面生活敘事，分成 2 個段落。
   - **越南文（vi）`content`**：約 **130～170 個越南文詞（words）**，自然道地、貼近日常，分成 2 個段落。
   - **繁體中文全譯 `translation`**：每篇皆附通順自然的繁體中文翻譯，約 **150～200 個中文字**。**`translation` 欄位必須是繁體中文，絕對不可照抄原文（尤其是越南文篇的全譯必須翻成繁體中文，不可留成越南文）**。
-3. **三語題材互補、不要三篇寫同一件事**：
+4. **三語題材互補、不要三篇寫同一件事**：
   - 英文篇可從英文素材池挑選國際新聞、設計藝術或跨文化故事（也可結合今日切角）。
   - 日文篇從日文素材池（或結合日本季節/生活/歷史同月同日切角）撰寫純正日文短文。
   - 越南文篇從越南文素材池（或結合越南生活飲食/節慶/歷史同月同日切角）撰寫純正越南文短文。
-4. **日文標音規則（ja）**：
+5. **日文標音規則（ja）**：
   - 日文 `content` 中的**每一個漢字**都必須加上 `<ruby>漢字<rt>ふりがな</rt></ruby>` 標音，不可漏標任何一個漢字，也不可只標一半（片假名、平假名、標點與數字不需加 ruby；漢字之間不要多加空白）。
   - `audio_text` 則提供「完全不含 HTML 標籤」的純日文文本供 TTS 朗讀。
-5. **越南文純淨度規則（vi）**：
+6. **越南文純淨度規則（vi）**：
   - 越南文 `title`、`content`、`audio_text`、`vocab.word`、`vocab.example` **必須 100% 為純正越南文**，嚴禁夾雜任何中文字、日文假名或無關英文單字；而 `vi.translation`、`vocab.meaning`、`vocab.example_zh` 則必須為**繁體中文**。
-6. **精選詞彙（vocab）**：
+7. **精選詞彙（vocab）**：
   - 每種語言挑出 **4 個** 最值得學習的關鍵詞彙或片語，附上詞性（`pos`：如 n. / v. / adj. / adv. / phr.）、繁體中文釋義（`meaning`），以及一句與本文情境相關的短例句（`example`）與例句中文翻譯（`example_zh`）。
 
 ### 參考素材池（請從中挑選最具體的一則發揮，勿將多則硬湊成大雜燴）：
@@ -407,10 +420,11 @@ def generate_trilingual_digest(seeds: dict) -> dict:
   "date": "{ARTICLE_ID}",
   "angle": "{angle_name}",
   "en": {{
+    "level": "GEPT Intermediate",
     "source_note": "參考來源名稱或歷史主題",
-    "title": "具體有吸引力的英文標題",
+    "title": "具體有吸引力的英文標題（GEPT 中級程度）",
     "zh_title": "12～24 字的繁體中文標題摘要",
-    "content": "約 130-165 英文單字的正文（可用 \\n\\n 分兩段）",
+    "content": "約 130-165 英文單字的正文（GEPT 中級程度，可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純英文正文",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
     "vocab": [
@@ -424,10 +438,11 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     ]
   }},
   "ja": {{
+    "level": "JLPT N3",
     "source_note": "參考來源名稱或歷史主題",
-    "title": "具體有吸引力的日文標題（純文字，不加 ruby）",
+    "title": "具體有吸引力的日文標題（JLPT N3 程度，純文字，不加 ruby）",
     "zh_title": "12～24 字的繁體中文標題摘要",
-    "content": "約 160-220 字元的日文正文（每個漢字皆附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
+    "content": "約 160-220 字元的日文正文（JLPT N3 程度，每個漢字皆附 <ruby>漢<rt>かん</rt></ruby> 標音，可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純日文正文（不含任何 HTML 標籤）",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文）",
     "vocab": [
@@ -441,10 +456,11 @@ def generate_trilingual_digest(seeds: dict) -> dict:
     ]
   }},
   "vi": {{
+    "level": "CEFR B1",
     "source_note": "參考來源名稱或歷史主題",
-    "title": "具體有吸引力的純正越南文標題",
+    "title": "具體有吸引力的純正越南文標題（CEFR B1 程度）",
     "zh_title": "12～24 字的繁體中文標題摘要",
-    "content": "約 130-170 詞的純正越南文正文（可用 \\n\\n 分兩段）",
+    "content": "約 130-170 詞的純正越南文正文（CEFR B1 程度，可用 \\n\\n 分兩段）",
     "audio_text": "供朗讀的純正越南文正文",
     "translation": "約 150-200 字的流暢繁體中文全譯（必須為繁體中文，不可照抄越南文）",
     "vocab": [
@@ -617,6 +633,11 @@ def render_lang_section(lang_code: str, lang_label: str, section: dict, audio_re
             "</li>"
         )
 
+    level_badge = (
+        f"<span class='level-tag'>{section.get('level', '')}</span>"
+        if section.get("level")
+        else ""
+    )
     source_badge = (
         f"<span class='source-tag'>素材：{section.get('source_note', '')}</span>"
         if section.get("source_note")
@@ -626,7 +647,10 @@ def render_lang_section(lang_code: str, lang_label: str, section: dict, audio_re
     return f"""
     <section class="lang-card" id="sec-{lang_code}">
       <div class="lang-header">
-        <span class="lang-badge">{lang_label}</span>
+        <div class="lang-header-left">
+          <span class="lang-badge">{lang_label}</span>
+          {level_badge}
+        </div>
         {source_badge}
       </div>
       <h2>{section.get('title', '')}</h2>
@@ -688,9 +712,14 @@ def build_article_html(data: dict, is_archive: bool = False) -> str:
       padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }}
     .lang-header {{ display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }}
+    .lang-header-left {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }}
     .lang-badge {{
       background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 600;
       padding: 2px 10px; border-radius: 999px;
+    }}
+    .level-tag {{
+      font-size: 0.78rem; color: var(--muted); border: 1px solid var(--border);
+      padding: 1px 8px; border-radius: 999px;
     }}
     .source-tag {{ font-size: 0.8rem; color: var(--muted); }}
     h2 {{ font-size: 1.25rem; margin: 12px 0; }}
@@ -793,7 +822,6 @@ def inject_card_into_index(index_html_path: str, card_html: str) -> None:
     e_idx = html.index(end_marker)
     list_body = html[s_idx:e_idx]
 
-    # 若已存在相同 href 的卡片，先移除避免重複
     card_pattern = re.compile(
         rf'\s*<a\s+href="{re.escape(ARTICLE_ID)}\.html"\s+class="digest-item">.*?</a>\s*',
         flags=re.DOTALL,
@@ -812,7 +840,7 @@ def update_manifest_and_pages(data: dict):
     data["article_id"] = ARTICLE_ID
     data["is_test"] = IS_TEST_VERSION
 
-    # 1. 儲存歸檔 JSON 與 HTML（archive/2026-11-21.json 與 .html）
+    # 1. 儲存歸檔 JSON 與 HTML
     archive_json_path = os.path.join(ARCHIVE_DIR, f"{ARTICLE_ID}.json")
     with open(archive_json_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
